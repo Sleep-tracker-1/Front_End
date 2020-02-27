@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route } from "react-router-dom";
 import { createStore, applyMiddleware } from "redux";
 import { Provider } from "react-redux";
 import thunk from "redux-thunk";
+import Header from "./components/Header";
 
 import { bwReducer as reducer } from "./reducers/bwReducer";
 
@@ -16,6 +17,7 @@ function App() {
     return (
         <Provider store={store}>
             {/* All of your jsx and components will be inside of Provider */}
+            <Header />
             <Router>
                 <div className="App">
                     <h1>Welcome to Build Week!</h1>
