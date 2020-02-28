@@ -25,20 +25,27 @@ function TestGraph() {
                     lineTension: 0,
                     radius: 30,
                     hoverRadius: 70,
+                    pointHoverBackgroundColor: "yellow",
                     datalabels: {
-                        labels: {
-                            textStrokeColor: "black",
-                            textStrokeWidth: 8,
-                            labelTextColor: "black",
+                        textStrokeColor: "black",
+                        textStrokeWidth: 1,
+                        color: "black",
+                        font: {
+                            size: 30,
                         },
                     },
                 },
             ],
         },
         options: {
+            responsive: true,
+            maintainAspectRatio: false,
             scales: {
                 yAxes: [
                     {
+                        ticks: {
+                            suggestedMax: 18,
+                        },
                         scaleLabel: {
                             display: true,
                             labelString: "Hours Slept",
@@ -49,9 +56,9 @@ function TestGraph() {
             },
             plugins: {
                 // Change options for ALL labels of THIS CHART
-                datalabels: {
-                    color: "#36A2EB",
-                },
+            },
+            legend: {
+                padding: 30,
             },
             title: {
                 display: true,
@@ -64,10 +71,13 @@ function TestGraph() {
                 bodySpacing: 20,
                 bodyAlign: "center",
                 caretPadding: 40,
-                mode: "index",
+                mode: "nearest",
                 callbacks: {
                     // Use the footer callback to display the sum of the items showing in the tooltip
-
+                    formatter: function(value) {
+                        return "line1\nline2\n" + value;
+                        // eq. return ['line1', 'line2', value]
+                    },
                     label: function(tooltipItem, data) {
                         const thisDataset =
                             data.datasets[Number(tooltipItem.datasetIndex)];
