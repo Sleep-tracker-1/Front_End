@@ -77,7 +77,7 @@ const NameLink = styled.a`
 `;
 
 const Nav = styled.nav`
-    width: 250px;
+    width: 350px;
     list-style: none;
     display: flex;
     align-items: center;
@@ -111,7 +111,7 @@ const Input = styled.input`
 
         &:checked ~ nav {
             max-height: 240px;
-            background-color: rgb(129, 196, 233);
+            background-color: #d2d1cf;
         }
 
         &:checked ~ label span {
