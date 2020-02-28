@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route } from "react-router-dom";
 import { createStore, applyMiddleware } from "redux";
 import { Provider } from "react-redux";
 import thunk from "redux-thunk";
-
+import SignupForm from "./components/Signup.js"
 import { bwReducer as reducer } from "./reducers/bwReducer";
 
 import PrivateRoute from "./components/PrivateRoute";
@@ -19,6 +19,7 @@ function App() {
             <Router>
                 <div className="App">
                     <h1>Welcome to Build Week!</h1>
+                    <SignupForm />
 
                     {/* <Route
                         exact
