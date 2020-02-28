@@ -3,7 +3,6 @@ import { BrowserRouter as Router, Route } from "react-router-dom";
 import { createStore, applyMiddleware } from "redux";
 import { Provider } from "react-redux";
 import thunk from "redux-thunk";
-import Header from "./components/Header";
 import TestGraph from "./components/TestGraph";
 
 import { bwReducer as reducer } from "./reducers/bwReducer";
@@ -24,6 +23,7 @@ function App() {
             <Header headerText="Sleep Tracker" />
             <Router>
                 <div className="App">
+                    <TestGraph />
                     <h1>Welcome to Build Week!</h1>
 
                     {/* <Route
