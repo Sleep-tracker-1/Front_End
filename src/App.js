@@ -7,6 +7,7 @@ import SignupForm from "./components/Signup.js"
 import { bwReducer as reducer } from "./reducers/bwReducer";
 
 import PrivateRoute from "./components/PrivateRoute";
+import Header from "./components/Header";
 
 import "./App.css";
 
@@ -16,6 +17,7 @@ function App() {
     return (
         <Provider store={store}>
             {/* All of your jsx and components will be inside of Provider */}
+            <Header headerText="Sleep Tracker" />
             <Router>
                 <div className="App">
                     <h1>Welcome to Build Week!</h1>
