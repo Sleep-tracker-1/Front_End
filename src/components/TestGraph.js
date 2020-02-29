@@ -2,10 +2,17 @@ import React, { useState, useEffect } from "react";
 import { Line } from "react-chartjs-2";
 import ChartDataLabels from "chartjs-plugin-datalabels";
 import styled from "styled-components";
+import Login from "./Login";
 
 function TestGraph() {
-    const moodAndRestObj = { mood: 8, restfulness: 10 };
-    const [currentWeek, setCurrentWeek] = useState([6, 5, 9, 12, 8, 5, 10]);
+    const apiResponseArray = [6, 5, 9, 12, 8, 5, 10];
+    const moodAndRestObj = {
+        sleepHours: apiResponseArray,
+        mood: 8,
+        restfulness: 10,
+    }; //We should probably use state here as well
+    //We need to get our data from the server, but these are our stand-in values
+    const [currentWeek, setCurrentWeek] = useState(apiResponseArray);
     const chartProps = {
         data: {
             labels: [
@@ -27,6 +34,7 @@ function TestGraph() {
                     lineTension: 0,
                     radius: 15,
                     hoverRadius: 30,
+                    onClick: console.log("billz"),
                     pointHoverBackgroundColor: "yellow",
                     datalabels: {
                         textStrokeColor: "black",
@@ -95,7 +103,6 @@ function TestGraph() {
                     afterLabel: function(tooltipItem, data) {
                         const thisDataset =
                             data.datasets[Number(tooltipItem.datasetIndex)];
-                        console.log(thisDataset);
                         const rest = thisDataset.moodAndRest.restfulness;
                         const mood = thisDataset.moodAndRest.restfulness;
 
@@ -111,6 +118,7 @@ function TestGraph() {
     const chartReference = React.createRef();
     const ChartContainer = styled.div``;
     const suggestedSleepHours = "9";
+    useEffect(() => {}, []);
     return (
         <ChartContainer>
             <Line
@@ -118,10 +126,18 @@ function TestGraph() {
                 data={chartProps.data}
                 options={chartProps.options}
             />
+            <button
+                onClick={e => {
+                    setCurrentWeek([3, 3, 3, 3]);
+                }}
+            >
+                PRESS HERE TO CHANGE THE DATES!
+            </button>
             <h3>
                 Your Recommended Sleep Hours:{" "}
                 <h2>{suggestedSleepHours}hrs/night</h2>
             </h3>
+            <Login />
         </ChartContainer>
     );
 }
