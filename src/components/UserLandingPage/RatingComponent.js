@@ -4,15 +4,23 @@ import styled from "styled-components";
 
 const Wrapper = styled.div`
     box-sizing: border-box;
-    padding: 10px;
     width: 150px;
     display: flex;
+    flex-direction: column;
     justify-content: space-evenly;
     align-items: center;
 `;
 
-const HiddenInput = styled.input`
-    visibility: hidden;
+const Heading = styled.h3`
+    margin: 0;
+`;
+
+const EmojisWrapper = styled.div`
+    width: 100%;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-evenly;
+    align-items: center;
 `;
 
 const EmojiContainer = styled.div`
@@ -34,7 +42,6 @@ const Emoji = ({ ariaLabel, emoji, isSelected, handleClick }) => (
 );
 
 const RatingComponent = ({
-    ratingId,
     isMoodForm,
     moodEmojis,
     tirednessEmojis,
@@ -42,16 +49,6 @@ const RatingComponent = ({
     value,
 }) => {
     const [ratingEmojis, setRatingEmojis] = useState({});
-    // const [isSelected, setIsSelected] = useState(null);
-
-    // const handleSelection = (handleChange, emoji) => {
-    //     handleChange();
-    //     setIsSelected(emoji);
-    // };
-
-    // useEffect(() => {
-    //     console.log("isSelected: ", isSelected);
-    // }, [isSelected]);
 
     useEffect(() => {
         let emojis = {};
@@ -65,16 +62,15 @@ const RatingComponent = ({
         setRatingEmojis(emojis);
     }, [isMoodForm, moodEmojis, tirednessEmojis]);
     return (
-        <>
+        <Wrapper>
+            <Heading>{isMoodForm ? "Mood" : "Tiredness"}</Heading>
+            {/* need to wait for ratingEmojis to be set */}
             {ratingEmojis.great && (
-                <Wrapper>
+                <EmojisWrapper>
                     <Emoji
                         emoji={ratingEmojis.great.emoji}
                         ariaLabel={ratingEmojis.great.desc}
-                        handleClick={() => {
-                            console.log("in emoji");
-                            handleChange(1);
-                        }}
+                        handleClick={() => handleChange(1)}
                         isSelected={value === 1}
                     />
                     <Emoji
@@ -89,40 +85,9 @@ const RatingComponent = ({
                         handleClick={() => handleChange(3)}
                         isSelected={value === 3}
                     />
-                    {/* <EmojiContainer
-                        value={props.values.mood}
-                        onClick={() =>
-                            handleSelection(
-                                props.handleChange,
-                                ratingEmojis.ok.emoji
-                            )
-                        }
-                        name={ratingId}
-                    >
-                        <Emoji
-                            emoji={ratingEmojis.ok.emoji}
-                            ariaLabel={ratingEmojis.ok.desc}
-                        />
-                    </EmojiContainer>
-
-                    <EmojiContainer
-                        value={props.values.mood}
-                        onClick={() =>
-                            handleSelection(
-                                props.handleChange,
-                                ratingEmojis.bad.emoji
-                            )
-                        }
-                        name={ratingId}
-                    >
-                        <Emoji
-                            emoji={ratingEmojis.bad.emoji}
-                            ariaLabel={ratingEmojis.bad.desc}
-                        />
-                    </EmojiContainer> */}
-                </Wrapper>
+                </EmojisWrapper>
             )}
-        </>
+        </Wrapper>
     );
 };
 
@@ -134,49 +99,3 @@ const mapStateToProps = state => {
 };
 
 export default connect(mapStateToProps, {})(RatingComponent);
-
-{
-    /* <fieldset
-                    id={ratingId}
-                    onChange={e => setSelection(e.target.value)}
-                >
-                    <label htmlFor={`${ratingId}Great`}>
-                        <span role="img" aria-label={ratingEmojis.great.desc}>
-                            {ratingEmojis.great.emoji}
-                        </span>
-                    </label>
-                    <HiddenInput
-                        id={`${ratingId}Great`}
-                        name={ratingId}
-                        type="radio"
-                        value={3}
-                        checked={selection === 3}
-                    />
-
-                    <label htmlFor={`${ratingId}Ok`}>
-                        <span role="img" aria-label={ratingEmojis.ok.desc}>
-                            {ratingEmojis.ok.emoji}
-                        </span>
-                    </label>
-                    <HiddenInput
-                        id={`${ratingId}Ok`}
-                        name={ratingId}
-                        type="radio"
-                        value={2}
-                        checked={selection === 2}
-                    />
-
-                    <label htmlFor={`${ratingId}Bad`}>
-                        <span role="img" aria-label={ratingEmojis.bad.desc}>
-                            {ratingEmojis.bad.emoji}
-                        </span>
-                    </label>
-                    <HiddenInput
-                        id={`${ratingId}Bad`}
-                        name={ratingId}
-                        type="radio"
-                        value={1}
-                        checked={selection === 1}
-                    />
-                </fieldset> */
-}
