@@ -23,9 +23,7 @@ const SignupForm = (props) => {
     const handleSubmit = e => {
         e.preventDefault();
         axios
-        // Commented new user <inputs> and made temporary login for testing also change url in post 
-        // to login instead of register.
-        .post('https://sleep-tracker-server.herokuapp.com/api/auth/login', user)
+        .post('https://sleep-tracker-server.herokuapp.com/api/auth/register', user)
             .then(res => {
                 console.log(res)
                 localStorage.setItem("token", res.data.token);
@@ -39,7 +37,7 @@ const SignupForm = (props) => {
             <SignupContainer>
                 <h1>Sign Up Form</h1>  
                 <Form>
-                    {/* <FormLabel htmlFor="first-name">first name</FormLabel>
+                    <FormLabel htmlFor="first-name">first name</FormLabel>
                     <NewUserInputs
                         className="first-name"
                         id="first-name"
@@ -58,7 +56,7 @@ const SignupForm = (props) => {
                         placeholder="email"
                         value={user.email}
                         onChange={handleChange}
-                    /> */}
+                    />
                     <FormLabel htmlFor="user-name">username</FormLabel>
                     <NewUserInputs
                         className="user-name"
