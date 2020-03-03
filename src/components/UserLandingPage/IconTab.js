@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { motion } from "framer-motion";
 import { Formik } from "formik";
 import styled from "styled-components";
@@ -75,9 +75,9 @@ const IconTab = ({
     timeLabel,
     timeId,
     initialValues,
-    isWakeUp,
-    isMidday,
-    isBedtime,
+    isWakeUp, // used for styled components for conditional styles
+    isMidday, // used for styled components for conditional styles
+    isBedtime, // used for styled components for conditional styles
     icon: Icon,
     animateX,
     animateY,
@@ -99,9 +99,9 @@ const IconTab = ({
 
     return (
         <FormContainer
-            isWakeUp={isWakeUp}
-            isBedtime={isBedtime}
-            isMidday={isMidday}
+            isWakeUp={isWakeUp} // used for styled components for conditional styles
+            isBedtime={isBedtime} // used for styled components for conditional styles
+            isMidday={isMidday} // used for styled components for conditional styles
             animate={{
                 x: animateX ? animateX : 0,
                 y: animateY ? animateY : 0,
@@ -190,9 +190,9 @@ const IconTab = ({
                 )}
             </Formik>
             <IconContainer
-                isWakeUp={isWakeUp}
-                isMidday={isMidday}
-                isBedtime={isBedtime}
+                isWakeUp={isWakeUp} // used for styled components for conditional styles
+                isMidday={isMidday} // used for styled components for conditional styles
+                isBedtime={isBedtime} // used for styled components for conditional styles
                 onTap={tapFunc}
             >
                 <Icon />

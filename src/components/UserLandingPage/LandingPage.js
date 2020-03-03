@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import TestGraph from "../TestGraph";
 import IconTab from "./IconTab";
+import TestGraph from "../TestGraph";
 import { WiSunrise } from "react-icons/wi";
 import { FiSun, FiMoon } from "react-icons/fi";
 
@@ -64,24 +65,6 @@ const LandingPage = () => {
         setMiddaySlide(newPosition);
     };
 
-    // const wakeUpDragConstraints = {
-    //     left: 0,
-    //     right: 165,
-    // };
-
-    // const middayDragConstraints = {
-    //     top: 135,
-    //     bottom: 0,
-    // };
-
-    // const bedtimeDragConstraints = {
-    //     left: -165,
-    //     right: 0,
-    // };
-
-    // const horizontalDrag = "x";
-    // const verticalDrag = "y";
-
     return (
         <>
             <TestGraph />
@@ -95,8 +78,6 @@ const LandingPage = () => {
                 animateX={wakeUpSlide}
                 tapFunc={wakeUpTap}
                 icon={Sunrise}
-                // dragDirection={horizontalDrag}
-                // dragConstraints={wakeUpDragConstraints}
             />
             <IconTab
                 heading="Midday"
@@ -105,8 +86,6 @@ const LandingPage = () => {
                 isMidday={true}
                 animateY={middaySlide}
                 tapFunc={middayTap}
-                // dragDirection={verticalDrag}
-                // dragConstratints={middayDragConstraints}
             />
             <IconTab
                 heading="Bedtime"
@@ -118,8 +97,6 @@ const LandingPage = () => {
                 icon={FiMoon}
                 animateX={bedtimeSlide}
                 tapFunc={bedtimeTap}
-                // dragDirection={horizontalDrag}
-                // dragConstraints={bedtimeDragConstraints}
             />
         </>
     );

@@ -8,10 +8,9 @@ function Login() {
     };
     const onInputChange = event => {
         // console.log`name is currently ${nameInput.value} email is currently ${emailInput.value} role is currently${roleInput.value}`();
-
         // setNewMember({
-             // ...newMember,
-             // [event.target.name]: event.target.value,
+        // ...newMember,
+        // [event.target.name]: event.target.value,
         // });
     };
 
