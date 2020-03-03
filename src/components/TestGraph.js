@@ -106,7 +106,7 @@ function TestGraph() {
                         const rest = thisDataset.moodAndRest.restfulness;
                         const mood = thisDataset.moodAndRest.restfulness;
 
-                        const stringo = `Rest: ${rest} - Mood: ${mood}`;
+                         const stringo = `Rest: ${rest} - Mood: ${mood}`;
 
                         return stringo;
                     },
@@ -138,7 +138,7 @@ function TestGraph() {
                 <h2>{suggestedSleepHours}hrs/night</h2>
             </h3>
 
-            <form>
+            {/* <form>
                 <label htmlFor>
                     Hours Slept:
                     <input
@@ -167,7 +167,7 @@ function TestGraph() {
                 <button onSubmit={e => {}}>Add Entry</button>
             </form>
 
-            <Login />
+            <Login /> */}
         </ChartContainer>
     );
 }
