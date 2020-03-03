@@ -23,6 +23,7 @@ const HeaderWrapper = styled.div`
     display: flex;
     align-items: center;
     justify-content: space-between;
+
     @media (max-width: 950px) {
         width: 90%;
     }
@@ -43,6 +44,7 @@ const HeaderWrapper = styled.div`
 const LinkWrapper = styled.div`
     max-width: 270px;
     margin-left: 0;
+
     @media (max-width: 830px) {
         margin-left: 1.5rem;
         grid-area: title;
@@ -60,6 +62,7 @@ const Heading = styled.h3`
 const ImageLink = styled.a`
     display: none;
     width: 0;
+
     @media (max-width: 830px) {
         display: initial;
         width: 65px;
@@ -135,6 +138,7 @@ const Input = styled.input`
 
 const Label = styled.label`
     visibility: hidden;
+
     @media (max-width: 830px) {
         grid-area: hamburger;
         cursor: pointer;
@@ -177,7 +181,7 @@ const Span = styled.span`
 
 // container for nav link
 const NavItem = styled.div`
-    background: rgb(129,196,233);
+    background: #d2d1cf;
     display: flex;
     align-items: center;
     justify-content: center;
