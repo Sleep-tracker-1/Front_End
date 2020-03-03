@@ -7,6 +7,6 @@ export const axiosWithAuth = () => {
         headers: {
             authorization: token,
         },
-        baseURL: "", //Your API base URL here
+        baseURL: "https://sleep-tracker-server.herokuapp.com/api", //Your API base URL here
     });
 };
