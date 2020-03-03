@@ -25,7 +25,7 @@ function App() {
             <Router>
                 <div className="App">
                     <SignupForm />
-                    <TestGraph />
+                    {/* <TestGraph /> */}
                     <h1>Welcome to Build Week!</h1>
 
                     {/* <Route

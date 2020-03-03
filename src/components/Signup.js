@@ -25,23 +25,18 @@ const SignupForm = () => {
         e.preventDefault();
         axios
         .post('https://sleep-tracker-server.herokuapp.com/api/auth/register', user)
-          .then(res => console.log(res))
+            .then(res => {
+              console.log(res)
+            localStorage.setItem("token", res.data.token)
+            })
           .catch(err => console.log(err))
-        // axios
-        // .post('https://sleep-tracker-server.herokuapp.com/api/auth/login', user)
-        //     .then(res => {
-        //         localStorage.setItem('token', res.data);
-        //         console.log(res);
-                
-        // })
-        //     .catch(err => console.log(err))  
     };
 
     return (
         <>
             <SignupContainer>
                 <form >
-                    <label htmlFor="firstname">name</label>
+                    <label htmlFor="firstname">name    </label>
                     <input
                         id="fname"
                         type="text"
@@ -50,7 +45,7 @@ const SignupForm = () => {
                         value={user.firstName}
                         onChange={handleChange}
                     />
-                    <label htmlFor="email">email</label>
+                    <label htmlFor="email">email   </label>
                     <input
                         id="email"
                         type="email"
