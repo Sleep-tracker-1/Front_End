@@ -7,14 +7,15 @@ form {
     margin-top: 0em;
 }
 
-input[type=text], [type=password], select {
-    width: 60%;
+input[type=text], [type=password], [type=email], select {
+    width: 75%;
     padding: 12px 20px;
     margin: 8px 0;
     display: inline-block;
     border: 1px solid #ccc;
     border-radius: 4px;
     box-sizing: border-box;
+    align-items: flex-start;
 }
 
 
@@ -36,4 +37,5 @@ input[type=submit]:hover {
 label {
     padding: 2%;
     color: blue;
+    text-align: start;
 }  

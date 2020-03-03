@@ -5,9 +5,13 @@ import { SignupContainer } from "./styles/SignupContainer";
 const SignupForm = () => {
     
     const [ user, setUser] = useState({
-        username: "",
-        password: "",
+        username: '',
+        password: '',
+        firstName: '',
+        email: '',
     })
+    console.log(user);
+    
 
     const handleChange = e => {
         setUser({
@@ -15,6 +19,7 @@ const SignupForm = () => {
           [e.target.name]: e.target.value,
         })
     }
+
 
     const handleSubmit = e => {
         e.preventDefault();
@@ -36,6 +41,24 @@ const SignupForm = () => {
         <>
             <SignupContainer>
                 <form >
+                    <label htmlFor="firstname">name</label>
+                    <input
+                        id="fname"
+                        type="text"
+                        name="firstName"
+                        placeholder="first name"
+                        value={user.firstName}
+                        onChange={handleChange}
+                    />
+                    <label htmlFor="email">email</label>
+                    <input
+                        id="email"
+                        type="email"
+                        name="email"
+                        placeholder="email"
+                        value={user.email}
+                        onChange={handleChange}
+                    />
                     <label htmlFor="uname">username</label>
                     <input
                         id="uname"

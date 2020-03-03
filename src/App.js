@@ -20,7 +20,6 @@ function App() {
             <Header headerText="Sleep Tracker" />
             <Router>
                 <div className="App">
-                    <h1>Welcome to Build Week!</h1>
                     <SignupForm />
 
                     {/* <Route
