@@ -94,9 +94,9 @@ function TestGraph() {
                         const thisDataset =
                             data.datasets[Number(tooltipItem.datasetIndex)];
 
-//                         const WeekLabel =
-//                             "Hours slept: " +
-//                             thisDataset.data[Number(tooltipItem.index)];
+                        const WeekLabel =
+                            "Hours slept: " +
+                            thisDataset.data[Number(tooltipItem.index)];
 
                         return WeekLabel;
                     },
@@ -106,7 +106,7 @@ function TestGraph() {
                         const rest = thisDataset.moodAndRest.restfulness;
                         const mood = thisDataset.moodAndRest.restfulness;
 
-//                         const stringo = `Rest: ${rest} - Mood: ${mood}`;
+                         const stringo = `Rest: ${rest} - Mood: ${mood}`;
 
                         return stringo;
                     },
