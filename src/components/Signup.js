@@ -37,37 +37,34 @@ const SignupForm = (props) => {
             <SignupContainer>
                 <h1>Sign Up Form</h1>  
                 <Form>
-                    <FormLabel htmlFor="first-name">first name</FormLabel>
+                    <FormLabel htmlFor="first-name">First Name</FormLabel>
                     <NewUserInputs
                         className="first-name"
                         id="first-name"
                         type="text"
                         name="firstName"
-                        placeholder="first name"
                         value={user.firstName}
                         onChange={handleChange}
                     />
-                    <FormLabel htmlFor="email">email</FormLabel>
+                    <FormLabel htmlFor="email">E-mail</FormLabel>
                     <NewUserInputs
                         className="email"
                         id="email"
                         type="email"
                         name="email"
-                        placeholder="email"
                         value={user.email}
                         onChange={handleChange}
                     />
-                    <FormLabel htmlFor="user-name">username</FormLabel>
+                    <FormLabel htmlFor="user-name">Username</FormLabel>
                     <NewUserInputs
                         className="user-name"
                         id="user-name"
                         type="text"
                         name="username"
-                        placeholder="username"
                         value={user.username}
                         onChange={handleChange}
                     />
-                    <FormLabel htmlFor="password">password</FormLabel>
+                    <FormLabel htmlFor="password">Password</FormLabel>
                     <NewUserInputs
                         className="password"
                         id="password"
