@@ -4,14 +4,7 @@ function Login() {
     const [statesHere, setStateshere] = useState("");
 
     const submitHandler = event => {
-        if (
-            newMember.name != "" &&
-            newMember.email != "" &&
-            newMember.role != ""
-        ) {
-            //do a thing        }
-            event.preventDefault();
-        }
+        event.preventDefault();
     };
     const onInputChange = event => {
         // console.log`name is currently ${nameInput.value} email is currently ${emailInput.value} role is currently${roleInput.value}`();
@@ -40,7 +33,7 @@ function Login() {
                 <input
                     type="text"
                     name="email"
-                    id="emailInput"
+                    id="passwordInput"
                     onChange={onInputChange}
                 />
             </label>

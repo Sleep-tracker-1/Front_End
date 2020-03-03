@@ -137,6 +137,36 @@ function TestGraph() {
                 Your Recommended Sleep Hours:{" "}
                 <h2>{suggestedSleepHours}hrs/night</h2>
             </h3>
+
+            <form>
+                <label htmlFor>
+                    Hours Slept:
+                    <input
+                        type="number"
+                        name="name"
+                        id="nameInput"
+                        min="1"
+                        max="17"
+                    />
+                </label>
+                <label>
+                    Restfulness:
+                    <input
+                        type="number"
+                        name="email"
+                        id="passwordInput"
+                        min="1"
+                        max="3"
+                    />
+                </label>
+                <label>
+                    Mood:
+                    <input type="number" name="email" id="passwordInput" />
+                </label>
+
+                <button onSubmit={e => {}}>Add Entry</button>
+            </form>
+
             <Login />
         </ChartContainer>
     );
