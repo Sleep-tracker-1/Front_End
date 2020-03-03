@@ -6,7 +6,33 @@ import {
 
 const initialState = {
     // initialize your state here
-    user: {},
+    user: {
+        userId: "",
+        username: "",
+        email: "",
+        sleepRecommendation: "", // after 30+ days of data
+        dates: [
+            {
+                date: "",
+                dateId: "",
+                totalTimeInBed: "",
+                wakeUp: {
+                    time: "",
+                    mood: 0,
+                    tiredness: 0,
+                },
+                midday: {
+                    mood: 0,
+                    tiredness: 0,
+                },
+                bedtime: {
+                    time: "",
+                    mood: 0,
+                    tiredness: 0,
+                },
+            },
+        ],
+    },
     moodEmojis: {
         great: {
             emoji: "😊",
