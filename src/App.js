@@ -4,6 +4,8 @@ import { createStore, applyMiddleware } from "redux";
 import { Provider } from "react-redux";
 import thunk from "redux-thunk";
 import SignupForm from "./components/Signup.js"
+import TestGraph from "./components/TestGraph";
+
 import { bwReducer as reducer } from "./reducers/bwReducer";
 
 import PrivateRoute from "./components/PrivateRoute";
@@ -13,6 +15,8 @@ import "./App.css";
 
 const store = createStore(reducer, applyMiddleware(thunk));
 
+// TODO: create list compojnent that lets you view previous date ranges and have them display on the graph
+
 function App() {
     return (
         <Provider store={store}>
@@ -21,6 +25,8 @@ function App() {
             <Router>
                 <div className="App">
                     <SignupForm />
+                    <TestGraph />
+                    <h1>Welcome to Build Week!</h1>
 
                     {/* <Route
                         exact
