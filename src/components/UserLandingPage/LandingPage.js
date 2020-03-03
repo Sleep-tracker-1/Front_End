@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-
+import TestGraph from "../TestGraph";
 import IconTab from "./IconTab";
 import { WiSunrise } from "react-icons/wi";
 import { FiSun, FiMoon } from "react-icons/fi";
@@ -84,6 +84,7 @@ const LandingPage = () => {
 
     return (
         <>
+            <TestGraph />
             <IconTab
                 heading="Wake Up"
                 needsTimeInput={true}
