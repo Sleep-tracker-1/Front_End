@@ -14,28 +14,42 @@ const FormContainer = styled(motion.div)`
     flex-direction: column;
     justify-content: space-evenly;
     align-items: center;
+    align-items: ${props => props.isWakeUp && "flex-start"};
+    align-items: ${props => props.isBedtime && "flex-end"};
+    padding-left: ${props => (props.isWakeUp ? "5px" : "0")};
+    padding-right: ${props => (props.isBedtime ? "5px" : "0")};
+    padding-bottom: 10px;
     background: gray;
     position: absolute;
-    bottom: 0;
-    left: ${props => (props.isWakeUp ? "0px" : "calc((100vw / 2) - 100px)")};
+    bottom: ${props => (props.isMidday ? "-153px" : "0")};
+    left: ${props => (props.isWakeUp ? "-165px" : "calc((100vw / 2) - 100px)")};
     left: ${props => props.isBedtime && "unset"};
-    right: ${props => (props.isBedtime ? "0" : null)};
+    right: ${props => (props.isBedtime ? "-165px" : null)};
     border-top-right-radius: ${props =>
         props.isWakeUp ? "50px 100px" : "unset"};
+    border-top-right-radius: ${props => props.isMidday && "100px 45px"};
     border-bottom-right-radius: ${props =>
         props.isWakeUp ? "50px 100px" : "unset"};
     border-top-left-radius: ${props =>
         props.isBedtime ? "50px 100px" : "unset"};
+    border-top-left-radius: ${props => props.isMidday && "100px 45px"};
     border-bottom-left-radius: ${props =>
         props.isBedtime ? "50px 100px" : "unset"};
 `;
 
-const IconContainer = styled.div`
+const Heading = styled.h2`
+    margin: ${props => props.isMidday && "45px 0 10px"};
+`;
+
+const IconContainer = styled(motion.div)`
     box-sizing: border-box;
+    height: 2.5rem;
     font-size: 2.5rem;
     z-index: 5;
     position: absolute;
     right: ${props => (props.isWakeUp ? "0" : "unset")};
+    left: ${props => (props.isBedtime ? "0" : "unset")};
+    top: ${props => (props.isMidday ? "5px" : "unset")};
 `;
 
 const InputTime = styled.input`
@@ -62,15 +76,17 @@ const IconTab = ({
     timeId,
     initialValues,
     isWakeUp,
+    isMidday,
     isBedtime,
     icon: Icon,
+    animateX,
+    animateY,
+    tapFunc,
 }) => {
-    const [wakeUpSlide, setWakeUpSlide] = useState(-170);
-
-    console.log("initialValues: ", initialValues);
     const handleSubmit = values => {
         const timeAsDate = new Date(values.time); // convert `time` to Date object for POST request
 
+        console.log("values in handleSubmit: ", values);
         console.log("about to do POST request");
         // axiosWithAuth()
         //     .post()
@@ -85,9 +101,14 @@ const IconTab = ({
         <FormContainer
             isWakeUp={isWakeUp}
             isBedtime={isBedtime}
-            animate={{ x: wakeUpSlide, initial: false }}
+            isMidday={isMidday}
+            animate={{
+                x: animateX ? animateX : 0,
+                y: animateY ? animateY : 0,
+                zIndex: animateX || animateY ? 10 : 0,
+            }}
         >
-            <h2>{heading}</h2>
+            <Heading isMidday={isMidday}>{heading}</Heading>
             <Formik
                 initialValues={{
                     ...initialValues,
@@ -170,13 +191,9 @@ const IconTab = ({
             </Formik>
             <IconContainer
                 isWakeUp={isWakeUp}
-                onClick={() =>
-                    setWakeUpSlide(
-                        wakeUpSlide === 0
-                            ? wakeUpSlide - 170
-                            : wakeUpSlide + 170
-                    )
-                }
+                isMidday={isMidday}
+                isBedtime={isBedtime}
+                onTap={tapFunc}
             >
                 <Icon />
             </IconContainer>
