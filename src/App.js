@@ -5,13 +5,11 @@ import { Provider } from "react-redux";
 import thunk from "redux-thunk";
 import SignupForm from "./components/Signup.js"
 import TestGraph from "./components/TestGraph";
-
 import { bwReducer as reducer } from "./reducers/bwReducer";
-
 import PrivateRoute from "./components/PrivateRoute";
 import Header from "./components/Header";
-
 import "./App.css";
+import LandingPage from "./components/UserLandingPage/LandingPage.js";
 
 const store = createStore(reducer, applyMiddleware(thunk));
 
@@ -24,20 +22,16 @@ function App() {
             <Header headerText="Sleep Tracker" />
             <Router>
                 <div className="App">
-                    <SignupForm />
-                    {/* <TestGraph /> */}
-                    <h1>Welcome to Build Week!</h1>
-
-                    {/* <Route
+                    <Route
                         exact
                         path="/"
-                        component={`YOUR HOME PAGE COMPONENT HERE`}
+                        component={SignupForm}
                     />
                     <PrivateRoute
                         exact
-                        path="YOUR PRIVATE ROUTE PATH HERE"
-                        component={`YOUR PRIVATE ROUTE COMPONENT HERE`}
-                    /> */}
+                        path="/home"
+                        component={LandingPage}
+                    />
                 </div>
             </Router>
         </Provider>
