@@ -7,7 +7,18 @@ import IconTab from "./IconTab";
 import { WiSunrise } from "react-icons/wi";
 import { FiSun, FiMoon } from "react-icons/fi";
 
-const Sunrise = styled(WiSunrise)`
+// if you change the height of the header, the LandingPageContainer min and max height calcs need to be adjusted
+const LandingPageContainer = styled.div`
+    width: 100%;
+    max-width: 100vw;
+    overflow: hidden;
+    height: 100%;
+    min-height: calc(100vh - 75px);
+    max-height: calc(100vh - 75px);
+    position: relative;
+`;
+
+export const Sunrise = styled(WiSunrise)`
     font-size: 2.5rem;
     z-index: 5;
     position: absolute;
@@ -77,8 +88,22 @@ const LandingPage = () => {
         setMiddaySlide(newPosition);
     };
 
+    const handleSubmit = values => {
+        const timeAsDate = new Date(values.time); // convert `time` to Date object for POST request
+
+        console.log("values in handleSubmit: ", values);
+        console.log("about to do POST request");
+        // axiosWithAuth()
+        //     .post()
+        //     .then(res => {
+        //         console.log("Rating POST res.data: ", res.data);
+        //     })
+        //     .catch(err => alert("Rating POST error: ", err));
+        // }
+    };
+
     return (
-        <>
+        <LandingPageContainer>
             <TestGraph />
             <ProgressBarsContainer>
                 <CircleProgressbar progressColor="red" />
@@ -91,6 +116,7 @@ const LandingPage = () => {
                 timeLabel="Wake up time"
                 timeId="wakeUpTime"
                 initialValues={initialValuesPlusTime}
+                handleSubmit={handleSubmit}
                 isWakeUp={true}
                 animateX={wakeUpSlide}
                 tapFunc={wakeUpTap}
@@ -99,6 +125,7 @@ const LandingPage = () => {
             <IconTab
                 heading="Midday"
                 initialValues={initialValues}
+                handleSubmit={handleSubmit}
                 icon={FiSun}
                 isMidday={true}
                 animateY={middaySlide}
@@ -110,12 +137,13 @@ const LandingPage = () => {
                 timeLabel="Bedtime"
                 timeId="bedtime"
                 initialValues={initialValuesPlusTime}
+                handleSubmit={handleSubmit}
                 isBedtime={true}
                 icon={FiMoon}
                 animateX={bedtimeSlide}
                 tapFunc={bedtimeTap}
             />
-        </>
+        </LandingPageContainer>
     );
 };
 

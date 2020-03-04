@@ -2,7 +2,6 @@ import React from "react";
 import { motion } from "framer-motion";
 import { Formik } from "formik";
 import styled from "styled-components";
-// import { axiosWithAuth } from "../../utils/axiosWithAuth";
 import { isDiff } from "../../utils/isDiff";
 
 import RatingComponent from "./RatingComponent";
@@ -75,6 +74,7 @@ const IconTab = ({
     timeLabel,
     timeId,
     initialValues,
+    handleSubmit,
     isWakeUp, // used for styled components for conditional styles
     isMidday, // used for styled components for conditional styles
     isBedtime, // used for styled components for conditional styles
@@ -83,19 +83,7 @@ const IconTab = ({
     animateY,
     tapFunc,
 }) => {
-    const handleSubmit = values => {
-        const timeAsDate = new Date(values.time); // convert `time` to Date object for POST request
-
-        console.log("values in handleSubmit: ", values);
-        console.log("about to do POST request");
-        // axiosWithAuth()
-        //     .post()
-        //     .then(res => {
-        //         console.log("Rating POST res.data: ", res.data);
-        //     })
-        //     .catch(err => alert("Rating POST error: ", err));
-        // }
-    };
+    
 
     return (
         <FormContainer
