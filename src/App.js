@@ -11,6 +11,7 @@ import Header from "./components/Header";
 import Login from "./components/Login/Login";
 import "./App.css";
 import LandingPage from "./components/UserLandingPage/LandingPage.js";
+import NewUser from "./components/UserLandingPage/NewUserLanding.js";
 
 const store = createStore(reducer, applyMiddleware(thunk));
 
@@ -25,7 +26,7 @@ function App() {
                 <div className="App">
                     <Route exact path="/" component={Login} />
                     <Route exact path="/signup" component={SignupForm} />
-
+                    <PrivateRoute exact path="/new" component={NewUser} />
                     <PrivateRoute exact path="/home" component={LandingPage} />
                 </div>
             </Router>

@@ -1,24 +1,33 @@
-import styled from "styled-components"
+import styled from "styled-components";
 
 export const SignupContainer = styled.div`
+    margin: auto; 
+    height: 100vh;
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+`
+
+export const FormContainer = styled.div`
     border-radius: 5px;
     background-color: #f2f2f2;
     padding: 10px;
-    height: 70%;
+    margin: auto;
     width: 70%;
-    margin: auto; 
     text-align: center; 
+    min-height: 50vh;
+    display: flex;
+    flex-flow: column;
+    justify-content: space-evenly;
+    
+    
     
 `
 
 export const Form = styled.form`
-    display: flex;
-    flex-flow: column nowrap;
-    width: 80%;
-    margin: auto;
-    padding: 4%;
-    text-align: center;
-    position: relative;
+    width: 100%;
+    margin: 0 auto;
+    
 `
 
 export const InputContainer = styled.div`
@@ -26,14 +35,13 @@ export const InputContainer = styled.div`
     flex-flow: column nowrap;
     width: 100%;
     margin: 0 auto;
-    padding: 0;
+    padding-bottom: 3%;
 `
 
 export const NewUserInputs = styled.input`
-    width: 65%;
-    padding: 2% 3%;
+    width: 75%;
+    padding: 2%;
     margin: 1%;
-    display: inline-block;
     border: 1px solid #ccc;
     border-radius: 4px;
     box-sizing: border-box;
@@ -57,10 +65,13 @@ export const NewUserSubmit = styled.input`
 `
 
 export const FormLabel = styled.label`
-    padding: 1%;    
-
+    padding-bottom: 1%;
+    margin: 0; 
+    width: 100%;
 `
 
 export const Header = styled.h3`
-    margin: 0 auto;
+    margin: 1%;
+    text-align: center; 
+    
 `
