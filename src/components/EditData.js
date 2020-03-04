@@ -77,6 +77,7 @@ const EditData = () => {
 
     useEffect(() => {
         // when the input values get updated in the redux store (pass into the dependency array for this useEffect), set the local state 'initialValues' and 'initialValuesPlusTime'
+        // might have to convert wake and bed times from Date object to string first? something to check
     }, []);
 
     return (
