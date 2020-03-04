@@ -1,11 +1,24 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import TestGraph from "../TestGraph";
+// import { axiosWithAuth } from "../../utils/axiosWithAuth";
+
 import IconTab from "./IconTab";
+import TestGraph from "../TestGraph";
 import { WiSunrise } from "react-icons/wi";
 import { FiSun, FiMoon } from "react-icons/fi";
 
-const Sunrise = styled(WiSunrise)`
+// if you change the height of the header, the LandingPageContainer min and max height calcs need to be adjusted
+const LandingPageContainer = styled.div`
+    width: 100%;
+    max-width: 100vw;
+    overflow: hidden;
+    height: 100%;
+    min-height: calc(100vh - 75px);
+    max-height: calc(100vh - 75px);
+    position: relative;
+`;
+
+export const Sunrise = styled(WiSunrise)`
     font-size: 2.5rem;
     z-index: 5;
     position: absolute;
@@ -64,26 +77,22 @@ const LandingPage = () => {
         setMiddaySlide(newPosition);
     };
 
-    // const wakeUpDragConstraints = {
-    //     left: 0,
-    //     right: 165,
-    // };
+    const handleSubmit = values => {
+        const timeAsDate = new Date(values.time); // convert `time` to Date object for POST request
 
-    // const middayDragConstraints = {
-    //     top: 135,
-    //     bottom: 0,
-    // };
-
-    // const bedtimeDragConstraints = {
-    //     left: -165,
-    //     right: 0,
-    // };
-
-    // const horizontalDrag = "x";
-    // const verticalDrag = "y";
+        console.log("values in handleSubmit: ", values);
+        console.log("about to do POST request");
+        // axiosWithAuth()
+        //     .post()
+        //     .then(res => {
+        //         console.log("Rating POST res.data: ", res.data);
+        //     })
+        //     .catch(err => alert("Rating POST error: ", err));
+        // }
+    };
 
     return (
-        <>
+        <LandingPageContainer>
             <TestGraph />
             <IconTab
                 heading="Wake Up"
@@ -91,22 +100,20 @@ const LandingPage = () => {
                 timeLabel="Wake up time"
                 timeId="wakeUpTime"
                 initialValues={initialValuesPlusTime}
+                handleSubmit={handleSubmit}
                 isWakeUp={true}
                 animateX={wakeUpSlide}
                 tapFunc={wakeUpTap}
                 icon={Sunrise}
-                // dragDirection={horizontalDrag}
-                // dragConstraints={wakeUpDragConstraints}
             />
             <IconTab
                 heading="Midday"
                 initialValues={initialValues}
+                handleSubmit={handleSubmit}
                 icon={FiSun}
                 isMidday={true}
                 animateY={middaySlide}
                 tapFunc={middayTap}
-                // dragDirection={verticalDrag}
-                // dragConstratints={middayDragConstraints}
             />
             <IconTab
                 heading="Bedtime"
@@ -114,14 +121,13 @@ const LandingPage = () => {
                 timeLabel="Bedtime"
                 timeId="bedtime"
                 initialValues={initialValuesPlusTime}
+                handleSubmit={handleSubmit}
                 isBedtime={true}
                 icon={FiMoon}
                 animateX={bedtimeSlide}
                 tapFunc={bedtimeTap}
-                // dragDirection={horizontalDrag}
-                // dragConstraints={bedtimeDragConstraints}
             />
-        </>
+        </LandingPageContainer>
     );
 };
 
