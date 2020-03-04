@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route } from "react-router-dom";
 import { createStore, applyMiddleware } from "redux";
 import { Provider } from "react-redux";
 import thunk from "redux-thunk";
-import SignupForm from "./components/Signup.js"
+import SignupForm from "./components/Signup.js";
 import TestGraph from "./components/TestGraph";
 import { bwReducer as reducer } from "./reducers/bwReducer";
 import PrivateRoute from "./components/PrivateRoute";
@@ -19,19 +19,10 @@ function App() {
     return (
         <Provider store={store}>
             {/* All of your jsx and components will be inside of Provider */}
-            <Header headerText="Sleep Tracker" />
             <Router>
                 <div className="App">
-                    <Route
-                        exact
-                        path="/"
-                        component={SignupForm}
-                    />
-                    <PrivateRoute
-                        exact
-                        path="/home"
-                        component={LandingPage}
-                    />
+                    <Route exact path="/" component={SignupForm} />
+                    <PrivateRoute exact path="/home" component={LandingPage} />
                 </div>
             </Router>
         </Provider>
