@@ -35,6 +35,10 @@ const ProgressBarsContainer = styled.div`
     grid-gap: 15px;
     box-sizing: border-box;
     padding: 0 40px;
+
+    @media (max-width: 400px) {
+        padding: 0 30px;
+    }
 `;
 
 // can get rid of these and import initial values from redux store
@@ -151,6 +155,7 @@ const LandingPage = props => {
                 handleSubmit={handleSubmit}
                 icon={FiSun}
                 isMidday={true}
+                isMiddayTiredness={true}
                 animateY={middaySlide}
                 tapFunc={middayTap}
             />
