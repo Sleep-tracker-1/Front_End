@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-// import { axiosWithAuth } from "../../utils/axiosWithAuth";
+import { connect } from "react-redux";
 
-import IconTab from "./IconTab";
 import TestGraph from "../TestGraph";
+import CircleProgressbar from "./CircleProgressbar";
+import IconTab from "./IconTab";
 import { WiSunrise } from "react-icons/wi";
 import { FiSun, FiMoon } from "react-icons/fi";
 
@@ -26,6 +27,21 @@ export const Sunrise = styled(WiSunrise)`
     transform: rotate(90deg);
 `;
 
+// padding is to make sure the IconTabs don't cover them up
+const ProgressBarsContainer = styled.div`
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(75px, 200px));
+    grid-gap: 15px;
+    box-sizing: border-box;
+    padding: 0 40px;
+
+    @media (max-width: 400px) {
+        padding: 0 30px;
+    }
+`;
+
+// can get rid of these and import initial values from redux store
 const initialValues = {
     mood: 0,
     tiredness: 0,
@@ -36,7 +52,14 @@ const initialValuesPlusTime = {
     time: "",
 };
 
-const LandingPage = () => {
+const Emoji = ({ emoji, ariaLabel }) => (
+    <span role="img" aria-label={ariaLabel}>
+        {emoji}
+    </span>
+);
+
+const LandingPage = props => {
+    // for IconTab transitions
     const [wakeUpSlide, setWakeUpSlide] = useState(0);
     const [bedtimeSlide, setBedtimeSlide] = useState(0);
     const [middaySlide, setMiddaySlide] = useState(0);
@@ -82,18 +105,38 @@ const LandingPage = () => {
 
         console.log("values in handleSubmit: ", values);
         console.log("about to do POST request");
-        // axiosWithAuth()
-        //     .post()
-        //     .then(res => {
-        //         console.log("Rating POST res.data: ", res.data);
-        //     })
-        //     .catch(err => alert("Rating POST error: ", err));
-        // }
+
+        // need to import action creator that will invoke the POST request
     };
 
     return (
         <LandingPageContainer>
             <TestGraph />
+            <ProgressBarsContainer>
+                {/* progressColor and emoji for each will need to be dynamic to change depending on the ratio */}
+
+                {/* sleep ratio */}
+                <CircleProgressbar progressColor="red" value={30}>
+                    {/* placeholder value */}
+                    <p>7hr 12min</p>
+                </CircleProgressbar>
+
+                {/* mood ratio */}
+                <CircleProgressbar progressColor="yellow" value={52}>
+                    <Emoji
+                        emoji={props.moodEmojis.great.emoji}
+                        ariaLabel={props.moodEmojis.great.desc}
+                    />
+                </CircleProgressbar>
+
+                {/* tiredness ratio */}
+                <CircleProgressbar progressColor="green" value={80}>
+                    <Emoji
+                        emoji={props.tirednessEmojis.great.emoji}
+                        ariaLabel={props.tirednessEmojis.great.desc}
+                    />
+                </CircleProgressbar>
+            </ProgressBarsContainer>
             <IconTab
                 heading="Wake Up"
                 needsTimeInput={true}
@@ -112,6 +155,7 @@ const LandingPage = () => {
                 handleSubmit={handleSubmit}
                 icon={FiSun}
                 isMidday={true}
+                isMiddayTiredness={true}
                 animateY={middaySlide}
                 tapFunc={middayTap}
             />
@@ -131,4 +175,11 @@ const LandingPage = () => {
     );
 };
 
-export default LandingPage;
+const mapStateToProps = state => {
+    return {
+        moodEmojis: state.moodEmojis,
+        tirednessEmojis: state.tirednessEmojis,
+    };
+};
+
+export default connect(mapStateToProps, {})(LandingPage);

@@ -9,6 +9,7 @@ const Wrapper = styled.div`
     flex-direction: column;
     justify-content: space-evenly;
     align-items: center;
+    padding-bottom: ${props => (props.isMiddayTiredness ? "10px" : "0")};
 `;
 
 const Heading = styled.h3`
@@ -43,12 +44,14 @@ const Emoji = ({ ariaLabel, emoji, isSelected, handleClick }) => (
 
 const RatingComponent = ({
     isMoodForm,
+    isMiddayTiredness, // for styling midday tiredness form
     moodEmojis,
     tirednessEmojis,
     handleChange,
     value,
 }) => {
     const [ratingEmojis, setRatingEmojis] = useState({});
+    console.log("isMiddayTiredness: ", isMiddayTiredness);
 
     useEffect(() => {
         let emojis = {};
@@ -62,7 +65,7 @@ const RatingComponent = ({
         setRatingEmojis(emojis);
     }, [isMoodForm, moodEmojis, tirednessEmojis]);
     return (
-        <Wrapper>
+        <Wrapper isMiddayTiredness={isMiddayTiredness}>
             <Heading>{isMoodForm ? "Mood" : "Tiredness"}</Heading>
             {/* need to wait for ratingEmojis to be set */}
             {ratingEmojis.great && (
