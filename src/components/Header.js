@@ -1,7 +1,8 @@
 import React, { useState, useRef } from "react";
+import { Link, NavLink } from "react-router-dom";
 import styled from "styled-components";
 import useOnClickOutside from "../hooks/useOnClickOutside";
-//Possibly consider moving styled components to separate JS file
+
 const Header = styled.header`
     width: 100%;
     display: flex;
@@ -194,7 +195,7 @@ const NavItem = styled.div`
         border-bottom: solid 1px rgba(45,156,219, 0.4);
 `;
 
-const NavLink = styled.a`
+const NavLinkContainer = styled(NavLink)`
     font-size: 1.2rem;
     display: flex;
     align-items: center;
@@ -204,11 +205,13 @@ const NavLink = styled.a`
     width: 100%;
 `;
 
-const ListLink = props => (
-    <NavItem>
-        <NavLink to={props.to}>{props.children}</NavLink>
-    </NavItem>
-);
+const ListLink = props => {
+    return (
+        <NavItem>
+            <NavLinkContainer to={props.to}>{props.val}</NavLinkContainer>
+        </NavItem>
+    );
+};
 
 export default props => {
     const headerRef = useRef(null);
@@ -239,9 +242,9 @@ export default props => {
                     <Span />
                 </Label>
                 <Nav>
-                    <ListLink to="/">View History</ListLink>
-                    <ListLink to="/">Account</ListLink>
-                    <ListLink to="/">Sign out</ListLink>
+                    <ListLink to="/" val="View History" />
+                    <ListLink to="/" val="Account" />
+                    <ListLink to="/bees" val="Sign Out" />
                 </Nav>
             </HeaderWrapper>
         </Header>
