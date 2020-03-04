@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react";
 import styled from "styled-components";
 import useOnClickOutside from "../hooks/useOnClickOutside";
-
+//Possibly consider moving styled components to separate JS file
 const Header = styled.header`
     width: 100%;
     display: flex;
