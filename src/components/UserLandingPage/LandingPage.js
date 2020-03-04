@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+
 import TestGraph from "../TestGraph";
+import CircleProgressbar from "./CircleProgressbar";
 import IconTab from "./IconTab";
-import TestGraph from "../TestGraph";
 import { WiSunrise } from "react-icons/wi";
 import { FiSun, FiMoon } from "react-icons/fi";
 
@@ -12,6 +13,16 @@ const Sunrise = styled(WiSunrise)`
     position: absolute;
     right: 0;
     transform: rotate(90deg);
+`;
+
+// padding is to make sure the IconTabs don't cover them up
+const ProgressBarsContainer = styled.div`
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(75px, 200px));
+    grid-gap: 15px;
+    box-sizing: border-box;
+    padding: 0 40px;
 `;
 
 const initialValues = {
@@ -68,6 +79,11 @@ const LandingPage = () => {
     return (
         <>
             <TestGraph />
+            <ProgressBarsContainer>
+                <CircleProgressbar progressColor="red" />
+                <CircleProgressbar progressColor="yellow" />
+                <CircleProgressbar progressColor="green" />
+            </ProgressBarsContainer>
             <IconTab
                 heading="Wake Up"
                 needsTimeInput={true}
