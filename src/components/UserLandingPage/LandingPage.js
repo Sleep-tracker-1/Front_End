@@ -7,6 +7,17 @@ import TestGraph from "../TestGraph";
 import { WiSunrise } from "react-icons/wi";
 import { FiSun, FiMoon } from "react-icons/fi";
 
+// if you change the height of the header, the LandingPageContainer min and max height calcs need to be adjusted
+const LandingPageContainer = styled.div`
+    width: 100%;
+    max-width: 100vw;
+    overflow: hidden;
+    height: 100%;
+    min-height: calc(100vh - 75px);
+    max-height: calc(100vh - 75px);
+    position: relative;
+`;
+
 export const Sunrise = styled(WiSunrise)`
     font-size: 2.5rem;
     z-index: 5;
@@ -81,7 +92,7 @@ const LandingPage = () => {
     };
 
     return (
-        <>
+        <LandingPageContainer>
             <TestGraph />
             <IconTab
                 heading="Wake Up"
@@ -116,7 +127,7 @@ const LandingPage = () => {
                 animateX={bedtimeSlide}
                 tapFunc={bedtimeTap}
             />
-        </>
+        </LandingPageContainer>
     );
 };
 
