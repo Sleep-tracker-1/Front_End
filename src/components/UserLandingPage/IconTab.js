@@ -75,6 +75,7 @@ const IconTab = ({
     timeId,
     initialValues,
     handleSubmit,
+    isMiddayTiredness, // used for styling midday tiredness input
     isWakeUp, // used for styled components for conditional styles
     isMidday, // used for styled components for conditional styles
     isBedtime, // used for styled components for conditional styles
@@ -83,8 +84,6 @@ const IconTab = ({
     animateY,
     tapFunc,
 }) => {
-    
-
     return (
         <FormContainer
             isWakeUp={isWakeUp} // used for styled components for conditional styles
@@ -155,6 +154,7 @@ const IconTab = ({
                         {/* Tiredness rating input */}
                         <RatingComponent
                             isMoodForm={false}
+                            isMiddayTiredness={isMiddayTiredness}
                             name="tiredness"
                             id="tiredness"
                             value={values.tiredness}
