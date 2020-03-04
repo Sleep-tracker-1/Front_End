@@ -34,6 +34,10 @@ function Login(props) {
         setUserAndPw({ ...userAndPw, [event.target.name]: event.target.value });
     };
 
+    if (localStorage.getItem("token")) {
+        props.history.push("/home");
+    }
+
     return (
         <loginStyles.LoginCard>
             <loginStyles.Title>Welcome back! Please log in</loginStyles.Title>
