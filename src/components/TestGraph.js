@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Line } from "react-chartjs-2";
 import ChartDataLabels from "chartjs-plugin-datalabels";
 import styled from "styled-components";
-import Login from "./Login";
+import Login from "./Login/Login";
 
 function TestGraph() {
     const apiResponseArray = [6, 5, 9, 12, 8, 5, 10];
@@ -34,7 +34,6 @@ function TestGraph() {
                     lineTension: 0,
                     radius: 15,
                     hoverRadius: 30,
-                    onClick: console.log("billz"),
                     pointHoverBackgroundColor: "yellow",
                     datalabels: {
                         textStrokeColor: "black",
@@ -106,7 +105,7 @@ function TestGraph() {
                         const rest = thisDataset.moodAndRest.restfulness;
                         const mood = thisDataset.moodAndRest.restfulness;
 
-                         const stringo = `Rest: ${rest} - Mood: ${mood}`;
+                        const stringo = `Rest: ${rest} - Mood: ${mood}`;
 
                         return stringo;
                     },
