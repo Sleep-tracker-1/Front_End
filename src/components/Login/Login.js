@@ -28,7 +28,7 @@ function Login(props) {
                 console.log(`the chef has cooked up ${err} error`);
             });
     };
-
+    //test
     const onInputChange = event => {
         // console.log`name is currently ${nameInput.value} email is currently ${emailInput.value} role is currently${roleInput.value}`();
         setUserAndPw({ ...userAndPw, [event.target.name]: event.target.value });
