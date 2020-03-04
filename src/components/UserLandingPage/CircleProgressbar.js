@@ -6,11 +6,6 @@ import {
 } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 
-const Container = styled.div`
-    width: 100px;
-    height: 100px;
-`;
-
 const CircleProgressbar = props => {
     return (
         <>

@@ -25,6 +25,7 @@ const ProgressBarsContainer = styled.div`
     padding: 0 40px;
 `;
 
+// can get rid of these and import initial values from redux store
 const initialValues = {
     mood: 0,
     tiredness: 0,
