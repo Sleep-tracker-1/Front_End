@@ -3,6 +3,10 @@ import { Link, NavLink } from "react-router-dom";
 import styled from "styled-components";
 import useOnClickOutside from "../hooks/useOnClickOutside";
 
+import { FaCloudMoon } from "react-icons/fa";
+
+// giving the header a hard coded height breaks the hamburger nav
+// workaround = giving a hard height to the ImageLink
 const Header = styled.header`
     width: 100%;
     display: flex;
@@ -13,7 +17,6 @@ const Header = styled.header`
     left: 0;
     z-index: 2;
     background-color: #d2d1cf;
-    margin-bottom: 1.5rem;
     box-shadow: 2px 0px 9px 6px rgba(187, 187, 187, 0.6);
 `;
 
@@ -63,13 +66,14 @@ const Heading = styled.h3`
 const ImageLink = styled.a`
     display: none;
     width: 0;
+    font-size: 2rem;
 
     @media (max-width: 830px) {
-        display: initial;
-        width: 65px;
-        height: 65px;
-        border-radius: 50%;
-        margin-right: 0.25rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 75px;
+        height: 75px;
         cursor: pointer;
     }
 `;
@@ -78,6 +82,13 @@ const NameLink = styled.a`
     text-shadow: none;
     background-image: none;
     text-decoration: none;
+    height: 75px;
+    display: flex;
+    cursor: pointer;
+
+    @media (max-width: 830px) {
+        display: none;
+    }
 `;
 
 const Nav = styled.nav`
@@ -99,6 +110,7 @@ const Nav = styled.nav`
         padding: 0;
         display: flex;
         flex-direction: column;
+
         li:last-of-type {
             border-bottom: none;
         }
@@ -223,7 +235,9 @@ export default props => {
         <Header ref={headerRef}>
             <HeaderWrapper>
                 <LinkWrapper>
-                    <ImageLink to="/">{/* Logo icon here */}</ImageLink>
+                    <ImageLink to="/">
+                        <FaCloudMoon />
+                    </ImageLink>
                     <NameLink to="/">
                         <Heading>{props.headerText}</Heading>
                     </NameLink>
