@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { SignupContainer, Form, NewUserInputs, NewUserSubmit, FormLabel } from "./styles/SignupStyles";
+import { SignupContainer, Form, NewUserInputs, NewUserSubmit, FormLabel, InputContainer, Header } from "./styles/SignupStyles";
 
 const SignupForm = (props) => {
     // Local state for user's information that will be sent in our post to
@@ -35,44 +35,52 @@ const SignupForm = (props) => {
     return (
         <>
             <SignupContainer>
-                <h1>Sign Up Form</h1>  
+                <Header>Sign Up Form</Header>  
                 <Form>
-                    <FormLabel htmlFor="first-name">First Name</FormLabel>
-                    <NewUserInputs
-                        className="first-name"
-                        id="first-name"
-                        type="text"
-                        name="firstName"
-                        value={user.firstName}
-                        onChange={handleChange}
-                    />
+                    <InputContainer>
+                        <FormLabel htmlFor="first-name">First Name</FormLabel>
+                        <NewUserInputs
+                            className="first-name"
+                            id="first-name"
+                            type="text"
+                            name="firstName"
+                            value={user.firstName}
+                            onChange={handleChange}
+                        />
+                    </InputContainer>
+                    <InputContainer>
                     <FormLabel htmlFor="email">E-mail</FormLabel>
-                    <NewUserInputs
-                        className="email"
-                        id="email"
-                        type="email"
-                        name="email"
-                        value={user.email}
-                        onChange={handleChange}
-                    />
-                    <FormLabel htmlFor="user-name">Username</FormLabel>
-                    <NewUserInputs
-                        className="user-name"
-                        id="user-name"
-                        type="text"
-                        name="username"
-                        value={user.username}
-                        onChange={handleChange}
-                    />
-                    <FormLabel htmlFor="password">Password</FormLabel>
-                    <NewUserInputs
-                        className="password"
-                        id="password"
-                        type="password"
-                        name="password"
-                        value={user.password}
-                        onChange={handleChange}
-                    />
+                        <NewUserInputs
+                            className="email"
+                            id="email"
+                            type="email"
+                            name="email"
+                            value={user.email}
+                            onChange={handleChange}
+                        />
+                    </InputContainer>
+                    <InputContainer>
+                        <FormLabel htmlFor="user-name">Username</FormLabel>
+                        <NewUserInputs
+                            className="user-name"
+                            id="user-name"
+                            type="text"
+                            name="username"
+                            value={user.username}
+                            onChange={handleChange}
+                        />
+                    </InputContainer>
+                    <InputContainer>
+                        <FormLabel htmlFor="password">Password</FormLabel>
+                        <NewUserInputs
+                            className="password"
+                            id="password"
+                            type="password"
+                            name="password"
+                            value={user.password}
+                            onChange={handleChange}
+                        />
+                    </InputContainer>
                     <NewUserSubmit
                         type="submit"
                         value="submit"
