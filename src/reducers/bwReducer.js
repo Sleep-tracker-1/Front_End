@@ -49,28 +49,34 @@ const initialState = {
         great: {
             emoji: "😊",
             desc: "smiling face with smiling eyes",
+            value: 3,
         },
         ok: {
             emoji: "😐",
             desc: "neutral face",
+            value: 2,
         },
         bad: {
             emoji: "🙁",
             desc: "Sad frowning face",
+            value: 1,
         },
     },
     tirednessEmojis: {
         great: {
             emoji: "🥳",
             desc: "energetic party face",
+            value: 1,
         },
         ok: {
             emoji: "😐",
             desc: "neutral face",
+            value: 2,
         },
         bad: {
             emoji: "😴",
             desc: "Sleeping face",
+            value: 3,
         },
     },
     isLoading: false,

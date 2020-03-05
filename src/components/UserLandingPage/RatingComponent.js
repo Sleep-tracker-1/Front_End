@@ -51,7 +51,6 @@ const RatingComponent = ({
     value,
 }) => {
     const [ratingEmojis, setRatingEmojis] = useState({});
-    console.log("isMiddayTiredness: ", isMiddayTiredness);
 
     useEffect(() => {
         let emojis = {};
@@ -73,20 +72,22 @@ const RatingComponent = ({
                     <Emoji
                         emoji={ratingEmojis.great.emoji}
                         ariaLabel={ratingEmojis.great.desc}
-                        handleClick={() => handleChange(1)}
-                        isSelected={value === 1}
+                        handleClick={() =>
+                            handleChange(ratingEmojis.great.value)
+                        }
+                        isSelected={value === ratingEmojis.great.value}
                     />
                     <Emoji
                         emoji={ratingEmojis.ok.emoji}
                         ariaLabel={ratingEmojis.ok.desc}
-                        handleClick={() => handleChange(2)}
-                        isSelected={value === 2}
+                        handleClick={() => handleChange(ratingEmojis.ok.value)}
+                        isSelected={value === ratingEmojis.ok.value}
                     />
                     <Emoji
                         emoji={ratingEmojis.bad.emoji}
                         ariaLabel={ratingEmojis.bad.desc}
-                        handleClick={() => handleChange(3)}
-                        isSelected={value === 3}
+                        handleClick={() => handleChange(ratingEmojis.bad.value)}
+                        isSelected={value === ratingEmojis.bad.value}
                     />
                 </EmojisWrapper>
             )}
