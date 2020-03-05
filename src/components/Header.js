@@ -231,6 +231,12 @@ export default props => {
 
     useOnClickOutside(headerRef, () => toggleMenu(false));
 
+    const handleLogoutClick = e => {
+        localStorage.clear();
+        // localStorage.removeItem("token");
+        props.history.push("/");
+    };
+
     return (
         <Header ref={headerRef}>
             <HeaderWrapper>
@@ -258,7 +264,11 @@ export default props => {
                 <Nav>
                     <ListLink to="/" val="View History" />
                     <ListLink to="/" val="Account" />
-                    <ListLink to="/bees" val="Sign Out" />
+                    <ListLink
+                        to="/bees"
+                        val="Sign Out"
+                        onClick={handleLogoutClick}
+                    />
                 </Nav>
             </HeaderWrapper>
         </Header>
