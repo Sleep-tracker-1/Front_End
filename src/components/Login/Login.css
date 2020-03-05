@@ -1,0 +1,20 @@
+.sizedLabels {
+    width: 25%;
+    display: contents;
+}
+
+.sizedInputs {
+    width: 80%;
+    margin-bottom: 25px;
+    height: auto;
+}
+
+.loginForm {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.styledGreeting {
+    text-align: center;
+}

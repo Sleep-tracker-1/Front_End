@@ -115,58 +115,30 @@ function TestGraph() {
         },
     };
     const chartReference = React.createRef();
-    const ChartContainer = styled.div``;
+    const ChartContainer = styled.div`
+        height: 80%;
+    `;
+    const BelowGraph = styled.div`
+        text-align: center;
+        margin-top: 10px;
+    `;
     const suggestedSleepHours = "9";
     useEffect(() => {}, []);
     return (
         <ChartContainer>
-            <Line
-                ref={chartReference}
-                data={chartProps.data}
-                options={chartProps.options}
-            />
-            <button
-                onClick={e => {
-                    setCurrentWeek([3, 3, 3, 3]);
-                }}
-            >
-                PRESS HERE TO CHANGE THE DATES!
-            </button>
-            <h3>
-                Your Recommended Sleep Hours:{" "}
-                <h2>{suggestedSleepHours}hrs/night</h2>
-            </h3>
-
-            {/* <form>
-                <label htmlFor>
-                    Hours Slept:
-                    <input
-                        type="number"
-                        name="name"
-                        id="nameInput"
-                        min="1"
-                        max="17"
-                    />
-                </label>
-                <label>
-                    Restfulness:
-                    <input
-                        type="number"
-                        name="email"
-                        id="passwordInput"
-                        min="1"
-                        max="3"
-                    />
-                </label>
-                <label>
-                    Mood:
-                    <input type="number" name="email" id="passwordInput" />
-                </label>
-
-                <button onSubmit={e => {}}>Add Entry</button>
-            </form>
-
-            <Login /> */}
+            <div>
+                <Line
+                    ref={chartReference}
+                    data={chartProps.data}
+                    options={chartProps.options}
+                />
+            </div>
+            <BelowGraph>
+                <h3>
+                    Your Recommended Sleep Hours:{" "}
+                    <h2>{suggestedSleepHours}hrs/night</h2>
+                </h3>
+            </BelowGraph>
         </ChartContainer>
     );
 }

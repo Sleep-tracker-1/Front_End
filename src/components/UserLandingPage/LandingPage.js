@@ -108,7 +108,7 @@ const LandingPage = props => {
 
         // need to import action creator that will invoke the POST request
     };
-
+    //todo disable animation on graph
     return (
         <LandingPageContainer>
             <TestGraph />
