@@ -9,7 +9,6 @@ const Wrapper = styled.div`
     flex-direction: column;
     justify-content: space-evenly;
     align-items: center;
-    padding-bottom: ${props => (props.isMiddayTiredness ? "10px" : "0")};
 `;
 
 const Heading = styled.h3`
@@ -24,7 +23,7 @@ const EmojisWrapper = styled.div`
     align-items: center;
 `;
 
-const EmojiContainer = styled.div`
+const EmojiContainer = styled.label`
     cursor: pointer;
 `;
 
@@ -34,16 +33,51 @@ const StyledEmoji = styled.span`
         props.isSelected ? "0px 0px 6px cadetblue" : "none"};
 `;
 
-const Emoji = ({ ariaLabel, emoji, isSelected, handleClick }) => (
-    <EmojiContainer onClick={handleClick}>
-        <StyledEmoji role="img" aria-label={ariaLabel} isSelected={isSelected}>
-            {emoji}
-        </StyledEmoji>
-    </EmojiContainer>
-);
+const RadioInput = styled.input`
+    display: none;
+
+    &:checked + label {
+        font-size: 1.5rem;
+        text-shadow: 0px 0px 8px darkgray;
+    }
+`;
+
+const Emoji = ({
+    ariaLabel,
+    emoji,
+    isMoodForm,
+    value,
+    handleChange,
+    timeOfDay,
+}) => {
+    const inputName = isMoodForm ? "mood" : "tiredness";
+    const inputId = `${timeOfDay}-${inputName}`;
+
+    return (
+        <>
+            <EmojiContainer>
+                <StyledEmoji
+                    role="img"
+                    aria-label={ariaLabel}
+                    htmlFor={inputId}
+                >
+                    {emoji}
+                </StyledEmoji>
+                <RadioInput
+                    id={inputId}
+                    name={inputName}
+                    type="radio"
+                    value={value}
+                    onChange={handleChange}
+                />
+            </EmojiContainer>
+        </>
+    );
+};
 
 const RatingComponent = ({
     isMoodForm,
+    timeOfDay,
     isMiddayTiredness, // for styling midday tiredness form
     moodEmojis,
     tirednessEmojis,
@@ -63,6 +97,11 @@ const RatingComponent = ({
 
         setRatingEmojis(emojis);
     }, [isMoodForm, moodEmojis, tirednessEmojis]);
+
+    console.log(
+        `${timeOfDay} ${isMoodForm ? "mood" : "tiredness"} value: `,
+        value
+    );
     return (
         <Wrapper isMiddayTiredness={isMiddayTiredness}>
             <Heading>{isMoodForm ? "Mood" : "Tiredness"}</Heading>
@@ -72,22 +111,34 @@ const RatingComponent = ({
                     <Emoji
                         emoji={ratingEmojis.great.emoji}
                         ariaLabel={ratingEmojis.great.desc}
-                        handleClick={() =>
-                            handleChange(ratingEmojis.great.value)
-                        }
-                        isSelected={value === ratingEmojis.great.value}
+                        timeOfDay={timeOfDay}
+                        isMoodForm={isMoodForm}
+                        value={value}
+                        handleChange={handleChange}
+                        // handleClick={() =>
+                        //     handleChange(ratingEmojis.great.value)
+                        // }
+                        // isSelected={value === ratingEmojis.great.value}
                     />
                     <Emoji
                         emoji={ratingEmojis.ok.emoji}
                         ariaLabel={ratingEmojis.ok.desc}
-                        handleClick={() => handleChange(ratingEmojis.ok.value)}
-                        isSelected={value === ratingEmojis.ok.value}
+                        timeOfDay={timeOfDay}
+                        isMoodForm={isMoodForm}
+                        value={value}
+                        handleChange={handleChange}
+                        // handleClick={() => handleChange(ratingEmojis.ok.value)}
+                        // isSelected={value === ratingEmojis.ok.value}
                     />
                     <Emoji
                         emoji={ratingEmojis.bad.emoji}
                         ariaLabel={ratingEmojis.bad.desc}
-                        handleClick={() => handleChange(ratingEmojis.bad.value)}
-                        isSelected={value === ratingEmojis.bad.value}
+                        timeOfDay={timeOfDay}
+                        isMoodForm={isMoodForm}
+                        value={value}
+                        handleChange={handleChange}
+                        // handleClick={() => handleChange(ratingEmojis.bad.value)}
+                        // isSelected={value === ratingEmojis.bad.value}
                     />
                 </EmojisWrapper>
             )}

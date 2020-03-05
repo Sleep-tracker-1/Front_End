@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { connect } from "react-redux";
+import { motion } from "framer-motion";
 
 import { getUserData } from "../../actions/bwActions";
 
@@ -52,7 +53,7 @@ const ButtonsContainer = styled.div`
     grid-gap: 15px;
 `;
 
-const InputFormButton = styled.button`
+const InputFormButton = styled(motion.button)`
     width: 100%;
     height: 100%;
     box-sizing: border-box;
@@ -91,9 +92,9 @@ const LandingPage = props => {
         let slidePosition = wakeUpSlide;
 
         if (slidePosition === 0) {
-            slidePosition += 165;
+            slidePosition -= 400;
         } else {
-            slidePosition -= 165;
+            slidePosition += 400;
         }
 
         setWakeUpSlide(slidePosition);
@@ -103,9 +104,9 @@ const LandingPage = props => {
         let newPos = bedtimeSlide;
 
         if (newPos === 0) {
-            newPos -= 165;
+            newPos -= 400;
         } else {
-            newPos += 165;
+            newPos += 400;
         }
 
         setBedtimeSlide(newPos);
@@ -115,9 +116,9 @@ const LandingPage = props => {
         let newPosition = middaySlide;
 
         if (newPosition === 0) {
-            newPosition -= 135;
+            newPosition -= 393;
         } else {
-            newPosition += 135;
+            newPosition += 393;
         }
 
         setMiddaySlide(newPosition);
@@ -152,6 +153,10 @@ const LandingPage = props => {
     useEffect(() => {
         fetchUserData();
     }, []);
+
+    useEffect(() => {
+        console.log("wakeUpSlide: ", wakeUpSlide);
+    }, [wakeUpSlide]);
 
     console.log("props.user.username: ", props.user.username);
 
@@ -193,12 +198,33 @@ const LandingPage = props => {
                 </CircleProgressbar>
             </ProgressBarsContainer>
             <ButtonsContainer>
-                <InputFormButton>Wake Up</InputFormButton>
-                <InputFormButton>Midday</InputFormButton>
-                <InputFormButton>Bedtime</InputFormButton>
+                <InputFormButton
+                    onClick={() => {
+                        console.log("here");
+                    }}
+                    // maybe have an onTap Framer Motion here to trigger a motion.div for the necessary form transition
+                    onTap={wakeUpTap}
+                    isWakeUp={true} // used for styled components for conditional styles
+                >
+                    Wake Up
+                </InputFormButton>
+
+                <InputFormButton
+                    onTap={middayTap}
+                    isMidday={true} // used for styled components for conditional styles
+                >
+                    Midday
+                </InputFormButton>
+
+                <InputFormButton
+                    onTap={bedtimeTap}
+                    isBedtime={true} // used for styled components for conditional styles
+                >
+                    Bedtime
+                </InputFormButton>
             </ButtonsContainer>
 
-            {/* <IconTab
+            <IconTab
                 heading="Wake Up"
                 needsTimeInput={true}
                 timeLabel="Wake up time"
@@ -206,7 +232,7 @@ const LandingPage = props => {
                 initialValues={initialValuesPlusTime}
                 handleSubmit={handleSubmit}
                 isWakeUp={true}
-                animateX={wakeUpSlide}
+                animateY={wakeUpSlide}
                 tapFunc={wakeUpTap}
                 icon={Sunrise}
             />
@@ -229,9 +255,9 @@ const LandingPage = props => {
                 handleSubmit={handleSubmit}
                 isBedtime={true}
                 icon={FiMoon}
-                animateX={bedtimeSlide}
+                animateY={bedtimeSlide}
                 tapFunc={bedtimeTap}
-            /> */}
+            />
         </LandingPageContainer>
     );
 };
