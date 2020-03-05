@@ -2,6 +2,9 @@ import {
     FETCHING_USER,
     FETCH_USER_DATA,
     ERROR_FETCHING_USER_DATA,
+    FETCHING_MAIN_DATA,
+    FETCH_MAIN_DATA,
+    ERROR_FETCHING_MAIN_DATA,
     POSTING_USER_INPUTS,
     POSTING_USER_INPUTS_SUCCESS,
     POSTING_USER_INPUTS_FAILURE,
@@ -18,6 +21,7 @@ const initialState = {
     user: {
         userId: "",
         username: "",
+        firstName: "",
         email: "",
         sleepRecommendation: "", // after 30+ days of data
         dates: [
@@ -99,6 +103,25 @@ export const bwReducer = (state = initialState, action) => {
                 isLoading: false,
                 error: action.payload,
             };
+        case FETCHING_MAIN_DATA:
+            return {
+                ...state,
+                isLoading: true,
+                error: "",
+            };
+        case FETCH_MAIN_DATA:
+            return {
+                ...state,
+                user: action.payload,
+                isLoading: false,
+                error: "",
+            };
+        case ERROR_FETCHING_MAIN_DATA:
+            return {
+                ...state,
+                isLoading: false,
+                error: action.payload,
+            };    
         case POSTING_USER_INPUTS:
             return {
                 ...state,

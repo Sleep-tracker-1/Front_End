@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from "react";
-import styled from "styled-components";
+import React, { useState } from "react";
 import "./Login.css";
 import * as loginStyles from "./LoginStyles";
 import axios from "axios";
-import axiosWithAuth from "axios";
+
 function Login(props) {
     const [userAndPw, setUserAndPw] = useState({
         username: "",

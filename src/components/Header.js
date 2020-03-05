@@ -262,8 +262,8 @@ export default props => {
                     <Span />
                 </Label>
                 <Nav>
-                    <ListLink to="/" val="View History" />
-                    <ListLink to="/" val="Account" />
+                    <ListLink to="/home" val="View History" />
+                    <ListLink to="/Account" val="Account" />
                     <ListLink
                         to="/bees"
                         val="Sign Out"

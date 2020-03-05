@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { connect } from "react-redux";
 
-import { getUserData } from "../../actions/bwActions";
+import { getMainData } from "../../actions/bwActions";
 
 import TestGraph from "../TestGraph";
 import CircleProgressbar from "./CircleProgressbar";
@@ -60,7 +60,12 @@ const Emoji = ({ emoji, ariaLabel }) => (
     </span>
 );
 
-const LandingPage = props => {
+const LandingPage = (props) => {
+    
+    useEffect(() => {
+        props.getMainData()
+
+    }, [])
     // for IconTab transitions
     const [wakeUpSlide, setWakeUpSlide] = useState(0);
     const [bedtimeSlide, setBedtimeSlide] = useState(0);
@@ -110,10 +115,6 @@ const LandingPage = props => {
 
         // need to import action creator that will invoke the POST request
         // timeOfDay will tell us which part of the data needs to be updated
-    };
-
-    const fetchUserData = () => {
-        props.getUserData();
     };
 
     return (
@@ -190,4 +191,4 @@ const mapStateToProps = state => {
     };
 };
 
-export default connect(mapStateToProps, { getUserData })(LandingPage);
+export default connect(mapStateToProps, { getMainData })(LandingPage);

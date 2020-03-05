@@ -12,6 +12,7 @@ import Login from "./components/Login/Login";
 import "./App.css";
 import LandingPage from "./components/UserLandingPage/LandingPage.js";
 import NewUser from "./components/UserLandingPage/NewUserLanding.js";
+import AccountPage from "./components/AccountPage.js";
 
 const store = createStore(reducer, applyMiddleware(thunk));
 
@@ -28,6 +29,7 @@ function App() {
                     <Route exact path="/signup" component={SignupForm} />
                     <PrivateRoute exact path="/new" component={NewUser} />
                     <PrivateRoute exact path="/home" component={LandingPage} />
+                    <PrivateRoute exact path="/account" component={AccountPage} />
                 </div>
             </Router>
         </Provider>
