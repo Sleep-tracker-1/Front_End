@@ -1,3 +1,4 @@
+/* eslint-disable max-lines-per-function */
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { connect } from "react-redux";
@@ -41,6 +42,26 @@ const ProgressBarsContainer = styled.div`
     @media (max-width: 400px) {
         padding: 0 30px;
     }
+`;
+
+const ButtonsContainer = styled.div`
+    width: 200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-rows: repeat(3, 40px);
+    grid-gap: 15px;
+`;
+
+const InputFormButton = styled.button`
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    font-size: 1rem;
+    padding: 10px;
+    border: 1px solid gray;
+    border-radius: 12px;
+    text-align: center;
+    cursor: pointer;
 `;
 
 // can get rid of these and import initial values from redux store
@@ -171,7 +192,13 @@ const LandingPage = props => {
                     />
                 </CircleProgressbar>
             </ProgressBarsContainer>
-            <IconTab
+            <ButtonsContainer>
+                <InputFormButton>Wake Up</InputFormButton>
+                <InputFormButton>Midday</InputFormButton>
+                <InputFormButton>Bedtime</InputFormButton>
+            </ButtonsContainer>
+
+            {/* <IconTab
                 heading="Wake Up"
                 needsTimeInput={true}
                 timeLabel="Wake up time"
@@ -204,7 +231,7 @@ const LandingPage = props => {
                 icon={FiMoon}
                 animateX={bedtimeSlide}
                 tapFunc={bedtimeTap}
-            />
+            /> */}
         </LandingPageContainer>
     );
 };
