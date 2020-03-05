@@ -1,8 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 import { motion } from "framer-motion";
 import { Formik } from "formik";
 import styled from "styled-components";
-// import { axiosWithAuth } from "../../utils/axiosWithAuth";
 import { isDiff } from "../../utils/isDiff";
 
 import RatingComponent from "./RatingComponent";
@@ -75,33 +74,21 @@ const IconTab = ({
     timeLabel,
     timeId,
     initialValues,
-    isWakeUp,
-    isMidday,
-    isBedtime,
+    handleSubmit,
+    isMiddayTiredness, // used for styling midday tiredness input
+    isWakeUp, // used for styled components for conditional styles
+    isMidday, // used for styled components for conditional styles
+    isBedtime, // used for styled components for conditional styles
     icon: Icon,
     animateX,
     animateY,
     tapFunc,
 }) => {
-    const handleSubmit = values => {
-        const timeAsDate = new Date(values.time); // convert `time` to Date object for POST request
-
-        console.log("values in handleSubmit: ", values);
-        console.log("about to do POST request");
-        // axiosWithAuth()
-        //     .post()
-        //     .then(res => {
-        //         console.log("Rating POST res.data: ", res.data);
-        //     })
-        //     .catch(err => alert("Rating POST error: ", err));
-        // }
-    };
-
     return (
         <FormContainer
-            isWakeUp={isWakeUp}
-            isBedtime={isBedtime}
-            isMidday={isMidday}
+            isWakeUp={isWakeUp} // used for styled components for conditional styles
+            isBedtime={isBedtime} // used for styled components for conditional styles
+            isMidday={isMidday} // used for styled components for conditional styles
             animate={{
                 x: animateX ? animateX : 0,
                 y: animateY ? animateY : 0,
@@ -167,6 +154,7 @@ const IconTab = ({
                         {/* Tiredness rating input */}
                         <RatingComponent
                             isMoodForm={false}
+                            isMiddayTiredness={isMiddayTiredness}
                             name="tiredness"
                             id="tiredness"
                             value={values.tiredness}
@@ -190,9 +178,9 @@ const IconTab = ({
                 )}
             </Formik>
             <IconContainer
-                isWakeUp={isWakeUp}
-                isMidday={isMidday}
-                isBedtime={isBedtime}
+                isWakeUp={isWakeUp} // used for styled components for conditional styles
+                isMidday={isMidday} // used for styled components for conditional styles
+                isBedtime={isBedtime} // used for styled components for conditional styles
                 onTap={tapFunc}
             >
                 <Icon />

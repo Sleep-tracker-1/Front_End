@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Line } from "react-chartjs-2";
 import ChartDataLabels from "chartjs-plugin-datalabels";
 import styled from "styled-components";
-import Login from "./Login";
+import Login from "./Login/Login";
 
 function TestGraph() {
     const apiResponseArray = [6, 5, 9, 12, 8, 5, 10];
@@ -34,7 +34,6 @@ function TestGraph() {
                     lineTension: 0,
                     radius: 15,
                     hoverRadius: 30,
-                    onClick: console.log("billz"),
                     pointHoverBackgroundColor: "yellow",
                     datalabels: {
                         textStrokeColor: "black",
@@ -138,7 +137,7 @@ function TestGraph() {
                 <h2>{suggestedSleepHours}hrs/night</h2>
             </h3>
 
-            <form>
+            {/* <form>
                 <label htmlFor>
                     Hours Slept:
                     <input
@@ -167,7 +166,7 @@ function TestGraph() {
                 <button onSubmit={e => {}}>Add Entry</button>
             </form>
 
-            <Login />
+            <Login /> */}
         </ChartContainer>
     );
 }

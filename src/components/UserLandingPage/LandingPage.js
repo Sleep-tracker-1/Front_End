@@ -1,18 +1,27 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
+import { connect } from "react-redux";
 
-<<<<<<< Updated upstream
-=======
 import { getUserData } from "../../actions/bwActions";
 
 import TestGraph from "../TestGraph";
 import CircleProgressbar from "./CircleProgressbar";
->>>>>>> Stashed changes
 import IconTab from "./IconTab";
 import { WiSunrise } from "react-icons/wi";
 import { FiSun, FiMoon } from "react-icons/fi";
 
-const Sunrise = styled(WiSunrise)`
+// if you change the height of the header, the LandingPageContainer min and max height calcs need to be adjusted
+const LandingPageContainer = styled.div`
+    width: 100%;
+    max-width: 100vw;
+    overflow: hidden;
+    height: 100%;
+    min-height: calc(100vh - 75px);
+    max-height: calc(100vh - 75px);
+    position: relative;
+`;
+
+export const Sunrise = styled(WiSunrise)`
     font-size: 2.5rem;
     z-index: 5;
     position: absolute;
@@ -20,6 +29,21 @@ const Sunrise = styled(WiSunrise)`
     transform: rotate(90deg);
 `;
 
+// padding is to make sure the IconTabs don't cover them up
+const ProgressBarsContainer = styled.div`
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(75px, 200px));
+    grid-gap: 15px;
+    box-sizing: border-box;
+    padding: 0 40px;
+
+    @media (max-width: 400px) {
+        padding: 0 30px;
+    }
+`;
+
+// can get rid of these and import initial values from redux store
 const initialValues = {
     mood: 0,
     tiredness: 0,
@@ -30,7 +54,14 @@ const initialValuesPlusTime = {
     time: "",
 };
 
-const LandingPage = () => {
+const Emoji = ({ emoji, ariaLabel }) => (
+    <span role="img" aria-label={ariaLabel}>
+        {emoji}
+    </span>
+);
+
+const LandingPage = props => {
+    // for IconTab transitions
     const [wakeUpSlide, setWakeUpSlide] = useState(0);
     const [bedtimeSlide, setBedtimeSlide] = useState(0);
     const [middaySlide, setMiddaySlide] = useState(0);
@@ -71,30 +102,12 @@ const LandingPage = () => {
         setMiddaySlide(newPosition);
     };
 
-<<<<<<< Updated upstream
-    // const wakeUpDragConstraints = {
-    //     left: 0,
-    //     right: 165,
-    // };
-=======
     const handleSubmit = (values, timeOfDay) => {
         const timeAsDate = new Date(values.time); // convert `time` to Date object for POST request
->>>>>>> Stashed changes
 
-    // const middayDragConstraints = {
-    //     top: 135,
-    //     bottom: 0,
-    // };
+        console.log("values in handleSubmit: ", values);
+        console.log("about to do POST request");
 
-<<<<<<< Updated upstream
-    // const bedtimeDragConstraints = {
-    //     left: -165,
-    //     right: 0,
-    // };
-
-    // const horizontalDrag = "x";
-    // const verticalDrag = "y";
-=======
         // need to import action creator that will invoke the POST request
         // timeOfDay will tell us which part of the data needs to be updated
     };
@@ -102,7 +115,6 @@ const LandingPage = () => {
     const fetchUserData = () => {
         props.getUserData();
     };
->>>>>>> Stashed changes
 
     useEffect(() => {
         fetchUserData();
@@ -112,7 +124,7 @@ const LandingPage = () => {
 
     return (
         <LandingPageContainer>
-            {/* <TestGraph /> */}
+            <TestGraph />
             <ProgressBarsContainer>
                 {/* progressColor and emoji for each will need to be dynamic to change depending on the ratio */}
 
@@ -144,22 +156,21 @@ const LandingPage = () => {
                 timeLabel="Wake up time"
                 timeId="wakeUpTime"
                 initialValues={initialValuesPlusTime}
+                handleSubmit={handleSubmit}
                 isWakeUp={true}
                 animateX={wakeUpSlide}
                 tapFunc={wakeUpTap}
                 icon={Sunrise}
-                // dragDirection={horizontalDrag}
-                // dragConstraints={wakeUpDragConstraints}
             />
             <IconTab
                 heading="Midday"
                 initialValues={initialValues}
+                handleSubmit={handleSubmit}
                 icon={FiSun}
                 isMidday={true}
+                isMiddayTiredness={true}
                 animateY={middaySlide}
                 tapFunc={middayTap}
-                // dragDirection={verticalDrag}
-                // dragConstratints={middayDragConstraints}
             />
             <IconTab
                 heading="Bedtime"
@@ -167,20 +178,16 @@ const LandingPage = () => {
                 timeLabel="Bedtime"
                 timeId="bedtime"
                 initialValues={initialValuesPlusTime}
+                handleSubmit={handleSubmit}
                 isBedtime={true}
                 icon={FiMoon}
                 animateX={bedtimeSlide}
                 tapFunc={bedtimeTap}
-                // dragDirection={horizontalDrag}
-                // dragConstraints={bedtimeDragConstraints}
             />
-        </>
+        </LandingPageContainer>
     );
 };
 
-<<<<<<< Updated upstream
-export default LandingPage;
-=======
 const mapStateToProps = state => {
     return {
         user: state.user,
@@ -190,4 +197,3 @@ const mapStateToProps = state => {
 };
 
 export default connect(mapStateToProps, { getUserData })(LandingPage);
->>>>>>> Stashed changes
