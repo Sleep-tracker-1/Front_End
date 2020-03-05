@@ -1,38 +1,60 @@
-import styled from "styled-components"
+import styled from "styled-components";
 
 export const SignupContainer = styled.div`
+    margin: auto; 
+    height: 100vh;
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+`
+
+export const FormContainer = styled.div`
     border-radius: 5px;
     background-color: #f2f2f2;
-    padding: 20px;
-    height: 70vh;
-    width: 85vw;
+    padding: 10px;
     margin: auto;
+    width: 70%;
+    text-align: center; 
+    min-height: 50vh;
+    display: flex;
+    flex-flow: column;
+    justify-content: space-evenly;
+    
+    
     
 `
 
 export const Form = styled.form`
-    display: block;
-    margin-top: 0em;
-    text-align: center;
+    width: 100%;
+    margin: 0 auto;
+    
+`
+
+export const InputContainer = styled.div`
+    display: flex;
+    flex-flow: column nowrap;
+    width: 100%;
+    margin: 0 auto;
+    padding-bottom: 3%;
 `
 
 export const NewUserInputs = styled.input`
     width: 75%;
-    padding: 12px 20px;
-    margin: 8px 0;
-    display: inline-block;
+    padding: 2%;
+    margin: 1%;
     border: 1px solid #ccc;
     border-radius: 4px;
     box-sizing: border-box;
     align-items: flex-start;
+    align-self: center;
 ` 
 
 export const NewUserSubmit = styled.input`
-    width: 70%;
     background-color: #4CAF50;
     color: white;
-    padding: 14px 20px;
-    margin: 8px 0;
+    padding: 2% 5%;
+    margin: 0 auto;
+    margin-top: 3%;
     border: none;
     border-radius: 4px;
     cursor: pointer;
@@ -43,6 +65,13 @@ export const NewUserSubmit = styled.input`
 `
 
 export const FormLabel = styled.label`
-    padding: 2%;    
+    padding-bottom: 1%;
+    margin: 0; 
+    width: 100%;
+`
 
+export const Header = styled.h3`
+    margin: 1%;
+    text-align: center; 
+    
 `
