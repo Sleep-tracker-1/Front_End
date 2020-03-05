@@ -116,12 +116,6 @@ const LandingPage = props => {
         props.getUserData();
     };
 
-    useEffect(() => {
-        fetchUserData();
-    }, []);
-
-    console.log("props.user.username: ", props.user.username);
-
     return (
         <LandingPageContainer>
             <TestGraph />
