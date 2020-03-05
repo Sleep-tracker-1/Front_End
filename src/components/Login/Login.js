@@ -34,17 +34,20 @@ function Login(props) {
         setUserAndPw({ ...userAndPw, [event.target.name]: event.target.value });
     };
 
-    if (localStorage.getItem("token")) {
-        props.history.push("/home");
-    }
+    // if (localStorage.getItem("token")) {
+    //     props.history.push("/home");
+    // }
 
     return (
         <loginStyles.LoginCard>
-            <loginStyles.Title>Welcome back! Please log in</loginStyles.Title>
-            <form onSubmit={submitHandler}>
-                <label htmlFor>
+            <loginStyles.Title>
+                <p className="styledGreeting">Welcome back! Please log in</p>
+            </loginStyles.Title>
+            <form onSubmit={submitHandler} className="loginForm">
+                <label className="sizedLabels">
                     Username:
                     <input
+                        className="sizedInputs"
                         type="text"
                         name="username"
                         id="usernameInput"
@@ -53,9 +56,10 @@ function Login(props) {
                         value={userAndPw.username}
                     />
                 </label>
-                <label>
+                <label className="sizedLabels">
                     Password:
                     <input
+                        className="sizedInputs"
                         type="text"
                         name="password"
                         id="passwordInput"

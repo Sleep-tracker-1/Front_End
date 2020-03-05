@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { connect } from "react-redux";
+
+import { getUserData } from "../../actions/bwActions";
 
 import TestGraph from "../TestGraph";
 import CircleProgressbar from "./CircleProgressbar";
@@ -100,13 +102,18 @@ const LandingPage = props => {
         setMiddaySlide(newPosition);
     };
 
-    const handleSubmit = values => {
+    const handleSubmit = (values, timeOfDay) => {
         const timeAsDate = new Date(values.time); // convert `time` to Date object for POST request
 
         console.log("values in handleSubmit: ", values);
         console.log("about to do POST request");
 
         // need to import action creator that will invoke the POST request
+        // timeOfDay will tell us which part of the data needs to be updated
+    };
+
+    const fetchUserData = () => {
+        props.getUserData();
     };
 
     return (
@@ -177,9 +184,10 @@ const LandingPage = props => {
 
 const mapStateToProps = state => {
     return {
+        user: state.user,
         moodEmojis: state.moodEmojis,
         tirednessEmojis: state.tirednessEmojis,
     };
 };
 
-export default connect(mapStateToProps, {})(LandingPage);
+export default connect(mapStateToProps, { getUserData })(LandingPage);
