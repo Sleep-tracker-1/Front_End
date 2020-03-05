@@ -109,6 +109,24 @@ const LandingPage = props => {
         // need to import action creator that will invoke the POST request
     };
 
+    const setProgressBarColor = percentage => {
+        if (percentage < 34) {
+            return "#F20000"; //red
+        } else if (percentage < 66 && percentage > 34) {
+            return "#EFD914"; // yellow
+        } else if (percentage > 66) {
+            return "#20C261"; // green
+        }
+
+        return "#20C261"; // green
+    };
+
+    useEffect(() => {
+        fetchUserData();
+    }, []);
+
+    console.log("props.user.username: ", props.user.username);
+
     return (
         <LandingPageContainer>
             <TestGraph />
@@ -116,13 +134,19 @@ const LandingPage = props => {
                 {/* progressColor and emoji for each will need to be dynamic to change depending on the ratio */}
 
                 {/* sleep ratio */}
-                <CircleProgressbar progressColor="red" value={30}>
+                <CircleProgressbar
+                    progressColor={setProgressBarColor(30)}
+                    value={30}
+                >
                     {/* placeholder value */}
                     <p>7hr 12min</p>
                 </CircleProgressbar>
 
                 {/* mood ratio */}
-                <CircleProgressbar progressColor="yellow" value={52}>
+                <CircleProgressbar
+                    progressColor={setProgressBarColor(52)}
+                    value={52}
+                >
                     <Emoji
                         emoji={props.moodEmojis.great.emoji}
                         ariaLabel={props.moodEmojis.great.desc}
@@ -130,7 +154,10 @@ const LandingPage = props => {
                 </CircleProgressbar>
 
                 {/* tiredness ratio */}
-                <CircleProgressbar progressColor="green" value={80}>
+                <CircleProgressbar
+                    progressColor={setProgressBarColor(80)}
+                    value={80}
+                >
                     <Emoji
                         emoji={props.tirednessEmojis.great.emoji}
                         ariaLabel={props.tirednessEmojis.great.desc}
