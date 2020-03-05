@@ -1,6 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 
+<<<<<<< Updated upstream
+=======
+import { getUserData } from "../../actions/bwActions";
+
+import TestGraph from "../TestGraph";
+import CircleProgressbar from "./CircleProgressbar";
+>>>>>>> Stashed changes
 import IconTab from "./IconTab";
 import { WiSunrise } from "react-icons/wi";
 import { FiSun, FiMoon } from "react-icons/fi";
@@ -64,16 +71,22 @@ const LandingPage = () => {
         setMiddaySlide(newPosition);
     };
 
+<<<<<<< Updated upstream
     // const wakeUpDragConstraints = {
     //     left: 0,
     //     right: 165,
     // };
+=======
+    const handleSubmit = (values, timeOfDay) => {
+        const timeAsDate = new Date(values.time); // convert `time` to Date object for POST request
+>>>>>>> Stashed changes
 
     // const middayDragConstraints = {
     //     top: 135,
     //     bottom: 0,
     // };
 
+<<<<<<< Updated upstream
     // const bedtimeDragConstraints = {
     //     left: -165,
     //     right: 0,
@@ -81,9 +94,50 @@ const LandingPage = () => {
 
     // const horizontalDrag = "x";
     // const verticalDrag = "y";
+=======
+        // need to import action creator that will invoke the POST request
+        // timeOfDay will tell us which part of the data needs to be updated
+    };
+
+    const fetchUserData = () => {
+        props.getUserData();
+    };
+>>>>>>> Stashed changes
+
+    useEffect(() => {
+        fetchUserData();
+    }, []);
+
+    console.log("props.user.username: ", props.user.username);
 
     return (
-        <>
+        <LandingPageContainer>
+            {/* <TestGraph /> */}
+            <ProgressBarsContainer>
+                {/* progressColor and emoji for each will need to be dynamic to change depending on the ratio */}
+
+                {/* sleep ratio */}
+                <CircleProgressbar progressColor="red" value={30}>
+                    {/* placeholder value */}
+                    <p>7hr 12min</p>
+                </CircleProgressbar>
+
+                {/* mood ratio */}
+                <CircleProgressbar progressColor="yellow" value={52}>
+                    <Emoji
+                        emoji={props.moodEmojis.great.emoji}
+                        ariaLabel={props.moodEmojis.great.desc}
+                    />
+                </CircleProgressbar>
+
+                {/* tiredness ratio */}
+                <CircleProgressbar progressColor="green" value={80}>
+                    <Emoji
+                        emoji={props.tirednessEmojis.great.emoji}
+                        ariaLabel={props.tirednessEmojis.great.desc}
+                    />
+                </CircleProgressbar>
+            </ProgressBarsContainer>
             <IconTab
                 heading="Wake Up"
                 needsTimeInput={true}
@@ -124,4 +178,16 @@ const LandingPage = () => {
     );
 };
 
+<<<<<<< Updated upstream
 export default LandingPage;
+=======
+const mapStateToProps = state => {
+    return {
+        user: state.user,
+        moodEmojis: state.moodEmojis,
+        tirednessEmojis: state.tirednessEmojis,
+    };
+};
+
+export default connect(mapStateToProps, { getUserData })(LandingPage);
+>>>>>>> Stashed changes
