@@ -1,0 +1,12 @@
+.chartCanvas {
+    width: 80vw;
+    height: 25vh;
+    display: flex;
+    flex-direction: column;
+}
+.title {
+    text-align: center;
+}
+
+.actualChart {
+}

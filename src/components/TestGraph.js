@@ -3,6 +3,7 @@ import { Line } from "react-chartjs-2";
 import ChartDataLabels from "chartjs-plugin-datalabels";
 import styled from "styled-components";
 import Login from "./Login/Login";
+import "./TestGraph.css";
 
 function TestGraph() {
     const apiResponseArray = [6, 5, 9, 12, 8, 5, 10];
@@ -47,10 +48,14 @@ function TestGraph() {
             ],
         },
         options: {
+            animation: {
+                duration: 0,
+            },
             responsive: true,
-            aspectRatio: 1,
+            maintainAspectRatio: true,
             legend: {
                 onClick: e => e.stopPropagation(),
+                display: false,
             },
             scales: {
                 yAxes: [
@@ -59,10 +64,12 @@ function TestGraph() {
                             suggestedMax: 18,
                             beginAtZero: true,
                         },
-                        scaleLabel: {
-                            display: true,
-                            labelString: "Hours Slept",
-                            fontSize: 30,
+                    },
+                ],
+                xAxes: [
+                    {
+                        ticks: {
+                            min: 9,
                         },
                     },
                 ],
@@ -72,16 +79,14 @@ function TestGraph() {
             },
 
             title: {
-                display: true,
-                text: "Sleep Quality Tracker",
-                fontSize: 40,
+                display: false,
             },
             tooltips: {
-                titleFontSize: 12,
-                bodyFontSize: 20,
-                bodySpacing: 14,
+                titleFontSize: 10,
+                bodyFontSize: 16,
+                bodySpacing: 10,
                 bodyAlign: "center",
-                caretPadding: 10,
+                caretPadding: 6,
                 mode: "nearest",
                 callbacks: {
                     // Use the footer callback to display the sum of the items showing in the tooltip
@@ -125,21 +130,24 @@ function TestGraph() {
     const suggestedSleepHours = "9";
     useEffect(() => {}, []);
     return (
-        <ChartContainer>
-            <div>
-                <Line
-                    ref={chartReference}
-                    data={chartProps.data}
-                    options={chartProps.options}
-                />
-            </div>
-            <BelowGraph>
-                <h3>
-                    Your Recommended Sleep Hours:{" "}
-                    <h2>{suggestedSleepHours}hrs/night</h2>
-                </h3>
-            </BelowGraph>
-        </ChartContainer>
+        <>
+            <ChartContainer className="chartCanvas">
+                <h1 className="title">Sleep Stats For This Week</h1>
+                <div className="actualChart">
+                    <Line
+                        ref={chartReference}
+                        data={chartProps.data}
+                        options={chartProps.options}
+                    />
+                </div>
+                <BelowGraph>
+                    <h3>
+                        Your Recommended Sleep Hours:{" "}
+                        <h2>{suggestedSleepHours}hrs/night</h2>
+                    </h3>
+                </BelowGraph>
+            </ChartContainer>
+        </>
     );
 }
 

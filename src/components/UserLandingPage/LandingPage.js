@@ -18,11 +18,15 @@ const LandingPageContainer = styled.div`
     min-height: calc(100vh - 75px);
     max-height: calc(100vh - 75px);
     position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 `;
 
 // padding is to make sure the IconTabs don't cover them up
 const ProgressBarsContainer = styled.div`
-    width: 100%;
+    width: auto;
+    margin: 0;
     display: grid;
     grid-template-columns: repeat(3, minmax(75px, 200px));
     grid-gap: 15px;
