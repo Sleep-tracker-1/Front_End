@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { connect } from "react-redux";
+import { motion } from "framer-motion";
 
 import { getUserData } from "../../actions/bwActions";
 
 import TestGraph from "../TestGraph";
 import CircleProgressbar from "./CircleProgressbar";
-import IconTab from "./IconTab";
-import { WiSunrise } from "react-icons/wi";
-import { FiSun, FiMoon } from "react-icons/fi";
+import UserInputForm from "./UserInputForm";
 
 // if you change the height of the header, the LandingPageContainer min and max height calcs need to be adjusted
 const LandingPageContainer = styled.div`
@@ -24,14 +23,6 @@ const LandingPageContainer = styled.div`
     align-items: center;
 `;
 
-export const Sunrise = styled(WiSunrise)`
-    font-size: 2.5rem;
-    z-index: 5;
-    position: absolute;
-    right: 0;
-    transform: rotate(90deg);
-`;
-
 // padding is to make sure the IconTabs don't cover them up
 const ProgressBarsContainer = styled.div`
     width: auto;
@@ -45,6 +36,26 @@ const ProgressBarsContainer = styled.div`
     @media (max-width: 400px) {
         padding: 0 30px;
     }
+`;
+
+const ButtonsContainer = styled.div`
+    width: 200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-rows: repeat(3, 40px);
+    grid-gap: 15px;
+`;
+
+const InputFormButton = styled(motion.button)`
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    font-size: 1rem;
+    padding: 10px;
+    border: 1px solid gray;
+    border-radius: 12px;
+    text-align: center;
+    cursor: pointer;
 `;
 
 // can get rid of these and import initial values from redux store
@@ -65,48 +76,54 @@ const Emoji = ({ emoji, ariaLabel }) => (
 );
 
 const LandingPage = props => {
-    // for IconTab transitions
+    const [formsSubmitted, setFormsSubmitted] = useState({
+        wakeUp: false,
+        midday: false,
+        bedtime: false,
+    });
+
+    // for UserInputForm transitions
     const [wakeUpSlide, setWakeUpSlide] = useState(0);
     const [bedtimeSlide, setBedtimeSlide] = useState(0);
     const [middaySlide, setMiddaySlide] = useState(0);
 
-    const wakeUpTap = e => {
+    const wakeUpTap = () => {
         let slidePosition = wakeUpSlide;
 
         if (slidePosition === 0) {
-            slidePosition += 165;
+            slidePosition -= 400;
         } else {
-            slidePosition -= 165;
+            slidePosition += 400;
         }
 
         setWakeUpSlide(slidePosition);
     };
 
-    const bedtimeTap = e => {
+    const bedtimeTap = () => {
         let newPos = bedtimeSlide;
 
         if (newPos === 0) {
-            newPos -= 165;
+            newPos -= 400;
         } else {
-            newPos += 165;
+            newPos += 400;
         }
 
         setBedtimeSlide(newPos);
     };
 
-    const middayTap = e => {
+    const middayTap = () => {
         let newPosition = middaySlide;
 
         if (newPosition === 0) {
-            newPosition -= 135;
+            newPosition -= 393;
         } else {
-            newPosition += 135;
+            newPosition += 393;
         }
 
         setMiddaySlide(newPosition);
     };
 
-    const handleSubmit = (values, timeOfDay) => {
+    const handleSubmit = values => {
         const timeAsDate = new Date(values.time); // convert `time` to Date object for POST request
 
         console.log("values in handleSubmit: ", values);
@@ -116,9 +133,42 @@ const LandingPage = props => {
         // timeOfDay will tell us which part of the data needs to be updated
     };
 
+    const toggleIsFormSubmitted = timeOfDay => {
+        const submittedForm = { ...formsSubmitted };
+
+        if (timeOfDay === "wakeUp") {
+            submittedForm.wakeUp = true;
+        } else if (timeOfDay === "midday") {
+            submittedForm.midday = true;
+        } else if (timeOfDay === "bedtime") {
+            submittedForm.bedtime = true;
+        }
+
+        setFormsSubmitted(submittedForm);
+    };
+
+    // fetch user data from API via action creator
     const fetchUserData = () => {
         props.getUserData();
     };
+
+    const setProgressBarColor = percentage => {
+        if (percentage < 34) {
+            return "#F20000"; //red
+        } else if (percentage < 66 && percentage > 34) {
+            return "#EFD914"; // yellow
+        } else if (percentage > 66) {
+            return "#20C261"; // green
+        }
+
+        return "#20C261"; // green
+    };
+
+    useEffect(() => {
+        fetchUserData();
+    }, []);
+
+    console.log("props.user.username: ", props.user.username);
 
     return (
         <LandingPageContainer>
@@ -127,13 +177,19 @@ const LandingPage = props => {
                 {/* progressColor and emoji for each will need to be dynamic to change depending on the ratio */}
 
                 {/* sleep ratio */}
-                <CircleProgressbar progressColor="red" value={30}>
+                <CircleProgressbar
+                    progressColor={setProgressBarColor(30)}
+                    value={30}
+                >
                     {/* placeholder value */}
                     <p>7hr 12min</p>
                 </CircleProgressbar>
 
                 {/* mood ratio */}
-                <CircleProgressbar progressColor="yellow" value={52}>
+                <CircleProgressbar
+                    progressColor={setProgressBarColor(52)}
+                    value={52}
+                >
                     <Emoji
                         emoji={props.moodEmojis.great.emoji}
                         ariaLabel={props.moodEmojis.great.desc}
@@ -141,46 +197,78 @@ const LandingPage = props => {
                 </CircleProgressbar>
 
                 {/* tiredness ratio */}
-                <CircleProgressbar progressColor="green" value={80}>
+                <CircleProgressbar
+                    progressColor={setProgressBarColor(80)}
+                    value={80}
+                >
                     <Emoji
                         emoji={props.tirednessEmojis.great.emoji}
                         ariaLabel={props.tirednessEmojis.great.desc}
                     />
                 </CircleProgressbar>
             </ProgressBarsContainer>
-            <IconTab
+            <ButtonsContainer>
+                <InputFormButton
+                    disabled={formsSubmitted.wakeUp} // don't want to allow more inputs/submissions after first submission
+                    onTap={() => wakeUpTap()}
+                    isWakeUp={true} // used for styled components for conditional styles
+                >
+                    Wake Up
+                </InputFormButton>
+
+                <InputFormButton
+                    disabled={formsSubmitted.midday} // don't want to allow more inputs/submissions after first submission
+                    onTap={() => middayTap()}
+                    isMidday={true} // used for styled components for conditional styles
+                >
+                    Midday
+                </InputFormButton>
+
+                <InputFormButton
+                    disabled={formsSubmitted.bedtime} // don't want to allow more inputs/submissions after first submission
+                    onTap={() => bedtimeTap()}
+                    isBedtime={true} // used for styled components for conditional styles
+                >
+                    Bedtime
+                </InputFormButton>
+            </ButtonsContainer>
+
+            <UserInputForm
                 heading="Wake Up"
                 needsTimeInput={true}
                 timeLabel="Wake up time"
                 timeId="wakeUpTime"
+                timeOfDay="wakeUp"
+                toggleIsFormSubmitted={toggleIsFormSubmitted}
                 initialValues={initialValuesPlusTime}
                 handleSubmit={handleSubmit}
-                isWakeUp={true}
-                animateX={wakeUpSlide}
-                tapFunc={wakeUpTap}
-                icon={Sunrise}
+                animateY={wakeUpSlide}
+                closeForm={wakeUpTap}
+                isDisabled={formsSubmitted.wakeUp}
             />
-            <IconTab
+            <UserInputForm
                 heading="Midday"
+                timeOfDay="midday"
+                toggleIsFormSubmitted={toggleIsFormSubmitted}
                 initialValues={initialValues}
                 handleSubmit={handleSubmit}
-                icon={FiSun}
-                isMidday={true}
-                isMiddayTiredness={true}
+                isMidday={true} // for styling
                 animateY={middaySlide}
-                tapFunc={middayTap}
+                closeForm={middayTap}
+                isDisabled={formsSubmitted.midday}
             />
-            <IconTab
+            <UserInputForm
                 heading="Bedtime"
                 needsTimeInput={true}
                 timeLabel="Bedtime"
                 timeId="bedtime"
+                timeOfDay="bedtime"
+                toggleIsFormSubmitted={toggleIsFormSubmitted}
                 initialValues={initialValuesPlusTime}
                 handleSubmit={handleSubmit}
-                isBedtime={true}
-                icon={FiMoon}
-                animateX={bedtimeSlide}
-                tapFunc={bedtimeTap}
+                animateY={bedtimeSlide}
+                closeForm={bedtimeTap}
+                isDisabled={formsSubmitted.bedtime}
             />
         </LandingPageContainer>
     );

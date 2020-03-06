@@ -9,7 +9,6 @@ const Wrapper = styled.div`
     flex-direction: column;
     justify-content: space-evenly;
     align-items: center;
-    padding-bottom: ${props => (props.isMiddayTiredness ? "10px" : "0")};
 `;
 
 const Heading = styled.h3`
@@ -31,10 +30,10 @@ const EmojiContainer = styled.div`
 const StyledEmoji = styled.span`
     font-size: ${props => (props.isSelected ? "1.5rem" : "initial")};
     text-shadow: ${props =>
-        props.isSelected ? "0px 0px 6px cadetblue" : "none"};
+        props.isSelected ? "0px 0px 6px darkgray" : "none"};
 `;
 
-const Emoji = ({ ariaLabel, emoji, isSelected, handleClick }) => (
+const Emoji = ({ ariaLabel, emoji, handleClick, isSelected }) => (
     <EmojiContainer onClick={handleClick}>
         <StyledEmoji role="img" aria-label={ariaLabel} isSelected={isSelected}>
             {emoji}
@@ -44,14 +43,13 @@ const Emoji = ({ ariaLabel, emoji, isSelected, handleClick }) => (
 
 const RatingComponent = ({
     isMoodForm,
-    isMiddayTiredness, // for styling midday tiredness form
+    timeOfDay,
     moodEmojis,
     tirednessEmojis,
     handleChange,
     value,
 }) => {
     const [ratingEmojis, setRatingEmojis] = useState({});
-    console.log("isMiddayTiredness: ", isMiddayTiredness);
 
     useEffect(() => {
         let emojis = {};
@@ -64,8 +62,13 @@ const RatingComponent = ({
 
         setRatingEmojis(emojis);
     }, [isMoodForm, moodEmojis, tirednessEmojis]);
+
+    console.log(
+        `${timeOfDay} ${isMoodForm ? "mood" : "tiredness"} value: `,
+        value
+    );
     return (
-        <Wrapper isMiddayTiredness={isMiddayTiredness}>
+        <Wrapper>
             <Heading>{isMoodForm ? "Mood" : "Tiredness"}</Heading>
             {/* need to wait for ratingEmojis to be set */}
             {ratingEmojis.great && (
@@ -73,20 +76,22 @@ const RatingComponent = ({
                     <Emoji
                         emoji={ratingEmojis.great.emoji}
                         ariaLabel={ratingEmojis.great.desc}
-                        handleClick={() => handleChange(1)}
-                        isSelected={value === 1}
+                        isSelected={value === ratingEmojis.great.value}
+                        handleClick={() =>
+                            handleChange(ratingEmojis.great.value)
+                        }
                     />
                     <Emoji
                         emoji={ratingEmojis.ok.emoji}
                         ariaLabel={ratingEmojis.ok.desc}
-                        handleClick={() => handleChange(2)}
-                        isSelected={value === 2}
+                        isSelected={value === ratingEmojis.ok.value}
+                        handleClick={() => handleChange(ratingEmojis.ok.value)}
                     />
                     <Emoji
                         emoji={ratingEmojis.bad.emoji}
                         ariaLabel={ratingEmojis.bad.desc}
-                        handleClick={() => handleChange(3)}
-                        isSelected={value === 3}
+                        isSelected={value === ratingEmojis.bad.value}
+                        handleClick={() => handleChange(ratingEmojis.bad.value)}
                     />
                 </EmojisWrapper>
             )}
