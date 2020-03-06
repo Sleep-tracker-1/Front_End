@@ -37,11 +37,19 @@ const ProgressBarsContainer = styled.div`
     }
 `;
 
-const RecommendedSleep = styled.div`
+const ProgressbarSleepAmount = styled.p`
+    margin: 0;
+`;
+
+const RecommendedSleepContainer = styled.div`
     display: flex;
     flex-flow: row wrap;
     justify-content: space-evenly;
     align-items: center;
+`;
+
+const RecommendedSleep = styled.h2`
+    font-size: 1.25rem;
 `;
 
 const ButtonsContainer = styled.div`
@@ -49,7 +57,7 @@ const ButtonsContainer = styled.div`
     margin: 0 auto;
     display: grid;
     grid-template-rows: repeat(3, 40px);
-    grid-gap: 15px;
+    grid-gap: 10px;
 `;
 
 const InputFormButton = styled(motion.button)`
@@ -188,7 +196,7 @@ const LandingPage = props => {
                     value={30}
                 >
                     {/* placeholder value */}
-                    <p>7hr 12min</p>
+                    <ProgressbarSleepAmount>7hr 12min</ProgressbarSleepAmount>
                 </CircleProgressbar>
 
                 {/* mood ratio */}
@@ -214,12 +222,12 @@ const LandingPage = props => {
                 </CircleProgressbar>
             </ProgressBarsContainer>
 
-            <RecommendedSleep>
-                <h2>
+            <RecommendedSleepContainer>
+                <RecommendedSleep>
                     Sleep recommendation:{" "}
                     <strong>{props.recommendedSleep}hours</strong>
-                </h2>
-            </RecommendedSleep>
+                </RecommendedSleep>
+            </RecommendedSleepContainer>
 
             <ButtonsContainer>
                 <InputFormButton
