@@ -149,7 +149,7 @@ const LandingPage = props => {
 
     // fetch user data from API via action creator
     const fetchUserData = () => {
-        props.getUserData();
+        props.getMainData();
     };
 
     const setProgressBarColor = percentage => {

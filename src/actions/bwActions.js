@@ -37,7 +37,7 @@ export const getMainData = () => dispatch => {
     axiosWithAuth()
         .get("/data")
         .then(res => {
-            console.log("res: ", res);
+            console.log("res: ", res.data);
             dispatch({ type: FETCH_MAIN_DATA, payload: res.data });
         })
         .catch(err => {
