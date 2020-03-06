@@ -4,6 +4,9 @@ import {
     FETCHING_USER,
     FETCH_USER_DATA,
     ERROR_FETCHING_USER_DATA,
+    FETCHING_MAIN_DATA,
+    FETCH_MAIN_DATA,
+    ERROR_FETCHING_MAIN_DATA,
     POSTING_USER_INPUTS,
     POSTING_USER_INPUTS_SUCCESS,
     POSTING_USER_INPUTS_FAILURE,
@@ -19,6 +22,9 @@ import {
     UPDATING_MIDDAY_INPUTS,
     UPDATING_MIDDAY_INPUTS_SUCCESS,
     UPDATING_MIDDAY_INPUTS_FAILURE,
+    ADD_USER,
+    ADD_USER_SUCCESS,
+    ADD_USER_FAILURE,
 } from "../actions/bwActions";
 
 const initialState = {
@@ -26,6 +32,7 @@ const initialState = {
     user: {
         userId: "",
         username: "",
+        firstName: "",
         email: "",
         sleepRecommendation: "", // after 30+ days of data
         dates: [
@@ -109,6 +116,25 @@ export const bwReducer = (state = initialState, action) => {
                 error: "",
             };
         case ERROR_FETCHING_USER_DATA:
+            return {
+                ...state,
+                isLoading: false,
+                error: action.payload,
+            };
+        case FETCHING_MAIN_DATA:
+            return {
+                ...state,
+                isLoading: true,
+                error: "",
+            };
+        case FETCH_MAIN_DATA:
+            return {
+                ...state,
+                user: action.payload,
+                isLoading: false,
+                error: "",
+            };
+        case ERROR_FETCHING_MAIN_DATA:
             return {
                 ...state,
                 isLoading: false,
@@ -220,6 +246,26 @@ export const bwReducer = (state = initialState, action) => {
                 error: "",
             };
         case UPDATING_MIDDAY_INPUTS_FAILURE:
+            return {
+                ...state,
+                isLoading: false,
+                error: action.payload,
+            };
+        case ADD_USER:
+            return {
+                ...state,
+                isLoading: true,
+                error: "",
+            };
+        case ADD_USER_SUCCESS:
+            // we should probably reset the user object to its initial state after the user has been deleted
+            return {
+                ...state,
+                user: action.payload,
+                isLoading: false,
+                error: "",
+            };
+        case ADD_USER_FAILURE:
             return {
                 ...state,
                 isLoading: false,

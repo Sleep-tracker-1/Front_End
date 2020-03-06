@@ -9,7 +9,7 @@ export const LoginCard = styled.div`
     text-align-last: center;
 `;
 
-export const Title = styled.p`
+export const Title = styled.div`
     font-size: 1.5em;
 `;
 

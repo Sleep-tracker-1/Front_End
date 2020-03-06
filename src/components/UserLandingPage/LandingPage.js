@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 
 import {
     getUserData,
+    getMainData,
     postBedtimeInputs,
     putWakeUpInputs,
     putMiddayInputs,
@@ -186,7 +187,7 @@ const LandingPage = props => {
 
     // fetch user data from API via action creator
     const fetchUserData = () => {
-        props.getUserData();
+        props.getMainData();
     };
 
     const setProgressBarColor = percentage => {
@@ -327,6 +328,7 @@ const mapStateToProps = state => {
 
 export default connect(mapStateToProps, {
     getUserData,
+    getMainData,
     postBedtimeInputs,
     putWakeUpInputs,
     putMiddayInputs,
