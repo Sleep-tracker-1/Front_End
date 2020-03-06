@@ -1,4 +1,5 @@
 import { axiosWithAuth } from "../utils/axiosWithAuth";
+import axios from "axios";
 
 export const FETCHING_USER = "FETCHING_USER";
 export const FETCH_USER_DATA = "FETCH_USER_DATA";
@@ -15,6 +16,10 @@ export const UPDATING_USER_INPUTS_FAILURE = "UPDATING_USER_INPUTS_FAILURE";
 export const DELETING_USER = "DELETING_USER";
 export const DELETING_USER_SUCCESS = "DELETING_USER_SUCCESS";
 export const DELETING_USER_FAILURE = "DELETING_USER_FAILURE";
+export const ADD_USER = "DELETING_USER";
+export const ADD_USER_SUCCESS = "DELETING_USER_SUCCESS";
+export const ADD_USER_FAILURE = "DELETING_USER_FAILURE";
+
 
 export const getUserData = () => dispatch => {
     dispatch({ type: FETCHING_USER });
@@ -76,7 +81,7 @@ export const updateUserInputs = () => dispatch => {
         });
 };
 
-export const deleteUserAccount = (props) => dispatch => {
+export const deleteUserAccount = () => dispatch => {
     dispatch({ type: DELETING_USER });
 
     axiosWithAuth()
@@ -88,5 +93,20 @@ export const deleteUserAccount = (props) => dispatch => {
         .catch(err => {
             console.log("error deleting account: ", err);
             dispatch({ type: DELETING_USER_FAILURE, payload: err });
+        });
+};
+
+export const addUser = () => dispatch => {
+    dispatch({ type: ADD_USER });
+
+    axios()
+        .post("https://sleep-tracker-server.herokuapp.com/api/auth/register")
+        .then(res => {
+            console.log(res.data);
+            dispatch({ type: ADD_USER_SUCCESS, payload: res.data });
+        })
+        .catch(err => {
+            console.log(err);
+            dispatch({ type: ADD_USER_FAILURE, payload: err });
         });
 };
