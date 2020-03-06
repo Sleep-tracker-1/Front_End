@@ -1,4 +1,3 @@
-/* eslint-disable max-lines-per-function */
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { connect } from "react-redux";
@@ -9,9 +8,6 @@ import { getUserData } from "../../actions/bwActions";
 import TestGraph from "../TestGraph";
 import CircleProgressbar from "./CircleProgressbar";
 import UserInputForm from "./UserInputForm";
-// import IconTab from "./IconTab";
-import { WiSunrise } from "react-icons/wi";
-import { FiSun, FiMoon } from "react-icons/fi";
 
 // if you change the height of the header, the LandingPageContainer min and max height calcs need to be adjusted
 const LandingPageContainer = styled.div`
@@ -22,14 +18,6 @@ const LandingPageContainer = styled.div`
     min-height: calc(100vh - 75px);
     max-height: calc(100vh - 75px);
     position: relative;
-`;
-
-export const Sunrise = styled(WiSunrise)`
-    font-size: 2.5rem;
-    z-index: 5;
-    position: absolute;
-    right: 0;
-    transform: rotate(90deg);
 `;
 
 // padding is to make sure the IconTabs don't cover them up
