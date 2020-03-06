@@ -69,6 +69,7 @@ function Login(props) {
                 </label>
 
                 <button onSubmit={e => {}}>Login</button>
+                <h6 onClick={() => props.history.push("/signup")}>signup/register</h6>
             </form>
         </loginStyles.LoginCard>
     );
