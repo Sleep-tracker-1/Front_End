@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from "react";
-import styled from "styled-components";
+import React, { useState } from "react";
 import "./Login.css";
 import * as loginStyles from "./LoginStyles";
 import axios from "axios";
-import axiosWithAuth from "axios";
+
 function Login(props) {
     const [userAndPw, setUserAndPw] = useState({
         username: "",
@@ -34,9 +33,9 @@ function Login(props) {
         setUserAndPw({ ...userAndPw, [event.target.name]: event.target.value });
     };
 
-    // if (localStorage.getItem("token")) {
-    //     props.history.push("/home");
-    // }
+    if (localStorage.getItem("token")) {
+        props.history.push("/home");
+    }
 
     return (
         <loginStyles.LoginCard>

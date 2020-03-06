@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { Line } from "react-chartjs-2";
 import ChartDataLabels from "chartjs-plugin-datalabels";
 import styled from "styled-components";
-import Login from "./Login/Login";
 import "./TestGraph.css";
 
 function TestGraph() {

@@ -4,7 +4,6 @@ import { createStore, applyMiddleware } from "redux";
 import { Provider } from "react-redux";
 import thunk from "redux-thunk";
 import SignupForm from "./components/Signup.js";
-import TestGraph from "./components/TestGraph";
 import { bwReducer as reducer } from "./reducers/bwReducer";
 import PrivateRoute from "./components/PrivateRoute";
 import Header from "./components/Header";
@@ -12,6 +11,7 @@ import Login from "./components/Login/Login";
 import "./App.css";
 import LandingPage from "./components/UserLandingPage/LandingPage.js";
 import NewUser from "./components/UserLandingPage/NewUserLanding.js";
+import AccountPage from "./components/AccountPage.js";
 
 const store = createStore(reducer, applyMiddleware(thunk));
 
@@ -28,6 +28,7 @@ function App() {
                     <Route exact path="/signup" component={SignupForm} />
                     <PrivateRoute exact path="/new" component={NewUser} />
                     <PrivateRoute exact path="/home" component={LandingPage} />
+                    <PrivateRoute exact path="/account" component={AccountPage} />
                 </div>
             </Router>
         </Provider>

@@ -2,9 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { connect } from "react-redux";
 import { motion } from "framer-motion";
-
-import { getUserData } from "../../actions/bwActions";
-
+import { getMainData } from "../../actions/bwActions";
 import TestGraph from "../TestGraph";
 import CircleProgressbar from "./CircleProgressbar";
 import UserInputForm from "./UserInputForm";
@@ -149,7 +147,7 @@ const LandingPage = props => {
 
     // fetch user data from API via action creator
     const fetchUserData = () => {
-        props.getUserData();
+        props.getMainData();
     };
 
     const setProgressBarColor = percentage => {
@@ -282,4 +280,4 @@ const mapStateToProps = state => {
     };
 };
 
-export default connect(mapStateToProps, { getUserData })(LandingPage);
+export default connect(mapStateToProps, { getMainData })(LandingPage);
