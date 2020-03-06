@@ -1,11 +1,13 @@
 .chartCanvas {
-    width: 80vw;
-    height: 25vh;
-    display: flex;
-    flex-direction: column;
+    width: 90%;
+    /* height: 25vh; */
+    /* display: flex;
+    flex-direction: column; */
+    margin: 0 auto;
 }
 .title {
     text-align: center;
+    font-size: 1.5rem;
 }
 
 .actualChart {
