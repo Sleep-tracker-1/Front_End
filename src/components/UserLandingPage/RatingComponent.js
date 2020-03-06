@@ -63,10 +63,6 @@ const RatingComponent = ({
         setRatingEmojis(emojis);
     }, [isMoodForm, moodEmojis, tirednessEmojis]);
 
-    console.log(
-        `${timeOfDay} ${isMoodForm ? "mood" : "tiredness"} value: `,
-        value
-    );
     return (
         <Wrapper>
             <Heading>{isMoodForm ? "Mood" : "Tiredness"}</Heading>

@@ -1,3 +1,5 @@
+/* eslint-disable complexity */
+/* eslint-disable no-case-declarations */
 import {
     FETCHING_USER,
     FETCH_USER_DATA,
@@ -14,9 +16,15 @@ import {
     DELETING_USER,
     DELETING_USER_SUCCESS,
     DELETING_USER_FAILURE,
+    FETCHING_DATE_RANGE_DATA,
+    FETCHING_DATE_RANGE_DATA_SUCCESS,
+    FETCHING_DATE_RANGE_DATA_FAILURE,
+    UPDATING_MIDDAY_INPUTS,
+    UPDATING_MIDDAY_INPUTS_SUCCESS,
+    UPDATING_MIDDAY_INPUTS_FAILURE,
     ADD_USER,
     ADD_USER_SUCCESS,
-    ADD_USER_FAILURE
+    ADD_USER_FAILURE,
 } from "../actions/bwActions";
 
 const initialState = {
@@ -86,6 +94,7 @@ const initialState = {
             value: 3,
         },
     },
+    graphDatesArray: [],
     isLoading: false,
     error: "",
 };
@@ -130,7 +139,7 @@ export const bwReducer = (state = initialState, action) => {
                 ...state,
                 isLoading: false,
                 error: action.payload,
-            };    
+            };
         case POSTING_USER_INPUTS:
             return {
                 ...state,
@@ -205,26 +214,63 @@ export const bwReducer = (state = initialState, action) => {
                 isLoading: false,
                 error: action.payload,
             };
-            case ADD_USER:
-                return {
-                    ...state,
-                    isLoading: true,
-                    error: "",
-                };
-            case ADD_USER_SUCCESS:
-                // we should probably reset the user object to its initial state after the user has been deleted
-                return {
-                    ...state,
-                    user: action.payload,
-                    isLoading: false,
-                    error: "",
-                };
-            case ADD_USER_FAILURE:
-                return {
-                    ...state,
-                    isLoading: false,
-                    error: action.payload,
-                };    
+        case FETCHING_DATE_RANGE_DATA:
+            return {
+                ...state,
+                isLoading: true,
+                error: "",
+            };
+        case FETCHING_DATE_RANGE_DATA_SUCCESS:
+            return {
+                ...state,
+                graphDatesArray: action.payload,
+                isLoading: false,
+                error: "",
+            };
+        case FETCHING_DATE_RANGE_DATA_FAILURE:
+            return {
+                ...state,
+                isLoading: false,
+                error: action.payload,
+            };
+        case UPDATING_MIDDAY_INPUTS:
+            return {
+                ...state,
+                isLoading: true,
+                error: "",
+            };
+        case UPDATING_MIDDAY_INPUTS_SUCCESS:
+            return {
+                ...state,
+                isLoading: false,
+                error: "",
+            };
+        case UPDATING_MIDDAY_INPUTS_FAILURE:
+            return {
+                ...state,
+                isLoading: false,
+                error: action.payload,
+            };
+        case ADD_USER:
+            return {
+                ...state,
+                isLoading: true,
+                error: "",
+            };
+        case ADD_USER_SUCCESS:
+            // we should probably reset the user object to its initial state after the user has been deleted
+            return {
+                ...state,
+                user: action.payload,
+                isLoading: false,
+                error: "",
+            };
+        case ADD_USER_FAILURE:
+            return {
+                ...state,
+                isLoading: false,
+                error: action.payload,
+            };
         default:
             return state;
     }

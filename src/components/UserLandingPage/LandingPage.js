@@ -2,7 +2,15 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { connect } from "react-redux";
 import { motion } from "framer-motion";
-import { getMainData } from "../../actions/bwActions";
+
+import {
+    getUserData,
+    getMainData,
+    postBedtimeInputs,
+    putWakeUpInputs,
+    putMiddayInputs,
+} from "../../actions/bwActions";
+
 import TestGraph from "../TestGraph";
 import CircleProgressbar from "./CircleProgressbar";
 import UserInputForm from "./UserInputForm";
@@ -23,8 +31,7 @@ const LandingPageContainer = styled.div`
 
 // padding is to make sure the IconTabs don't cover them up
 const ProgressBarsContainer = styled.div`
-    width: auto;
-    margin: 0;
+    width: 100%;
     display: grid;
     grid-template-columns: repeat(3, minmax(75px, 200px));
     grid-gap: 15px;
@@ -36,12 +43,27 @@ const ProgressBarsContainer = styled.div`
     }
 `;
 
+const ProgressbarSleepAmount = styled.p`
+    margin: 0;
+`;
+
+const RecommendedSleepContainer = styled.div`
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-evenly;
+    align-items: center;
+`;
+
+const RecommendedSleep = styled.h2`
+    font-size: 1.25rem;
+`;
+
 const ButtonsContainer = styled.div`
     width: 200px;
     margin: 0 auto;
     display: grid;
     grid-template-rows: repeat(3, 40px);
-    grid-gap: 15px;
+    grid-gap: 10px;
 `;
 
 const InputFormButton = styled(motion.button)`
@@ -121,14 +143,32 @@ const LandingPage = props => {
         setMiddaySlide(newPosition);
     };
 
-    const handleSubmit = values => {
-        const timeAsDate = new Date(values.time); // convert `time` to Date object for POST request
+    const handleBedtimeSubmit = values => {
+        let timeAsDate = new Date(values.time); // convert `time` to Date object for POST request
+        timeAsDate = timeAsDate.toISOString();
 
-        console.log("values in handleSubmit: ", values);
-        console.log("about to do POST request");
+        const postRequestObj = {
+            ...values,
+            time: timeAsDate,
+        };
 
-        // need to import action creator that will invoke the POST request
-        // timeOfDay will tell us which part of the data needs to be updated
+        props.postBedtimeInputs(postRequestObj);
+    };
+
+    const handleWakeUpSubmit = values => {
+        let timeAsDate = new Date(values.time); // convert `time` to Date object for POST request
+        timeAsDate = timeAsDate.toISOString();
+
+        const postRequestObj = {
+            ...values,
+            time: timeAsDate,
+        };
+
+        props.putWakeUpInputs(postRequestObj);
+    };
+
+    const handleMiddaySubmit = values => {
+        props.putMiddayInputs(values);
     };
 
     const toggleIsFormSubmitted = timeOfDay => {
@@ -166,8 +206,6 @@ const LandingPage = props => {
         fetchUserData();
     }, []);
 
-    console.log("props.user.username: ", props.user.username);
-
     return (
         <LandingPageContainer>
             <TestGraph />
@@ -180,7 +218,7 @@ const LandingPage = props => {
                     value={30}
                 >
                     {/* placeholder value */}
-                    <p>7hr 12min</p>
+                    <ProgressbarSleepAmount>7hr 12min</ProgressbarSleepAmount>
                 </CircleProgressbar>
 
                 {/* mood ratio */}
@@ -205,6 +243,18 @@ const LandingPage = props => {
                     />
                 </CircleProgressbar>
             </ProgressBarsContainer>
+
+            <RecommendedSleepContainer>
+                <RecommendedSleep>
+                    Sleep recommendation:{" "}
+                    {props.user.sleepRecommendation ? (
+                        <strong>{props.user.sleepRecommendation}hours</strong>
+                    ) : (
+                        <strong>Not available</strong>
+                    )}
+                </RecommendedSleep>
+            </RecommendedSleepContainer>
+
             <ButtonsContainer>
                 <InputFormButton
                     disabled={formsSubmitted.wakeUp} // don't want to allow more inputs/submissions after first submission
@@ -239,7 +289,7 @@ const LandingPage = props => {
                 timeOfDay="wakeUp"
                 toggleIsFormSubmitted={toggleIsFormSubmitted}
                 initialValues={initialValuesPlusTime}
-                handleSubmit={handleSubmit}
+                handleSubmit={handleWakeUpSubmit}
                 animateY={wakeUpSlide}
                 closeForm={wakeUpTap}
                 isDisabled={formsSubmitted.wakeUp}
@@ -249,7 +299,7 @@ const LandingPage = props => {
                 timeOfDay="midday"
                 toggleIsFormSubmitted={toggleIsFormSubmitted}
                 initialValues={initialValues}
-                handleSubmit={handleSubmit}
+                handleSubmit={handleMiddaySubmit}
                 isMidday={true} // for styling
                 animateY={middaySlide}
                 closeForm={middayTap}
@@ -263,7 +313,7 @@ const LandingPage = props => {
                 timeOfDay="bedtime"
                 toggleIsFormSubmitted={toggleIsFormSubmitted}
                 initialValues={initialValuesPlusTime}
-                handleSubmit={handleSubmit}
+                handleSubmit={handleBedtimeSubmit}
                 animateY={bedtimeSlide}
                 closeForm={bedtimeTap}
                 isDisabled={formsSubmitted.bedtime}
@@ -280,4 +330,10 @@ const mapStateToProps = state => {
     };
 };
 
-export default connect(mapStateToProps, { getMainData })(LandingPage);
+export default connect(mapStateToProps, {
+    getUserData,
+    getMainData,
+    postBedtimeInputs,
+    putWakeUpInputs,
+    putMiddayInputs,
+})(LandingPage);
