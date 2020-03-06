@@ -14,6 +14,9 @@ import {
     DELETING_USER,
     DELETING_USER_SUCCESS,
     DELETING_USER_FAILURE,
+    ADD_USER,
+    ADD_USER_SUCCESS,
+    ADD_USER_FAILURE
 } from "../actions/bwActions";
 
 const initialState = {
@@ -202,6 +205,26 @@ export const bwReducer = (state = initialState, action) => {
                 isLoading: false,
                 error: action.payload,
             };
+            case ADD_USER:
+                return {
+                    ...state,
+                    isLoading: true,
+                    error: "",
+                };
+            case ADD_USER_SUCCESS:
+                // we should probably reset the user object to its initial state after the user has been deleted
+                return {
+                    ...state,
+                    user: action.payload,
+                    isLoading: false,
+                    error: "",
+                };
+            case ADD_USER_FAILURE:
+                return {
+                    ...state,
+                    isLoading: false,
+                    error: action.payload,
+                };    
         default:
             return state;
     }
