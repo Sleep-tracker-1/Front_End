@@ -234,7 +234,7 @@ export default props => {
     const handleLogoutClick = e => {
         localStorage.clear();
         // localStorage.removeItem("token");
-        props.history.push("/");
+        
     };
 
     return (
@@ -265,8 +265,8 @@ export default props => {
                     <ListLink to="/home" val="View History" />
                     <ListLink to="/Account" val="Account" />
                     <ListLink
-                        to="/bees"
-                        val="Sign Out"
+                        to="/"
+                        val={<span onClick={handleLogoutClick}>Sign Out</span>}
                         onClick={handleLogoutClick}
                     />
                 </Nav>
