@@ -2,16 +2,17 @@ import styled from "styled-components";
 
 export const SignupContainer = styled.div`
     margin: auto; 
-    height: 100vh;
+    height: 85vh;
     display: flex;
     flex-flow: column;
     justify-content: center;
+
 `
 
 export const FormContainer = styled.div`
     border-radius: 5px;
     background-color: #f2f2f2;
-    padding: 10px;
+    padding: 3%;
     margin: auto;
     width: 70%;
     text-align: center; 
@@ -19,9 +20,6 @@ export const FormContainer = styled.div`
     display: flex;
     flex-flow: column;
     justify-content: space-evenly;
-    
-    
-    
 `
 
 export const Form = styled.form`
