@@ -36,7 +36,7 @@ const DateInput = styled.input`
 // const suggestedSleepHours = "9";
 
 const TestGraph = ({ user, graphDatesArray, ...props }) => {
-    const apiResponseArray = [6, 5, 9, 12, 8, 5, 10];
+    // const apiResponseArray = [6, 5, 9, 12, 8, 5, 10];
     const [amountOfSleepArray, setAmountOfSleepArray] = useState([]);
     const moodAndRestObj = {
         sleepHours: amountOfSleepArray,

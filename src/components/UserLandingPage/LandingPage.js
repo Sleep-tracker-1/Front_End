@@ -247,7 +247,11 @@ const LandingPage = props => {
             <RecommendedSleepContainer>
                 <RecommendedSleep>
                     Sleep recommendation:{" "}
-                    <strong>{props.recommendedSleep}hours</strong>
+                    {props.user.sleepRecommendation ? (
+                        <strong>{props.user.sleepRecommendation}hours</strong>
+                    ) : (
+                        <strong>Not available</strong>
+                    )}
                 </RecommendedSleep>
             </RecommendedSleepContainer>
 
