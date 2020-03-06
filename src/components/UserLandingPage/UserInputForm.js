@@ -1,15 +1,39 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
+import { motion } from "framer-motion";
 import { Formik } from "formik";
 import { isDiff } from "../../utils/isDiff";
 
 import RatingComponent from "./RatingComponent";
 
+const FormContainer = styled(motion.div)`
+    width: 250px;
+    box-sizing: border-box;
+    display: inline-flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    background: gray;
+    position: absolute;
+    bottom: ${props => (props.isMidday ? "-243px" : "-260px")};
+    left: calc((100vw / 2) - 125px);
+    border-radius: 12px;
+`;
+
+const Heading = styled.h2`
+    margin: 0.5rem 0;
+`;
+
+const InputTime = styled.input`
+    width: 90%;
+    margin: 0 auto;
+`;
+
 const TimeInput = ({ labelText, timeId, time, handleChange }) => (
     <>
         <label htmlFor={timeId}>{labelText}</label>
-        <input
-            type="dateime-local" // returns time as a string with the following format: "2020-02-29T02:00"
+        <InputTime
+            type="datetime-local" // returns time as a string with the following format: "2020-02-29T02:00"
             id={timeId}
             name="time"
             value={time}
@@ -19,34 +43,42 @@ const TimeInput = ({ labelText, timeId, time, handleChange }) => (
 );
 
 const UserInputForm = ({
-    initialValues,
-    handleSubmit,
+    heading,
     needsTimeInput,
     timeLabel,
     timeId,
-    isMiddayTiredness, // used for styling midday tiredness input
-    isWakeUp, // used for styled components for conditional styles
-    isMidday, // used for styled components for conditional styles
-    isBedtime, // used for styled components for conditional styles
+    timeOfDay,
+    toggleIsFormSubmitted,
+    initialValues,
+    handleSubmit,
+    animateY,
+    closeForm,
+    isDisabled,
 }) => {
-    const [timeOfDay, setTimeOfDay] = useState("");
+    // const [timeOfDay, setTimeOfDay] = useState("");
 
-    useEffect(() => {
-        let time = "";
+    // useEffect(() => {
+    //     let time = "";
 
-        if (isWakeup) {
-            time = "wakeUp";
-        } else if (isMidday) {
-            time = "midday";
-        } else if (isBedtime) {
-            time = "bedtime";
-        }
+    //     if (isWakeup) {
+    //         time = "wakeUp";
+    //     } else if (isMidday) {
+    //         time = "midday";
+    //     } else if (isBedtime) {
+    //         time = "bedtime";
+    //     }
 
-        setTimeOfDay(time);
-    }, [isWakeUp, isMidday, isBedtime]);
+    //     setTimeOfDay(time);
+    // }, [isWakeUp, isMidday, isBedtime]);
 
     return (
-        <div>
+        <FormContainer
+            animate={{
+                y: isDisabled ? 0 : animateY,
+                zIndex: animateY ? 10 : 0,
+            }}
+        >
+            <Heading>{heading}</Heading>
             <Formik
                 initialValues={{
                     ...initialValues,
@@ -74,6 +106,8 @@ const UserInputForm = ({
                                         )
                                     ) {
                                         submitForm();
+                                        toggleIsFormSubmitted(timeOfDay);
+                                        closeForm();
                                     }
                                 }}
                             />
@@ -99,6 +133,8 @@ const UserInputForm = ({
                                     )
                                 ) {
                                     submitForm();
+                                    toggleIsFormSubmitted(timeOfDay);
+                                    closeForm();
                                 }
                             }}
                         />
@@ -106,31 +142,34 @@ const UserInputForm = ({
                         {/* Tiredness rating input */}
                         <RatingComponent
                             isMoodForm={false}
-                            isMiddayTiredness={isMiddayTiredness}
+                            // isMiddayTiredness={isMiddayTiredness}
                             name="tiredness"
                             id="tiredness"
                             timeOfDay={timeOfDay}
                             value={values.tiredness}
                             handleChange={newValue => {
-                                setFieldValue("mood", newValue);
+                                setFieldValue("tiredness", newValue);
+                                console.log("newValue: ", newValue);
                                 // automatically submit the form when all values have an input that are different from their initialized values
                                 if (
                                     isDiff(
                                         {
                                             ...values,
-                                            mood: newValue,
+                                            tiredness: newValue,
                                         },
                                         initialValues
                                     )
                                 ) {
                                     submitForm();
+                                    toggleIsFormSubmitted(timeOfDay);
+                                    closeForm();
                                 }
                             }}
                         />
                     </>
                 )}
             </Formik>
-        </div>
+        </FormContainer>
     );
 };
 
