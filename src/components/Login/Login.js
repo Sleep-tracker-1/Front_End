@@ -33,9 +33,9 @@ function Login(props) {
         setUserAndPw({ ...userAndPw, [event.target.name]: event.target.value });
     };
 
-    // if (localStorage.getItem("token")) {
-    //     props.history.push("/home");
-    // }
+    if (localStorage.getItem("token")) {
+        props.history.push("/home");
+    }
 
     return (
         <loginStyles.LoginCard>

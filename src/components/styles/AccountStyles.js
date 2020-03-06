@@ -20,17 +20,18 @@ export const InfoDiv = styled.div`
     width: 100%;
     flex-flow: column nowrap;
     margin: 0 auto;
+    border: 1px solid black;
 `
 
 export const Label = styled.h5`
 
 `
 
-export const DataH4 = styled.input`
-    margin: 1% auto;
+export const DataH4 = styled.h4`
+    margin: 1%;
     border: none;
     font-size: 1.22em;
-    width: 80%;
-    text-align: center;
+    text-align: flex-start;
     font-weight: bolder;
+    padding-bottom: 1%;
 `

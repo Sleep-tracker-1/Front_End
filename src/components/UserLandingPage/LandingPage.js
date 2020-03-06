@@ -2,9 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { connect } from "react-redux";
 import { motion } from "framer-motion";
-
 import { getMainData } from "../../actions/bwActions";
-
 import TestGraph from "../TestGraph";
 import CircleProgressbar from "./CircleProgressbar";
 import UserInputForm from "./UserInputForm";

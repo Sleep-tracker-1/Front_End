@@ -76,11 +76,11 @@ export const updateUserInputs = () => dispatch => {
         });
 };
 
-export const deleteUserAccount = () => dispatch => {
+export const deleteUserAccount = (props) => dispatch => {
     dispatch({ type: DELETING_USER });
 
     axiosWithAuth()
-        .delete()
+        .delete("/user/delete")
         .then(res => {
             console.log("delete res: ", res);
             dispatch({ type: DELETING_USER_SUCCESS, payload: res.data });

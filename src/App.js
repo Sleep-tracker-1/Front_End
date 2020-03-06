@@ -4,7 +4,6 @@ import { createStore, applyMiddleware } from "redux";
 import { Provider } from "react-redux";
 import thunk from "redux-thunk";
 import SignupForm from "./components/Signup.js";
-import TestGraph from "./components/TestGraph";
 import { bwReducer as reducer } from "./reducers/bwReducer";
 import PrivateRoute from "./components/PrivateRoute";
 import Header from "./components/Header";

@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { connect } from "react-redux";
-import { getUserData } from "../actions/bwActions";
+import { getUserData, deleteUserAccount } from "../actions/bwActions";
 import * as Style from "./styles/AccountStyles";
-import { Label } from "react-bootstrap";
 
 const AccountPage = (props) => {
     useEffect(() => {
@@ -10,32 +9,11 @@ const AccountPage = (props) => {
 
     }, [])
 
-    const [ users, setUsers] = useState({
-        username: '',
-        password: '',
-        firstName: '',
-        email: '',
-    })
-    
-    const handleChange = e => {
-        setUsers({
-          ...users,
-          [e.target.name]: e.target.value,
-        })
-    }
-
-
-    const handleSubmit = e => {
-        e.preventDefault();
-        // axios
-        // .post('https://sleep-tracker-server.herokuapp.com/api/auth/register', user)
-        //     .then(res => {
-        //         console.log(res)
-        //         localStorage.setItem("token", res.data.token);
-        //         props.history.push('/home')
-        //     })
-        //   .catch(err => console.log(err))
-    };
+const deleteUser =  () => {
+    props.deleteUserAccount()
+    localStorage.clear()
+    props.history.push("/");
+}   
     
     return(
         <>  
@@ -43,16 +21,17 @@ const AccountPage = (props) => {
                 <Style.Header>Account Information</Style.Header>
                 <Style.InfoDiv>
                     <Style.Label>Username:</Style.Label>
-                    <Style.DataH4 type="text" name="username" value={props.user.username} onChange={handleChange} />
+                    <Style.DataH4>{props.user.username}</Style.DataH4>
                 </Style.InfoDiv>
                 <Style.InfoDiv>
                     <Style.Label>First Name:</Style.Label>
-                    <Style.DataH4 type="text" name="firstName" value={props.user.firstName} onChange={handleChange} />
+                    <Style.DataH4>{props.user.firstName}</Style.DataH4>
                 </Style.InfoDiv>
                 <Style.InfoDiv>    
                     <Style.Label>Email:</Style.Label>
-                    <Style.DataH4 type="email" name="email" value={props.user.email} onChange={handleChange} /> 
+                    <Style.DataH4>{props.user.email}</Style.DataH4> 
                 </Style.InfoDiv>
+                <button onClick={deleteUser}>Delete Account</button>
             </Style.MContainer>
         </>
     )
@@ -64,4 +43,4 @@ const mapStateToProps = state => {
     };
 };
 
-export default connect( mapStateToProps, {getUserData} )(AccountPage);
+export default connect( mapStateToProps, {getUserData, deleteUserAccount} )(AccountPage);
