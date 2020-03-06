@@ -1,3 +1,5 @@
+/* eslint-disable complexity */
+/* eslint-disable no-case-declarations */
 import {
     FETCHING_USER,
     FETCH_USER_DATA,
@@ -11,6 +13,9 @@ import {
     DELETING_USER,
     DELETING_USER_SUCCESS,
     DELETING_USER_FAILURE,
+    FETCHING_DATE_RANGE_DATA,
+    FETCHING_DATE_RANGE_DATA_SUCCESS,
+    FETCHING_DATE_RANGE_DATA_FAILURE,
 } from "../actions/bwActions";
 
 const initialState = {
@@ -79,6 +84,7 @@ const initialState = {
             value: 3,
         },
     },
+    graphDatesArray: [],
     isLoading: false,
     error: "",
 };
@@ -174,6 +180,25 @@ export const bwReducer = (state = initialState, action) => {
                 error: "",
             };
         case DELETING_USER_FAILURE:
+            return {
+                ...state,
+                isLoading: false,
+                error: action.payload,
+            };
+        case FETCHING_DATE_RANGE_DATA:
+            return {
+                ...state,
+                isLoading: true,
+                error: "",
+            };
+        case FETCHING_DATE_RANGE_DATA_SUCCESS:
+            return {
+                ...state,
+                graphDatesArray: action.payload,
+                isLoading: false,
+                error: "",
+            };
+        case FETCHING_DATE_RANGE_DATA_FAILURE:
             return {
                 ...state,
                 isLoading: false,

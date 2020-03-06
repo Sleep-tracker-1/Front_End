@@ -25,8 +25,7 @@ const LandingPageContainer = styled.div`
 
 // padding is to make sure the IconTabs don't cover them up
 const ProgressBarsContainer = styled.div`
-    width: auto;
-    margin: 0;
+    width: 100%;
     display: grid;
     grid-template-columns: repeat(3, minmax(75px, 200px));
     grid-gap: 15px;
@@ -36,6 +35,13 @@ const ProgressBarsContainer = styled.div`
     @media (max-width: 400px) {
         padding: 0 30px;
     }
+`;
+
+const RecommendedSleep = styled.div`
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-evenly;
+    align-items: center;
 `;
 
 const ButtonsContainer = styled.div`
@@ -207,6 +213,14 @@ const LandingPage = props => {
                     />
                 </CircleProgressbar>
             </ProgressBarsContainer>
+
+            <RecommendedSleep>
+                <h2>
+                    Sleep recommendation:{" "}
+                    <strong>{props.recommendedSleep}hours</strong>
+                </h2>
+            </RecommendedSleep>
+
             <ButtonsContainer>
                 <InputFormButton
                     disabled={formsSubmitted.wakeUp} // don't want to allow more inputs/submissions after first submission
