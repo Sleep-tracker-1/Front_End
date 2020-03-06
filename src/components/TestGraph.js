@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Line } from "react-chartjs-2";
 import { connect } from "react-redux";
-// import ChartDataLabels from "chartjs-plugin-datalabels";
+import ChartDataLabels from "chartjs-plugin-datalabels";
 import styled from "styled-components";
 
 import { getDataFromDateRange } from "../actions/bwActions";
@@ -29,23 +29,18 @@ const DateInput = styled.input`
     border-radius: 8px;
 `;
 
-// const BelowGraph = styled.div`
-//     text-align: center;
-//     margin-top: 10px;
-// `;
-// const suggestedSleepHours = "9";
-
 const TestGraph = ({ user, graphDatesArray, ...props }) => {
     // const apiResponseArray = [6, 5, 9, 12, 8, 5, 10];
     const [amountOfSleepArray, setAmountOfSleepArray] = useState([]);
+    const [avgMoods, setAvgMoods] = useState([]);
+    const [avgRest, setAvgRest] = useState([]);
     const moodAndRestObj = {
         sleepHours: amountOfSleepArray,
-        mood: 8,
-        restfulness: 10,
+        mood: avgMoods,
+        restfulness: avgRest,
     }; //We should probably use state here as well
     //We need to get our data from the server, but these are our stand-in values
     // const [currentWeek, setCurrentWeek] = useState(amountOfSleepArray);
-
     // const [today, setToday] = useState(new Date());
     const [startingDate, setStartingDate] = useState(() => {
         const today = new Date();
@@ -74,6 +69,7 @@ const TestGraph = ({ user, graphDatesArray, ...props }) => {
                 "Friday",
                 "Saturday",
                 "Sunday",
+                "",
             ],
             datasets: [
                 {
@@ -84,14 +80,14 @@ const TestGraph = ({ user, graphDatesArray, ...props }) => {
                     fill: false,
                     lineTension: 0,
                     radius: 15,
-                    hoverRadius: 30,
+                    hoverRadius: 25,
                     pointHoverBackgroundColor: "yellow",
                     datalabels: {
                         textStrokeColor: "black",
                         textStrokeWidth: 1,
                         color: "black",
                         font: {
-                            size: 20,
+                            size: 18,
                         },
                     },
                 },
@@ -157,9 +153,14 @@ const TestGraph = ({ user, graphDatesArray, ...props }) => {
                     afterLabel: function(tooltipItem, data) {
                         const thisDataset =
                             data.datasets[Number(tooltipItem.datasetIndex)];
-                        const rest = thisDataset.moodAndRest.restfulness;
-                        const mood = thisDataset.moodAndRest.restfulness;
-
+                        const rest =
+                            thisDataset.moodAndRest.restfulness[
+                                Number(tooltipItem.index)
+                            ];
+                        const mood =
+                            thisDataset.moodAndRest.mood[
+                                Number(tooltipItem.index)
+                            ];
                         const stringo = `Rest: ${rest} - Mood: ${mood}`;
 
                         return stringo;
@@ -199,9 +200,26 @@ const TestGraph = ({ user, graphDatesArray, ...props }) => {
     // }, [user]);
 
     useEffect(() => {
+        console.log(graphDatesArray);
         const sleepArray = graphDatesArray.map(day => day.totalTimeInBed);
+        const avgRestArray = graphDatesArray.map(day => {
+            let morning = day.wakeUp.tiredness;
+            let midday = day.wakeUp.tiredness;
+            let bedtime = day.wakeUp.tiredness;
+
+            return (morning + midday + bedtime) / 3;
+        });
+        const avgMoodArray = graphDatesArray.map(day => {
+            let morning = day.wakeUp.mood;
+            let midday = day.wakeUp.mood;
+            let bedtime = day.wakeUp.mood;
+
+            return (morning + midday + bedtime) / 3;
+        });
 
         setAmountOfSleepArray(sleepArray);
+        setAvgRest(avgRestArray);
+        setAvgMoods(avgMoodArray);
     }, [graphDatesArray]);
 
     return (

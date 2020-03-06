@@ -7,6 +7,7 @@ export const LoginCard = styled.div`
     padding-bottom: 2.5%;
     font-size: 1.5em;
     text-align-last: center;
+    margin-top: 40px;
 `;
 
 export const Title = styled.div`
