@@ -16,6 +16,9 @@ import {
     FETCHING_DATE_RANGE_DATA,
     FETCHING_DATE_RANGE_DATA_SUCCESS,
     FETCHING_DATE_RANGE_DATA_FAILURE,
+    UPDATING_MIDDAY_INPUTS,
+    UPDATING_MIDDAY_INPUTS_SUCCESS,
+    UPDATING_MIDDAY_INPUTS_FAILURE,
 } from "../actions/bwActions";
 
 const initialState = {
@@ -199,6 +202,24 @@ export const bwReducer = (state = initialState, action) => {
                 error: "",
             };
         case FETCHING_DATE_RANGE_DATA_FAILURE:
+            return {
+                ...state,
+                isLoading: false,
+                error: action.payload,
+            };
+        case UPDATING_MIDDAY_INPUTS:
+            return {
+                ...state,
+                isLoading: true,
+                error: "",
+            };
+        case UPDATING_MIDDAY_INPUTS_SUCCESS:
+            return {
+                ...state,
+                isLoading: false,
+                error: "",
+            };
+        case UPDATING_MIDDAY_INPUTS_FAILURE:
             return {
                 ...state,
                 isLoading: false,

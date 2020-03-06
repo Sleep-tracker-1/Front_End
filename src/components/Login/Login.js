@@ -60,7 +60,7 @@ function Login(props) {
                     Password:
                     <input
                         className="sizedInputs"
-                        type="text"
+                        type="password"
                         name="password"
                         id="passwordInput"
                         placeholder={userAndPw.password}

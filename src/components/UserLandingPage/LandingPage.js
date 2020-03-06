@@ -3,7 +3,12 @@ import styled from "styled-components";
 import { connect } from "react-redux";
 import { motion } from "framer-motion";
 
-import { getUserData } from "../../actions/bwActions";
+import {
+    getUserData,
+    postBedtimeInputs,
+    putWakeUpInputs,
+    putMiddayInputs,
+} from "../../actions/bwActions";
 
 import TestGraph from "../TestGraph";
 import CircleProgressbar from "./CircleProgressbar";
@@ -137,14 +142,32 @@ const LandingPage = props => {
         setMiddaySlide(newPosition);
     };
 
-    const handleSubmit = values => {
-        const timeAsDate = new Date(values.time); // convert `time` to Date object for POST request
+    const handleBedtimeSubmit = values => {
+        let timeAsDate = new Date(values.time); // convert `time` to Date object for POST request
+        timeAsDate = timeAsDate.toISOString();
 
-        console.log("values in handleSubmit: ", values);
-        console.log("about to do POST request");
+        const postRequestObj = {
+            ...values,
+            time: timeAsDate,
+        };
 
-        // need to import action creator that will invoke the POST request
-        // timeOfDay will tell us which part of the data needs to be updated
+        props.postBedtimeInputs(postRequestObj);
+    };
+
+    const handleWakeUpSubmit = values => {
+        let timeAsDate = new Date(values.time); // convert `time` to Date object for POST request
+        timeAsDate = timeAsDate.toISOString();
+
+        const postRequestObj = {
+            ...values,
+            time: timeAsDate,
+        };
+
+        props.putWakeUpInputs(postRequestObj);
+    };
+
+    const handleMiddaySubmit = values => {
+        props.putMiddayInputs(values);
     };
 
     const toggleIsFormSubmitted = timeOfDay => {
@@ -181,8 +204,6 @@ const LandingPage = props => {
     useEffect(() => {
         fetchUserData();
     }, []);
-
-    console.log("props.user.username: ", props.user.username);
 
     return (
         <LandingPageContainer>
@@ -263,7 +284,7 @@ const LandingPage = props => {
                 timeOfDay="wakeUp"
                 toggleIsFormSubmitted={toggleIsFormSubmitted}
                 initialValues={initialValuesPlusTime}
-                handleSubmit={handleSubmit}
+                handleSubmit={handleWakeUpSubmit}
                 animateY={wakeUpSlide}
                 closeForm={wakeUpTap}
                 isDisabled={formsSubmitted.wakeUp}
@@ -273,7 +294,7 @@ const LandingPage = props => {
                 timeOfDay="midday"
                 toggleIsFormSubmitted={toggleIsFormSubmitted}
                 initialValues={initialValues}
-                handleSubmit={handleSubmit}
+                handleSubmit={handleMiddaySubmit}
                 isMidday={true} // for styling
                 animateY={middaySlide}
                 closeForm={middayTap}
@@ -287,7 +308,7 @@ const LandingPage = props => {
                 timeOfDay="bedtime"
                 toggleIsFormSubmitted={toggleIsFormSubmitted}
                 initialValues={initialValuesPlusTime}
-                handleSubmit={handleSubmit}
+                handleSubmit={handleBedtimeSubmit}
                 animateY={bedtimeSlide}
                 closeForm={bedtimeTap}
                 isDisabled={formsSubmitted.bedtime}
@@ -304,4 +325,9 @@ const mapStateToProps = state => {
     };
 };
 
-export default connect(mapStateToProps, { getUserData })(LandingPage);
+export default connect(mapStateToProps, {
+    getUserData,
+    postBedtimeInputs,
+    putWakeUpInputs,
+    putMiddayInputs,
+})(LandingPage);
