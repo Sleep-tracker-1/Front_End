@@ -57,6 +57,7 @@ const IconTab = ({
     needsTimeInput,
     timeLabel,
     timeId,
+    timeOfDay,
     initialValues,
     handleSubmit,
     isMiddayTiredness, // used for styling midday tiredness input
@@ -116,6 +117,7 @@ const IconTab = ({
                             isMoodForm={true}
                             name="mood"
                             id="mood"
+                            timeOfDay={timeOfDay}
                             value={values.mood}
                             handleChange={newValue => {
                                 setFieldValue("mood", newValue);
@@ -140,6 +142,7 @@ const IconTab = ({
                             isMiddayTiredness={isMiddayTiredness}
                             name="tiredness"
                             id="tiredness"
+                            timeOfDay={timeOfDay}
                             value={values.tiredness}
                             handleChange={newValue => {
                                 setFieldValue("tiredness", newValue);

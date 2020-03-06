@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import styled from "styled-components";
 import { motion } from "framer-motion";
 import { Formik } from "formik";
@@ -34,6 +34,7 @@ const TimeInput = ({ labelText, timeId, time, handleChange }) => (
         <label htmlFor={timeId}>{labelText}</label>
         <InputTime
             type="datetime-local" // returns time as a string with the following format: "2020-02-29T02:00"
+            role="input"
             id={timeId}
             name="time"
             value={time}
@@ -55,26 +56,10 @@ const UserInputForm = ({
     closeForm,
     isDisabled,
 }) => {
-    // const [timeOfDay, setTimeOfDay] = useState("");
-
-    // useEffect(() => {
-    //     let time = "";
-
-    //     if (isWakeup) {
-    //         time = "wakeUp";
-    //     } else if (isMidday) {
-    //         time = "midday";
-    //     } else if (isBedtime) {
-    //         time = "bedtime";
-    //     }
-
-    //     setTimeOfDay(time);
-    // }, [isWakeUp, isMidday, isBedtime]);
-
     return (
         <FormContainer
             animate={{
-                y: isDisabled ? 0 : animateY,
+                y: isDisabled ? 0 : animateY, // if the button is disabled, don't allow the animation
                 zIndex: animateY ? 10 : 0,
             }}
         >
@@ -106,8 +91,8 @@ const UserInputForm = ({
                                         )
                                     ) {
                                         submitForm();
-                                        toggleIsFormSubmitted(timeOfDay);
-                                        closeForm();
+                                        toggleIsFormSubmitted(timeOfDay); // to disable the button
+                                        closeForm(); // "close" the form
                                     }
                                 }}
                             />
@@ -133,8 +118,8 @@ const UserInputForm = ({
                                     )
                                 ) {
                                     submitForm();
-                                    toggleIsFormSubmitted(timeOfDay);
-                                    closeForm();
+                                    toggleIsFormSubmitted(timeOfDay); // to disable the button
+                                    closeForm(); // "close" the form
                                 }
                             }}
                         />
@@ -142,14 +127,13 @@ const UserInputForm = ({
                         {/* Tiredness rating input */}
                         <RatingComponent
                             isMoodForm={false}
-                            // isMiddayTiredness={isMiddayTiredness}
                             name="tiredness"
                             id="tiredness"
                             timeOfDay={timeOfDay}
                             value={values.tiredness}
                             handleChange={newValue => {
                                 setFieldValue("tiredness", newValue);
-                                console.log("newValue: ", newValue);
+
                                 // automatically submit the form when all values have an input that are different from their initialized values
                                 if (
                                     isDiff(
@@ -161,8 +145,8 @@ const UserInputForm = ({
                                     )
                                 ) {
                                     submitForm();
-                                    toggleIsFormSubmitted(timeOfDay);
-                                    closeForm();
+                                    toggleIsFormSubmitted(timeOfDay); // to disable the button
+                                    closeForm(); // "close" the form
                                 }
                             }}
                         />

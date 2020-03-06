@@ -90,7 +90,7 @@ const LandingPage = props => {
         bedtime: false,
     });
 
-    // for IconTab transitions
+    // for UserInputForm transitions
     const [wakeUpSlide, setWakeUpSlide] = useState(0);
     const [bedtimeSlide, setBedtimeSlide] = useState(0);
     const [middaySlide, setMiddaySlide] = useState(0);
@@ -152,10 +152,10 @@ const LandingPage = props => {
             submittedForm.bedtime = true;
         }
 
-        console.log("submittedForm: ", submittedForm);
         setFormsSubmitted(submittedForm);
     };
 
+    // fetch user data from API via action creator
     const fetchUserData = () => {
         props.getUserData();
     };
@@ -175,10 +175,6 @@ const LandingPage = props => {
     useEffect(() => {
         fetchUserData();
     }, []);
-
-    useEffect(() => {
-        console.log("wakeUpSlide: ", wakeUpSlide);
-    }, [wakeUpSlide]);
 
     console.log("props.user.username: ", props.user.username);
 
@@ -221,11 +217,7 @@ const LandingPage = props => {
             </ProgressBarsContainer>
             <ButtonsContainer>
                 <InputFormButton
-                    disabled={formsSubmitted.wakeUp}
-                    onClick={() => {
-                        console.log("here");
-                    }}
-                    // maybe have an onTap Framer Motion here to trigger a motion.div for the necessary form transition
+                    disabled={formsSubmitted.wakeUp} // don't want to allow more inputs/submissions after first submission
                     onTap={() => wakeUpTap()}
                     isWakeUp={true} // used for styled components for conditional styles
                 >
@@ -233,7 +225,7 @@ const LandingPage = props => {
                 </InputFormButton>
 
                 <InputFormButton
-                    disabled={formsSubmitted.midday}
+                    disabled={formsSubmitted.midday} // don't want to allow more inputs/submissions after first submission
                     onTap={() => middayTap()}
                     isMidday={true} // used for styled components for conditional styles
                 >
@@ -241,7 +233,7 @@ const LandingPage = props => {
                 </InputFormButton>
 
                 <InputFormButton
-                    disabled={formsSubmitted.bedtime}
+                    disabled={formsSubmitted.bedtime} // don't want to allow more inputs/submissions after first submission
                     onTap={() => bedtimeTap()}
                     isBedtime={true} // used for styled components for conditional styles
                 >
@@ -258,11 +250,9 @@ const LandingPage = props => {
                 toggleIsFormSubmitted={toggleIsFormSubmitted}
                 initialValues={initialValuesPlusTime}
                 handleSubmit={handleSubmit}
-                isWakeUp={true}
                 animateY={wakeUpSlide}
                 closeForm={wakeUpTap}
                 isDisabled={formsSubmitted.wakeUp}
-                // icon={Sunrise}
             />
             <UserInputForm
                 heading="Midday"
@@ -270,9 +260,7 @@ const LandingPage = props => {
                 toggleIsFormSubmitted={toggleIsFormSubmitted}
                 initialValues={initialValues}
                 handleSubmit={handleSubmit}
-                // icon={FiSun}
-                isMidday={true}
-                isMiddayTiredness={true}
+                isMidday={true} // for styling
                 animateY={middaySlide}
                 closeForm={middayTap}
                 isDisabled={formsSubmitted.midday}
@@ -286,8 +274,6 @@ const LandingPage = props => {
                 toggleIsFormSubmitted={toggleIsFormSubmitted}
                 initialValues={initialValuesPlusTime}
                 handleSubmit={handleSubmit}
-                isBedtime={true}
-                // icon={FiMoon}
                 animateY={bedtimeSlide}
                 closeForm={bedtimeTap}
                 isDisabled={formsSubmitted.bedtime}
