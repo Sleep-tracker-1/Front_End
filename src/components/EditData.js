@@ -1,129 +1,264 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
+import { connect } from "react-redux";
+import { formatDateForInput } from "../utils/formatDateForInput";
+import useOnClickOutside from "../hooks/useOnClickOutside";
 
-import { Sunrise } from "./UserLandingPage/LandingPage";
-import { FiSun, FiMoon } from "react-icons/fi";
+import {
+    getMainData,
+    editMood,
+    editTiredness,
+    editWakeAndBedTimes,
+    getDataFromOneDate,
+} from "../actions/bwActions";
 
-import IconTab from "./UserLandingPage/IconTab";
+import {
+    LandingPageContainer,
+    ButtonsContainer,
+    InputFormButton,
+} from "./UserLandingPage/LandingPage";
+import CircleProgressbars from "./UserLandingPage/CircleProgressbars";
+import UserInputForm from "./UserLandingPage/UserInputForm";
 
-const EditData = () => {
+const DateInputContainer = styled.div`
+    width: 80%;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    margin-top: 10px;
+
+    & label {
+        margin-bottom: 0;
+    }
+
+    & input {
+        max-width: 150px;
+    }
+`;
+
+const EditData = ({
+    dateToEdit,
+    getDataFromOneDate, // need to destructure b/c of useEffect dependency array warning error
+    getMainData, // need to destructure b/c of useEffect dependency array warning error
+    moodEmojis,
+    tirednessEmojis,
+    ...props
+}) => {
+    const [date, setDate] = useState(new Date());
+
+    // for "closing" forms when clicking outside of them
+    const wakeUpFormRef = useRef(null);
+    const middayFormRef = useRef(null);
+    const bedtimeFormRef = useRef(null);
+
+    const wakeUpButtonRef = useRef(null);
+    const middayButtonRef = useRef(null);
+    const bedtimeButtonRef = useRef(null);
+
     // for the IconTab swiping animation
     const [wakeUpSlide, setWakeUpSlide] = useState(0);
     const [bedtimeSlide, setBedtimeSlide] = useState(0);
     const [middaySlide, setMiddaySlide] = useState(0);
 
-    // local state for the party that updates the date we want to do a GET request for
-    const [dateToQuery, setDateToQuery] = useState(Date.now());
-
-    // initial values for the times, moods, and tiredness before doing a GET request
-    const [initialValues, setInitialValues] = useState({
-        mood: 0,
-        tiredness: 0,
-    });
-    const [initialValuesPlusTime, setInitialValuesPlusTime] = useState({
-        ...initialValues,
-        time: "",
-    });
-
     // handleTap functions for the IconTab animations
-    const wakeUpTap = e => {
+    const wakeUpTap = () => {
         let slidePosition = wakeUpSlide;
 
         if (slidePosition === 0) {
-            slidePosition += 165;
+            slidePosition -= 400;
         } else {
-            slidePosition -= 165;
+            slidePosition += 400;
         }
 
         setWakeUpSlide(slidePosition);
     };
 
-    const bedtimeTap = e => {
+    const bedtimeTap = () => {
         let newPos = bedtimeSlide;
 
         if (newPos === 0) {
-            newPos -= 165;
+            newPos -= 400;
         } else {
-            newPos += 165;
+            newPos += 400;
         }
 
         setBedtimeSlide(newPos);
     };
 
-    const middayTap = e => {
+    const middayTap = () => {
         let newPosition = middaySlide;
 
         if (newPosition === 0) {
-            newPosition -= 135;
+            newPosition -= 393;
         } else {
-            newPosition += 135;
+            newPosition += 393;
         }
 
         setMiddaySlide(newPosition);
     };
 
-    // handleSubmit for sending the PUT request to the server
-    const handleSubmit = e => {
-        e.preventDefault();
+    useOnClickOutside(wakeUpFormRef, wakeUpButtonRef, () => {
+        setWakeUpSlide(0);
+    });
 
+    useOnClickOutside(middayFormRef, middayButtonRef, () => {
+        setMiddaySlide(0);
+    });
+
+    useOnClickOutside(bedtimeFormRef, bedtimeButtonRef, () => {
+        setBedtimeSlide(0);
+    });
+
+    const handleDateChange = e => {
+        setDate(e.target.value);
+    };
+
+    // handleSubmit for sending the PUT request to the server
+    const handleMoodSubmit = (timeOfDay, dateId, updatedMood) => {
         // invoke action creator here that does the PUT request
         // action.payload = the date's updated redux state for the times, mood, and tiredness
+        props.editMood(timeOfDay, dateId, updatedMood);
+    };
+
+    const handleTirednessSubmit = (
+        initialVals,
+        timeOfDay,
+        dateId,
+        updatedTiredness
+    ) => {
+        props.editTiredness(timeOfDay, dateId, updatedTiredness);
+    };
+
+    const handleSleepTimesSubmit = (timeOfDay, dateId, updatedTime) => {
+        // updatedTime needs to be Date.toISOString()
+        props.editWakeAndBedTimes(timeOfDay, dateId, updatedTime);
     };
 
     useEffect(() => {
         // do GET request via action creator to update state in redux store
         // want to do a new GET request when the user selects a different date to edit
-    }, [dateToQuery]);
+        const getDateData = day => {
+            getDataFromOneDate(day);
+        };
+
+        console.log("date in EditData: ", date);
+
+        getDateData(formatDateForInput(date));
+    }, [date, getDataFromOneDate]);
 
     useEffect(() => {
         // when the input values get updated in the redux store (pass into the dependency array for this useEffect), set the local state 'initialValues' and 'initialValuesPlusTime'
         // might have to convert wake and bed times from Date object to string first? something to check
-    }, []);
+        const fetchUserData = () => {
+            getMainData();
+        };
+
+        fetchUserData();
+    }, [getMainData]);
 
     return (
-        <div>
-            {/* Graph that only shows 1 day of data with some sort of data selection that will do a GET request for a different day */}
+        <LandingPageContainer>
+            <DateInputContainer>
+                <label htmlFor="editDate">Date to edit:</label>
+                <input
+                    id="editDate"
+                    type="date"
+                    name="editDate"
+                    value={formatDateForInput(date)}
+                    onChange={e => {
+                        handleDateChange(e);
+                    }}
+                />
+            </DateInputContainer>
 
             {/* Amount of sleep, mood, and tiredness levels compared to averages as circular progress "bars" */}
+            <CircleProgressbars />
 
-            {/* IconTab components with values initialized with data pulled in from GET request */}
+            <ButtonsContainer>
+                <InputFormButton
+                    ref={wakeUpButtonRef}
+                    onTap={() => wakeUpTap()}
+                    isWakeUp={true} // used for styled components for conditional styles
+                >
+                    Wake Up
+                </InputFormButton>
 
-            {/* Have each IconTab take an action creator that updates the redux store state on the client side, but don't send the PUT request to the server with those changes until they press the Submit button */}
-            <IconTab
+                <InputFormButton
+                    ref={middayButtonRef}
+                    onTap={() => middayTap()}
+                    isMidday={true} // used for styled components for conditional styles
+                >
+                    Midday
+                </InputFormButton>
+
+                <InputFormButton
+                    ref={bedtimeButtonRef}
+                    onTap={() => bedtimeTap()}
+                    isBedtime={true} // used for styled components for conditional styles
+                >
+                    Bedtime
+                </InputFormButton>
+            </ButtonsContainer>
+
+            <UserInputForm
+                dateId={dateToEdit.dateId}
                 heading="Wake Up"
                 needsTimeInput={true}
                 timeLabel="Wake up time"
                 timeId="wakeUpTime"
-                initialValues={initialValuesPlusTime}
-                isWakeUp={true}
-                animateX={wakeUpSlide}
-                tapFunc={wakeUpTap}
-                icon={Sunrise}
+                timeOfDay="wakeUp"
+                initialValues={dateToEdit.wakeUp}
+                handleMoodSubmit={handleMoodSubmit}
+                handleTirednessSubmit={handleTirednessSubmit}
+                handleSleepTimesSubmit={handleSleepTimesSubmit}
+                animateY={wakeUpSlide}
+                closeForm={wakeUpTap}
+                formRef={wakeUpFormRef}
             />
-            <IconTab
+            <UserInputForm
+                dateId={dateToEdit.dateId}
                 heading="Midday"
-                initialValues={initialValues}
-                icon={FiSun}
-                isMidday={true}
+                timeOfDay="midday"
+                initialValues={dateToEdit.midday}
+                handleMoodSubmit={handleMoodSubmit}
+                handleTirednessSubmit={handleTirednessSubmit}
+                isMidday={true} // for styling
                 animateY={middaySlide}
-                tapFunc={middayTap}
+                closeForm={middayTap}
+                formRef={middayFormRef}
             />
-            <IconTab
+            <UserInputForm
+                dateId={dateToEdit.dateId}
                 heading="Bedtime"
                 needsTimeInput={true}
                 timeLabel="Bedtime"
                 timeId="bedtime"
-                initialValues={initialValuesPlusTime}
-                isBedtime={true}
-                icon={FiMoon}
-                animateX={bedtimeSlide}
-                tapFunc={bedtimeTap}
+                timeOfDay="bedtime"
+                initialValues={dateToEdit.bedtime}
+                handleMoodSubmit={handleMoodSubmit}
+                handleTirednessSubmit={handleTirednessSubmit}
+                handleSleepTimesSubmit={handleSleepTimesSubmit}
+                animateY={bedtimeSlide}
+                closeForm={bedtimeTap}
+                formRef={bedtimeFormRef}
             />
-
-            {/* button that invokes the action creator that does the PUT request */}
-            <button onClick={handleSubmit}>Save Changes</button>
-        </div>
+        </LandingPageContainer>
     );
 };
 
-export default EditData;
+const mapStateToProps = state => {
+    return {
+        user: state.user,
+        moodEmojis: state.moodEmojis,
+        tirednessEmojis: state.tirednessEmojis,
+        dateToEdit: state.dateToEdit,
+    };
+};
+
+export default connect(mapStateToProps, {
+    getMainData,
+    editMood,
+    editTiredness,
+    editWakeAndBedTimes,
+    getDataFromOneDate,
+})(EditData);

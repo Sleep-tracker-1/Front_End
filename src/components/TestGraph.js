@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Line } from "react-chartjs-2";
 import { connect } from "react-redux";
-import ChartDataLabels from "chartjs-plugin-datalabels";
 import styled from "styled-components";
+import { getAverages } from "../utils/getAverages";
 
 import { getDataFromDateRange } from "../actions/bwActions";
-import { formatDate } from "../utils/formatDate";
+import { formatDateForInput } from "../utils/formatDateForInput";
 
 import "./TestGraph.css";
 
@@ -29,18 +29,19 @@ const DateInput = styled.input`
     border-radius: 8px;
 `;
 
-const TestGraph = ({ user, graphDatesArray, ...props }) => {
-    // const apiResponseArray = [6, 5, 9, 12, 8, 5, 10];
+const TestGraph = ({
+    // user,
+    graphDatesArray,
+    getDataFromDateRange, // need to destructure for useEffect dependency array
+}) => {
+    const [dateLabels, setDateLabels] = useState([]);
     const [amountOfSleepArray, setAmountOfSleepArray] = useState([]);
-    const [avgMoods, setAvgMoods] = useState([]);
-    const [avgRest, setAvgRest] = useState([]);
-    const moodAndRestObj = {
+    const [moodAndRestObj, setMoodAndRestObj] = useState({
         sleepHours: amountOfSleepArray,
-        mood: avgMoods,
-        restfulness: avgRest,
-    }; //We should probably use state here as well
-    //We need to get our data from the server, but these are our stand-in values
-    // const [currentWeek, setCurrentWeek] = useState(amountOfSleepArray);
+        mood: [],
+        restfulness: [],
+    });
+
     // const [today, setToday] = useState(new Date());
     const [startingDate, setStartingDate] = useState(() => {
         const today = new Date();
@@ -49,11 +50,33 @@ const TestGraph = ({ user, graphDatesArray, ...props }) => {
         // convert to YYYY-MM-DD string
         sevenDaysAgo = sevenDaysAgo.toLocaleDateString().replace(/\//g, "-");
 
-        // convert to MM-DD-YYYY format
+        // to handle different options for single digit months and days
+        if (sevenDaysAgo[1] === "-" && sevenDaysAgo[3] === "-") {
+            // if 7 days from current day is formatted like 3-1-2020 (M-D-YYYY)
+            // want to add a 0 before the day num @ sevenDaysAgo[2] and shift everything from index 2 over 1
+            sevenDaysAgo = `${sevenDaysAgo.slice(0, 2)}0${sevenDaysAgo.slice(
+                2,
+                sevenDaysAgo.length
+            )}`;
+        } else if (sevenDaysAgo[2] === "-" && sevenDaysAgo[4] === "-") {
+            // if 7 days from current day is formatted like 12-1-2020 (MM-D-YYYY)
+            // want to add a 0 before the day num @ sevenDaysAgo[3] and shift everything from index 3 over 1
+            sevenDaysAgo = `${sevenDaysAgo.slice(0, 3)}0${sevenDaysAgo.slice(
+                3,
+                sevenDaysAgo.length
+            )}`;
+        }
+
+        // if month is only a single digit, add a zero in front
+        if (sevenDaysAgo[1] === "-") {
+            sevenDaysAgo = `0${sevenDaysAgo}`;
+        }
+
+        // convert to YYYY-MM-DD format
         sevenDaysAgo = `${sevenDaysAgo.slice(
-            5,
+            6,
             sevenDaysAgo.length
-        )}-${sevenDaysAgo.slice(0, 4)}`;
+        )}-${sevenDaysAgo.slice(0, 5)}`;
 
         // want graph to start with data a week ago from today
         return sevenDaysAgo;
@@ -61,16 +84,7 @@ const TestGraph = ({ user, graphDatesArray, ...props }) => {
 
     const chartProps = {
         data: {
-            labels: [
-                "Monday",
-                "Tuesday",
-                "Wednesday",
-                "Thursday",
-                "Friday",
-                "Saturday",
-                "Sunday",
-                "",
-            ],
+            labels: [...dateLabels],
             datasets: [
                 {
                     data: amountOfSleepArray,
@@ -79,15 +93,15 @@ const TestGraph = ({ user, graphDatesArray, ...props }) => {
                     borderColor: "#3e95cd",
                     fill: false,
                     lineTension: 0,
-                    radius: 15,
-                    hoverRadius: 25,
+                    radius: 10,
+                    hoverRadius: 15,
                     pointHoverBackgroundColor: "yellow",
                     datalabels: {
                         textStrokeColor: "black",
                         textStrokeWidth: 1,
                         color: "black",
                         font: {
-                            size: 18,
+                            size: 16,
                         },
                     },
                 },
@@ -107,7 +121,7 @@ const TestGraph = ({ user, graphDatesArray, ...props }) => {
                 yAxes: [
                     {
                         ticks: {
-                            suggestedMax: 18,
+                            suggestedMax: 12,
                             beginAtZero: true,
                         },
                     },
@@ -137,16 +151,16 @@ const TestGraph = ({ user, graphDatesArray, ...props }) => {
                 callbacks: {
                     // Use the footer callback to display the sum of the items showing in the tooltip
                     formatter: function(value) {
-                        return "line1\nline2\n" + value;
+                        return `line1\nline2\n${value}`;
                         // eq. return ['line1', 'line2', value]
                     },
                     label: function(tooltipItem, data) {
                         const thisDataset =
                             data.datasets[Number(tooltipItem.datasetIndex)];
 
-                        const WeekLabel =
-                            "Hours slept: " +
-                            thisDataset.data[Number(tooltipItem.index)];
+                        const WeekLabel = `Hours slept: ${
+                            thisDataset.data[Number(tooltipItem.index)]
+                        }`;
 
                         return WeekLabel;
                     },
@@ -161,7 +175,8 @@ const TestGraph = ({ user, graphDatesArray, ...props }) => {
                             thisDataset.moodAndRest.mood[
                                 Number(tooltipItem.index)
                             ];
-                        const stringo = `Rest: ${rest} - Mood: ${mood}`;
+
+                        const stringo = `Tiredness: ${rest} | Mood: ${mood}`;
 
                         return stringo;
                     },
@@ -176,63 +191,68 @@ const TestGraph = ({ user, graphDatesArray, ...props }) => {
         setStartingDate(e.target.value);
     };
 
-    const getDates = startDate => {
-        props.getDataFromDateRange(startDate);
-    };
-
-    // useEffect(() => {
-    //     console.log("today: ", today);
-    //     // let todayDate = today.setDate(today.getDate());
-
-    //     let todayDate = today.toLocaleDateString().replace(/\//g, "-");
-
-    //     console.log("todayDate: ", todayDate);
-
-    //     setStartingDate(todayDate);
-    // }, [today]);
-
     useEffect(() => {
-        getDates(startingDate);
+        const getDates = startDate => {
+            getDataFromDateRange(startDate);
+        };
+
+        console.log("startingDate in useEffect: ", startingDate);
+        console.log(
+            "formatDateForInput(startingDate) in Graph: ",
+            formatDateForInput(startingDate)
+        );
+
+        getDates(formatDateForInput(startingDate));
     }, [startingDate]);
 
-    // useEffect(() => {
-    //     setCurrentWeek(user.dates);
-    // }, [user]);
-
     useEffect(() => {
-        console.log(graphDatesArray);
         const sleepArray = graphDatesArray.map(day => day.totalTimeInBed);
-        const avgRestArray = graphDatesArray.map(day => {
-            let morning = day.wakeUp.tiredness;
-            let midday = day.wakeUp.tiredness;
-            let bedtime = day.wakeUp.tiredness;
+        // const avgRestArray = graphDatesArray.map(day => {
+        //     let morning = day.wakeUp.tiredness;
+        //     let midday = day.wakeUp.tiredness;
+        //     let bedtime = day.wakeUp.tiredness;
 
-            return (morning + midday + bedtime) / 3;
-        });
-        const avgMoodArray = graphDatesArray.map(day => {
-            let morning = day.wakeUp.mood;
-            let midday = day.wakeUp.mood;
-            let bedtime = day.wakeUp.mood;
+        //     return (morning + midday + bedtime) / 3;
+        // });
+        // const avgMoodArray = graphDatesArray.map(day => {
+        //     let morning = day.wakeUp.mood;
+        //     let midday = day.wakeUp.mood;
+        //     let bedtime = day.wakeUp.mood;
 
-            return (morning + midday + bedtime) / 3;
-        });
+        //     return (morning + midday + bedtime) / 3;
+        // });
 
         setAmountOfSleepArray(sleepArray);
-        setAvgRest(avgRestArray);
-        setAvgMoods(avgMoodArray);
+
+        const graphDateLabels = graphDatesArray.map(day => day.date);
+
+        setDateLabels(graphDateLabels);
     }, [graphDatesArray]);
+
+    useEffect(() => {
+        const moodAndRest = {
+            sleepHours: amountOfSleepArray,
+            mood: [],
+            restfulness: [],
+        };
+
+        moodAndRest.mood = getAverages(graphDatesArray).averageMood;
+
+        moodAndRest.restfulness = getAverages(graphDatesArray).averageTiredness;
+
+        setMoodAndRestObj(moodAndRest);
+    }, [graphDatesArray, amountOfSleepArray]);
 
     return (
         <>
             <ChartContainer className="chartCanvas">
-                {/* <h1 className="title">Sleep Stats For This Week</h1> */}
                 <DateInputContainer>
                     <DateLabel htmlFor="graphDate">Starting date:</DateLabel>
                     <DateInput
                         id="graphDate"
                         type="date"
                         name="startingDate"
-                        value={formatDate(startingDate)}
+                        value={formatDateForInput(startingDate)}
                         onChange={e => handleDateChange(e)}
                     />
                 </DateInputContainer>
@@ -244,12 +264,6 @@ const TestGraph = ({ user, graphDatesArray, ...props }) => {
                         options={chartProps.options}
                     />
                 </div>
-                {/* <BelowGraph>
-                    <h3>
-                        Your Recommended Sleep Hours:{" "}
-                        <h2>{suggestedSleepHours}hrs/night</h2>
-                    </h3>
-                </BelowGraph> */}
             </ChartContainer>
         </>
     );

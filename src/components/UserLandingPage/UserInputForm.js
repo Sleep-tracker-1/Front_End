@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { motion } from "framer-motion";
 import { Formik } from "formik";
 import { isDiff } from "../../utils/isDiff";
+import { formatTime } from "../../utils/formatTime";
 
 import RatingComponent from "./RatingComponent";
 
@@ -44,6 +45,7 @@ const TimeInput = ({ labelText, timeId, time, handleChange }) => (
 );
 
 const UserInputForm = ({
+    dateId,
     heading,
     needsTimeInput,
     timeLabel,
@@ -52,12 +54,17 @@ const UserInputForm = ({
     toggleIsFormSubmitted,
     initialValues,
     handleSubmit,
+    handleMoodSubmit,
+    handleTirednessSubmit,
+    handleSleepTimesSubmit,
     animateY,
     closeForm,
+    formRef,
     isDisabled,
 }) => {
     return (
         <FormContainer
+            ref={formRef}
             animate={{
                 y: isDisabled ? 0 : animateY, // if the button is disabled, don't allow the animation
                 zIndex: animateY ? 10 : 0,
@@ -68,90 +75,150 @@ const UserInputForm = ({
                 initialValues={{
                     ...initialValues,
                 }}
+                enableReinitialize // to update initialValues for EditData
                 onSubmit={handleSubmit}
             >
-                {({ values, handleChange, setFieldValue, submitForm }) => (
-                    <>
-                        {needsTimeInput && (
-                            <TimeInput
-                                labelText={timeLabel}
-                                timeId={timeId}
-                                time={values.time}
-                                handleChange={e => {
-                                    handleChange(e);
+                {({ values, handleChange, setFieldValue, submitForm }) => {
+                    // console.log("values: ", values);
+                    return (
+                        <>
+                            {needsTimeInput && (
+                                <TimeInput
+                                    labelText={timeLabel}
+                                    timeId={timeId}
+                                    time={formatTime(values.time)}
+                                    handleChange={e => {
+                                        handleChange(e);
+
+                                        if (
+                                            initialValues.time !== "" &&
+                                            initialValues.time !==
+                                                e.target.value
+                                        ) {
+                                            handleSleepTimesSubmit(
+                                                // e,
+                                                timeOfDay,
+                                                dateId,
+                                                e.target.value
+                                            );
+                                        }
+
+                                        // automatically submit the form when all values have an input that are different from their initialized values
+                                        else if (
+                                            isDiff(
+                                                {
+                                                    ...values,
+                                                    time: e.target.value,
+                                                },
+                                                initialValues
+                                            )
+                                        ) {
+                                            if (handleSubmit) {
+                                                submitForm();
+                                            }
+
+                                            if (toggleIsFormSubmitted) {
+                                                toggleIsFormSubmitted(
+                                                    timeOfDay
+                                                ); // to disable the button
+                                            }
+                                            closeForm(); // "close" the form
+                                        }
+                                    }}
+                                />
+                            )}
+
+                            {/* Mood rating input */}
+                            <RatingComponent
+                                isMoodForm={true}
+                                name="mood"
+                                id="mood"
+                                timeOfDay={timeOfDay}
+                                value={values.mood}
+                                handleChange={newValue => {
+                                    setFieldValue("mood", newValue);
+
+                                    if (
+                                        initialValues.mood > 0 &&
+                                        newValue !== initialValues
+                                    ) {
+                                        handleMoodSubmit(
+                                            // e,
+                                            timeOfDay,
+                                            dateId,
+                                            newValue
+                                        );
+                                    }
 
                                     // automatically submit the form when all values have an input that are different from their initialized values
-                                    if (
+                                    else if (
                                         isDiff(
                                             {
                                                 ...values,
-                                                time: e.target.value,
+                                                mood: newValue,
                                             },
                                             initialValues
                                         )
                                     ) {
-                                        submitForm();
-                                        toggleIsFormSubmitted(timeOfDay); // to disable the button
+                                        if (handleSubmit) {
+                                            submitForm();
+                                        }
+
+                                        if (toggleIsFormSubmitted) {
+                                            toggleIsFormSubmitted(timeOfDay); // to disable the button
+                                        }
                                         closeForm(); // "close" the form
                                     }
                                 }}
                             />
-                        )}
 
-                        {/* Mood rating input */}
-                        <RatingComponent
-                            isMoodForm={true}
-                            name="mood"
-                            id="mood"
-                            timeOfDay={timeOfDay}
-                            value={values.mood}
-                            handleChange={newValue => {
-                                setFieldValue("mood", newValue);
-                                // automatically submit the form when all values have an input that are different from their initialized values
-                                if (
-                                    isDiff(
-                                        {
-                                            ...values,
-                                            mood: newValue,
-                                        },
-                                        initialValues
-                                    )
-                                ) {
-                                    submitForm();
-                                    toggleIsFormSubmitted(timeOfDay); // to disable the button
-                                    closeForm(); // "close" the form
-                                }
-                            }}
-                        />
+                            {/* Tiredness rating input */}
+                            <RatingComponent
+                                isMoodForm={false}
+                                name="tiredness"
+                                id="tiredness"
+                                timeOfDay={timeOfDay}
+                                value={values.tiredness}
+                                handleChange={newValue => {
+                                    setFieldValue("tiredness", newValue);
 
-                        {/* Tiredness rating input */}
-                        <RatingComponent
-                            isMoodForm={false}
-                            name="tiredness"
-                            id="tiredness"
-                            timeOfDay={timeOfDay}
-                            value={values.tiredness}
-                            handleChange={newValue => {
-                                setFieldValue("tiredness", newValue);
+                                    if (
+                                        initialValues.tiredness > 0 &&
+                                        newValue !== initialValues
+                                    ) {
+                                        handleTirednessSubmit(
+                                            // e,
+                                            initialValues,
+                                            timeOfDay,
+                                            dateId,
+                                            newValue
+                                        );
+                                    }
 
-                                // automatically submit the form when all values have an input that are different from their initialized values
-                                if (
-                                    isDiff(
-                                        {
-                                            ...values,
-                                            tiredness: newValue,
-                                        },
-                                        initialValues
-                                    )
-                                ) {
-                                    submitForm();
-                                    toggleIsFormSubmitted(timeOfDay); // to disable the button
-                                    closeForm(); // "close" the form
-                                }
-                            }}
-                        />
-                    </>
-                )}
+                                    // automatically submit the form when all values have an input that are different from their initialized values
+                                    else if (
+                                        isDiff(
+                                            {
+                                                ...values,
+                                                tiredness: newValue,
+                                            },
+                                            initialValues
+                                        )
+                                    ) {
+                                        if (handleSubmit) {
+                                            submitForm();
+                                        }
+
+                                        if (toggleIsFormSubmitted) {
+                                            toggleIsFormSubmitted(timeOfDay); // to disable the button
+                                        }
+                                        closeForm(); // "close" the form
+                                    }
+                                }}
+                            />
+                        </>
+                    );
+                }}
             </Formik>
         </FormContainer>
     );

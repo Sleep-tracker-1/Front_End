@@ -1,11 +1,17 @@
 import { useEffect } from "react";
 
-export default (ref, handler) => {
+export default (ref, buttonRef, handler) => {
     useEffect(
         () => {
             const listener = event => {
                 // Do nothing if clicking ref's element or descendent elements
-                if (!ref.current || ref.current.contains(event.target)) {
+                if (
+                    !ref.current ||
+                    ref.current.contains(event.target) ||
+                    (buttonRef &&
+                        buttonRef.current &&
+                        buttonRef.current.contains(event.target))
+                ) {
                     return;
                 }
 
