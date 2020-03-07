@@ -39,18 +39,29 @@ const Emoji = ({ emoji, ariaLabel }) => (
     </span>
 );
 
-const CircleProgressbars = ({ dateToEdit, moodEmojis, tirednessEmojis }) => {
+const CircleProgressbars = ({
+    dateToEdit,
+    moodEmojis,
+    tirednessEmojis,
+    // totalAvgTiredness, // should get from backend, but they didn't actually give it to us
+}) => {
     const [averageMoodEmoji, setAverageMoodEmoji] = useState(0);
     const [moodEmojiAriaLabel, setMoodEmojiAriaLabel] = useState("");
     const [averageTirednessEmoji, setAverageTirednessEmoji] = useState(0);
     const [tirednessEmojiAriaLabel, setTirednessEmojiAriaLabel] = useState("");
+    const [sleepBarValue, setSleepBarValue] = useState(0);
+    const [moodBarValue, setMoodBarValue] = useState(0);
+    const [tirednessBarValue, setTirednessBarValue] = useState(0);
+    const totalAvgSleep = 7.6;
+    const totalAvgMood = 2.3;
+    const totalAvgTiredness = 2.5;
 
     const setProgressBarColor = percentage => {
         if (percentage < 34) {
             return "#F20000"; //red
-        } else if (percentage < 66 && percentage > 34) {
+        } else if (percentage < 67 && percentage > 34) {
             return "#EFD914"; // yellow
-        } else if (percentage > 66) {
+        } else if (percentage > 67) {
             return "#20C261"; // green
         }
 
@@ -94,19 +105,53 @@ const CircleProgressbars = ({ dateToEdit, moodEmojis, tirednessEmojis }) => {
             tirednessAriaLabel = badTiredness.desc;
         }
 
+        console.log("averageTiredness: ", dateToEdit.averageTiredness);
         setAverageMoodEmoji(moodEmoji);
         setMoodEmojiAriaLabel(moodAriaLabel);
         setAverageTirednessEmoji(tirednessEmoji);
         setTirednessEmojiAriaLabel(tirednessAriaLabel);
     }, [dateToEdit, moodEmojis, tirednessEmojis]);
 
+    useEffect(() => {
+        let progressValue = dateToEdit.totalTimeInBed * 100;
+        progressValue = progressValue / totalAvgSleep;
+
+        console.log("totalAvgSleep: ", totalAvgSleep);
+        console.log("dateToEdit.totalTimeInBed: ", dateToEdit.totalTimeInBed);
+        console.log("sleep progressValue: ", progressValue);
+        setSleepBarValue(progressValue);
+    }, [dateToEdit.totalTimeInBed, totalAvgSleep]);
+
+    useEffect(() => {
+        let progressValue = dateToEdit.averageMood * 100;
+        progressValue = progressValue / totalAvgMood;
+
+        console.log("totalAvgMood: ", totalAvgMood);
+        console.log("dateToEdit.averageMood: ", dateToEdit.averageMood);
+        console.log("mood progressValue: ", progressValue);
+        setMoodBarValue(progressValue);
+    }, [dateToEdit.averageMood, totalAvgMood]);
+
+    useEffect(() => {
+        let progressValue = dateToEdit.averageTiredness * 100;
+        progressValue = progressValue / totalAvgTiredness;
+
+        console.log("totalAvgTiredness: ", totalAvgTiredness);
+        console.log(
+            "dateToEdit.averageTiredness: ",
+            dateToEdit.averageTiredness
+        );
+        console.log("tiredness progressValue: ", progressValue);
+        setTirednessBarValue(progressValue);
+    }, [dateToEdit.averageTiredness, totalAvgTiredness]);
+
     return (
         <ProgressBarsContainer>
             {/* sleep ratio */}
             <CircleWrapper>
                 <CircleProgressbar
-                    progressColor={setProgressBarColor(24)}
-                    value={dateToEdit.totalTimeInBed} // need to divide by overall average -- not in backend yet
+                    progressColor={setProgressBarColor(sleepBarValue)}
+                    value={sleepBarValue}
                 >
                     <ProgressbarSleepAmount>
                         {dateToEdit.totalTimeInBed}hrs
@@ -118,8 +163,8 @@ const CircleProgressbars = ({ dateToEdit, moodEmojis, tirednessEmojis }) => {
             {/* mood ratio */}
             <CircleWrapper>
                 <CircleProgressbar
-                    progressColor={setProgressBarColor(52)}
-                    value={dateToEdit.averageMood} // need to divide by overall average
+                    progressColor={setProgressBarColor(moodBarValue)}
+                    value={moodBarValue}
                 >
                     <Emoji
                         emoji={averageMoodEmoji}
@@ -132,8 +177,8 @@ const CircleProgressbars = ({ dateToEdit, moodEmojis, tirednessEmojis }) => {
             {/* tiredness ratio */}
             <CircleWrapper>
                 <CircleProgressbar
-                    progressColor={setProgressBarColor(80)}
-                    value={dateToEdit.averageTiredness} // need to divide by overall average
+                    progressColor={setProgressBarColor(tirednessBarValue)}
+                    value={tirednessBarValue}
                 >
                     <Emoji
                         emoji={averageTirednessEmoji}
@@ -148,6 +193,7 @@ const CircleProgressbars = ({ dateToEdit, moodEmojis, tirednessEmojis }) => {
 
 const mapStateToProps = state => {
     return {
+        // totalAvgTiredness: state.user.totalAvgTiredness,
         dateToEdit: state.dateToEdit,
         moodEmojis: state.moodEmojis,
         tirednessEmojis: state.tirednessEmojis,
