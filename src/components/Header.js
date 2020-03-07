@@ -63,10 +63,15 @@ const Heading = styled.h3`
     font-size: 1.5rem;
 `;
 
-const ImageLink = styled.a`
+const ImageLink = styled(NavLink)`
     display: none;
     width: 0;
+    font-color: black;
     font-size: 2rem;
+
+    &:visited {
+        font-color: black;
+    }
 
     @media (max-width: 830px) {
         display: flex;
@@ -78,13 +83,18 @@ const ImageLink = styled.a`
     }
 `;
 
-const NameLink = styled.a`
+const NameLink = styled(NavLink)`
     text-shadow: none;
     background-image: none;
     text-decoration: none;
     height: 75px;
     display: flex;
+    font-color: black;
     cursor: pointer;
+
+    &:visited {
+        font-color: black;
+    }
 
     @media (max-width: 830px) {
         display: none;
@@ -240,10 +250,10 @@ export default props => {
         <Header ref={headerRef}>
             <HeaderWrapper>
                 <LinkWrapper>
-                    <ImageLink to="/">
+                    <ImageLink to="/home">
                         <FaCloudMoon />
                     </ImageLink>
-                    <NameLink to="/">
+                    <NameLink to="/home">
                         <Heading>{props.headerText}</Heading>
                     </NameLink>
                 </LinkWrapper>
