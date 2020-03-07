@@ -18,6 +18,12 @@ export const SizedLabel = styled.label`
     color: red;
 `;
 
+export const H6Link = styled.h6`
+    color: blue;
+    border-bottom: 1px solid black;
+    padding-top: 1%;
+`
+
 export const TextField = styled.input``;
 
 export default TextField;
