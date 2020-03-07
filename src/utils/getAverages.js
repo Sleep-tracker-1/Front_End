@@ -30,6 +30,5 @@ export const getAverages = dayObjectsArray => {
         return averageTiredness;
     });
 
-    console.log("averagesObject: ", averagesObject);
     return averagesObject;
 };

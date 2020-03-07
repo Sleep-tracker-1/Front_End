@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Line } from "react-chartjs-2";
 import { connect } from "react-redux";
-// import ChartDataLabels from "chartjs-plugin-datalabels";
 import styled from "styled-components";
 import { getAverages } from "../utils/getAverages";
 
@@ -30,19 +29,11 @@ const DateInput = styled.input`
     border-radius: 8px;
 `;
 
-// const BelowGraph = styled.div`
-//     text-align: center;
-//     margin-top: 10px;
-// `;
-// const suggestedSleepHours = "9";
-
 const TestGraph = ({
     user,
     graphDatesArray,
     getDataFromDateRange, // need to destructure for useEffect dependency array
-    ...props
 }) => {
-    // const apiResponseArray = [6, 5, 9, 12, 8, 5, 10];
     const [dateLabels, setDateLabels] = useState([]);
     const [amountOfSleepArray, setAmountOfSleepArray] = useState([]);
     const [moodAndRestObj, setMoodAndRestObj] = useState({
@@ -51,24 +42,13 @@ const TestGraph = ({
         restfulness: [],
     });
 
-    // const moodAndRestObj = {
-    //     sleepHours: amountOfSleepArray,
-    //     mood: 8,
-    //     restfulness: 10,
-    // }; //We should probably use state here as well
-    //We need to get our data from the server, but these are our stand-in values
-    // const [currentWeek, setCurrentWeek] = useState(amountOfSleepArray);
-
     // const [today, setToday] = useState(new Date());
     const [startingDate, setStartingDate] = useState(() => {
         const today = new Date();
         let sevenDaysAgo = new Date(today.setDate(today.getDate() - 6));
-        console.log("sevenDaysAgo: ", sevenDaysAgo);
 
         // convert to YYYY-MM-DD string
         sevenDaysAgo = sevenDaysAgo.toLocaleDateString().replace(/\//g, "-");
-
-        console.log("sevenDaysAgo toLocaleDateString: ", sevenDaysAgo);
 
         // to handle different options for single digit months and days
         if (sevenDaysAgo[1] === "-" && sevenDaysAgo[3] === "-") {
@@ -78,7 +58,6 @@ const TestGraph = ({
                 2,
                 sevenDaysAgo.length
             )}`;
-            console.log("sevenDaysAgo after slice: ", sevenDaysAgo);
         } else if (sevenDaysAgo[2] === "-" && sevenDaysAgo[4] === "-") {
             // if 7 days from current day is formatted like 12-1-2020 (MM-D-YYYY)
             // want to add a 0 before the day num @ sevenDaysAgo[3] and shift everything from index 3 over 1
@@ -95,7 +74,6 @@ const TestGraph = ({
         )}-${sevenDaysAgo.slice(0, 4)}`;
 
         // want graph to start with data a week ago from today
-        console.log("sevenDaysAgo at end: ", sevenDaysAgo);
         return sevenDaysAgo;
     });
 
@@ -205,33 +183,16 @@ const TestGraph = ({
     const chartReference = React.createRef();
 
     const handleDateChange = e => {
-        alert("In handleDateChange!");
         setStartingDate(e.target.value);
     };
 
-    // useEffect(() => {
-    //     console.log("today: ", today);
-    //     // let todayDate = today.setDate(today.getDate());
-
-    //     let todayDate = today.toLocaleDateString().replace(/\//g, "-");
-
-    //     console.log("todayDate: ", todayDate);
-
-    //     setStartingDate(todayDate);
-    // }, [today]);
-
     useEffect(() => {
         const getDates = startDate => {
-            alert("about to invoke action creator");
             getDataFromDateRange(startDate);
         };
 
         getDates(startingDate);
     }, [startingDate]);
-
-    // useEffect(() => {
-    //     setCurrentWeek(user.dates);
-    // }, [user]);
 
     useEffect(() => {
         const sleepArray = graphDatesArray.map(day => day.totalTimeInBed);
@@ -241,11 +202,6 @@ const TestGraph = ({
         const graphDateLabels = graphDatesArray.map(day => day.date);
 
         setDateLabels(graphDateLabels);
-
-        // moodAndRestObj.mood = getAverages(graphDatesArray).averageMood;
-        // moodAndRestObj.restfulness = getAverages(
-        //     graphDatesArray
-        // ).averageTiredness;
     }, [graphDatesArray]);
 
     useEffect(() => {
@@ -265,7 +221,6 @@ const TestGraph = ({
     return (
         <>
             <ChartContainer className="chartCanvas">
-                {/* <h1 className="title">Sleep Stats For This Week</h1> */}
                 <DateInputContainer>
                     <DateLabel htmlFor="graphDate">Starting date:</DateLabel>
                     <DateInput
@@ -284,12 +239,6 @@ const TestGraph = ({
                         options={chartProps.options}
                     />
                 </div>
-                {/* <BelowGraph>
-                    <h3>
-                        Your Recommended Sleep Hours:{" "}
-                        <h2>{suggestedSleepHours}hrs/night</h2>
-                    </h3>
-                </BelowGraph> */}
             </ChartContainer>
         </>
     );

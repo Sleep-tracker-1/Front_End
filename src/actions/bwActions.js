@@ -105,7 +105,7 @@ export const getMainData = () => dispatch => {
     axiosWithAuth()
         .get("/data")
         .then(res => {
-            console.log("res: ", res.data);
+            // console.log("res: ", res.data);
             dispatch({ type: FETCH_MAIN_DATA, payload: res.data });
         })
         .catch(err => {
@@ -116,13 +116,11 @@ export const getMainData = () => dispatch => {
 
 export const postBedtimeInputs = valuesObj => dispatch => {
     dispatch({ type: POSTING_USER_INPUTS });
-    // console.log(valuesObj);
-    console.log("in bedtime submit action creator");
 
     axiosWithAuth()
         .post("/night", valuesObj)
         .then(res => {
-            console.log("postUserInputs res: ", res);
+            // console.log("postUserInputs res: ", res);
             dispatch({ type: POSTING_USER_INPUTS_SUCCESS, payload: res.data });
         })
         .catch(err => {
@@ -138,11 +136,10 @@ export const postBedtimeInputs = valuesObj => dispatch => {
 export const postWakeUpInputs = valuesObj => dispatch => {
     dispatch({ type: UPDATING_USER_INPUTS });
 
-    console.log("in wake up submit action creator");
     axiosWithAuth()
         .put("/wake", valuesObj)
         .then(res => {
-            console.log("PUT request response: ", res);
+            // console.log("PUT request response: ", res);
             dispatch({ type: UPDATING_USER_INPUTS_SUCCESS, payload: res.data });
         })
         .catch(err => {
@@ -161,7 +158,7 @@ export const postMiddayInputs = valuesObj => dispatch => {
     axiosWithAuth()
         .put("/midday", valuesObj)
         .then(res => {
-            console.log("PUT request in midday inputs: ", res);
+            // console.log("PUT request in midday inputs: ", res);
             dispatch({ type: UPDATING_MIDDAY_INPUTS, payload: res.data });
         })
         .catch(err => {
@@ -194,7 +191,7 @@ export const addUser = () => dispatch => {
     axios()
         .post("https://sleep-tracker-server.herokuapp.com/api/auth/register")
         .then(res => {
-            console.log(res.data);
+            // console.log(res.data);
             dispatch({ type: ADD_USER_SUCCESS, payload: res.data });
         })
         .catch(err => {
@@ -206,7 +203,7 @@ export const addUser = () => dispatch => {
 export const getDataFromOneDate = date => dispatch => {
     dispatch({ type: FETCHING_DATA_FOR_ONE_DATE });
 
-    console.log("date in action creator: ", date); // 2020-03-02
+    // console.log("date in action creator: ", date); // 2020-03-02
     let formattedDate = `${date.slice(5, date.length)}-${date.slice(0, 4)}`;
 
     if (formattedDate[0] === 0 || formattedDate[0] === "0") {
@@ -223,14 +220,14 @@ export const getDataFromOneDate = date => dispatch => {
         endDate = endDate.slice(1, endDate.length);
     }
 
-    console.log("startDate: ", formattedDate); // 3-02-2020
-    console.log("endDate: ", endDate);
+    // console.log("startDate: ", formattedDate); // 3-02-2020
+    // console.log("endDate: ", endDate);
 
     axiosWithAuth()
         // getting single date GET request only works if the end date is the next day
         .get(`/data?start=${formattedDate}&end=${endDate}`)
         .then(res => {
-            console.log("getDataFromOneDate res: ", res);
+            // console.log("getDataFromOneDate res: ", res);
             dispatch({
                 type: FETCHING_DATA_FOR_ONE_DATE_SUCCESS,
                 payload: res.data.dates[0],
@@ -261,12 +258,12 @@ export const editMood = (timeOfDay, dateId, updatedMood) => dispatch => {
         [keyName]: updatedMood,
     };
 
-    console.log("mood putRequestObj: ", putRequestObj);
+    // console.log("mood putRequestObj: ", putRequestObj);
 
     axiosWithAuth()
         .put(`/moods/${dateId}`, putRequestObj)
         .then(res => {
-            console.log("editMood PUT res: ", res);
+            // console.log("editMood PUT res: ", res);
             dispatch({ type: EDITING_MOOD_SUCCESS, payload: res.data });
         })
         .catch(err => {
@@ -296,12 +293,12 @@ export const editTiredness = (
         [keyName]: updatedTiredness,
     };
 
-    console.log("editTiredness putRequestObj: ", putRequestObj);
+    // console.log("editTiredness putRequestObj: ", putRequestObj);
 
     axiosWithAuth()
         .put(`/tiredness/${dateId}`, putRequestObj)
         .then(res => {
-            console.log("editTiredness PUT res: ", res);
+            // console.log("editTiredness PUT res: ", res);
             dispatch({ type: EDITING_TIREDNESS_SUCCESS, payload: res.data });
         })
         .catch(err => {
@@ -329,12 +326,12 @@ export const editWakeAndBedTimes = (
         [keyName]: updatedTime,
     };
 
-    console.log("editTime updatedTime: ", updatedTime);
+    // console.log("editTime updatedTime: ", updatedTime);
 
     axiosWithAuth()
         .put(`/bedhours/${dateId}`, putRequestObj)
         .then(res => {
-            console.log("Editing sleep times res: ", res);
+            // console.log("Editing sleep times res: ", res);
             dispatch({ type: EDITING_SLEEP_TIMES_SUCCESS, payload: res.data });
         })
         .catch(err => {

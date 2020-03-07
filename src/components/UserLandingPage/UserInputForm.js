@@ -62,21 +62,6 @@ const UserInputForm = ({
     formRef,
     isDisabled,
 }) => {
-    // const [initialVals, setInitialVals] = useState({ ...initialValues });
-
-    // console.log("initialValues in form: ", initialValues);
-
-    // useEffect(() => {
-    //     let formattedTime = initialVals.time;
-
-    //     if (formattedTime && formattedTime.time) {
-    //         formattedTime = formattedTime.slice(0, formattedTime.length - 1);
-    //     }
-
-    //     console.log("formattedTime: ", formattedTime);
-    //     setInitialVals({ ...initialValues, time: formattedTime });
-    // }, [initialValues]);
-
     return (
         <FormContainer
             ref={formRef}
@@ -104,30 +89,12 @@ const UserInputForm = ({
                                     time={formatTime(values.time)}
                                     handleChange={e => {
                                         handleChange(e);
-                                        console.log("in time handleChange");
-                                        console.log(
-                                            "initialValues: ",
-                                            initialValues
-                                        );
-                                        console.log("values: ", values);
-                                        console.log(
-                                            "e.target.value: ",
-                                            e.target.value
-                                        );
 
                                         if (
                                             initialValues.time !== "" &&
                                             initialValues.time !==
                                                 e.target.value
                                         ) {
-                                            console.log(
-                                                "initialValues before editing sleep times: ",
-                                                initialValues
-                                            );
-                                            console.log(
-                                                "values before editing sleep times: ",
-                                                values
-                                            );
                                             handleSleepTimesSubmit(
                                                 // e,
                                                 timeOfDay,
@@ -146,11 +113,7 @@ const UserInputForm = ({
                                                 initialValues
                                             )
                                         ) {
-                                            console.log(
-                                                "all inputs filled out"
-                                            );
                                             if (handleSubmit) {
-                                                console.log("submitting form");
                                                 submitForm();
                                             }
 
@@ -159,7 +122,6 @@ const UserInputForm = ({
                                                     timeOfDay
                                                 ); // to disable the button
                                             }
-                                            console.log("closing form");
                                             closeForm(); // "close" the form
                                         }
                                     }}
@@ -243,11 +205,7 @@ const UserInputForm = ({
                                             initialValues
                                         )
                                     ) {
-                                        console.log(
-                                            "inputs are all filled out"
-                                        );
                                         if (handleSubmit) {
-                                            console.log("about to submit");
                                             submitForm();
                                         }
 
