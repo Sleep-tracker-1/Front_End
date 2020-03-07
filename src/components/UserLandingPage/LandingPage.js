@@ -1,14 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import { connect } from "react-redux";
 import { motion } from "framer-motion";
+import useOnClickOutside from "../../hooks/useOnClickOutside";
 
 import {
     getUserData,
     getMainData,
     postBedtimeInputs,
-    putWakeUpInputs,
-    putMiddayInputs,
+    postWakeUpInputs,
+    postMiddayInputs,
 } from "../../actions/bwActions";
 
 import TestGraph from "../TestGraph";
@@ -16,7 +17,7 @@ import CircleProgressbar from "./CircleProgressbar";
 import UserInputForm from "./UserInputForm";
 
 // if you change the height of the header, the LandingPageContainer min and max height calcs need to be adjusted
-const LandingPageContainer = styled.div`
+export const LandingPageContainer = styled.div`
     width: 100%;
     max-width: 100vw;
     overflow: hidden;
@@ -30,7 +31,7 @@ const LandingPageContainer = styled.div`
 `;
 
 // padding is to make sure the IconTabs don't cover them up
-const ProgressBarsContainer = styled.div`
+export const ProgressBarsContainer = styled.div`
     width: 100%;
     display: grid;
     grid-template-columns: repeat(3, minmax(75px, 200px));
@@ -43,7 +44,7 @@ const ProgressBarsContainer = styled.div`
     }
 `;
 
-const ProgressbarSleepAmount = styled.p`
+export const ProgressbarSleepAmount = styled.p`
     margin: 0;
 `;
 
@@ -58,7 +59,7 @@ const RecommendedSleep = styled.h2`
     font-size: 1.25rem;
 `;
 
-const ButtonsContainer = styled.div`
+export const ButtonsContainer = styled.div`
     width: 200px;
     margin: 0 auto;
     display: grid;
@@ -66,7 +67,7 @@ const ButtonsContainer = styled.div`
     grid-gap: 10px;
 `;
 
-const InputFormButton = styled(motion.button)`
+export const InputFormButton = styled(motion.button)`
     width: 100%;
     height: 100%;
     box-sizing: border-box;
@@ -89,7 +90,7 @@ const initialValuesPlusTime = {
     time: "",
 };
 
-const Emoji = ({ emoji, ariaLabel }) => (
+export const Emoji = ({ emoji, ariaLabel }) => (
     <span role="img" aria-label={ariaLabel}>
         {emoji}
     </span>
@@ -101,6 +102,15 @@ const LandingPage = props => {
         midday: false,
         bedtime: false,
     });
+
+    // for "closing" forms when clicking outside of them
+    const wakeUpFormRef = useRef(null);
+    const middayFormRef = useRef(null);
+    const bedtimeFormRef = useRef(null);
+
+    const wakeUpButtonRef = useRef(null);
+    const middayButtonRef = useRef(null);
+    const bedtimeButtonRef = useRef(null);
 
     // for UserInputForm transitions
     const [wakeUpSlide, setWakeUpSlide] = useState(0);
@@ -143,6 +153,18 @@ const LandingPage = props => {
         setMiddaySlide(newPosition);
     };
 
+    useOnClickOutside(wakeUpFormRef, wakeUpButtonRef, () => {
+        setWakeUpSlide(0);
+    });
+
+    useOnClickOutside(middayFormRef, middayButtonRef, () => {
+        setMiddaySlide(0);
+    });
+
+    useOnClickOutside(bedtimeFormRef, bedtimeButtonRef, () => {
+        setBedtimeSlide(0);
+    });
+
     const handleBedtimeSubmit = values => {
         let timeAsDate = new Date(values.time); // convert `time` to Date object for POST request
         timeAsDate = timeAsDate.toISOString();
@@ -152,10 +174,23 @@ const LandingPage = props => {
             time: timeAsDate,
         };
 
+        // const postRequestObj = {
+        //     nightTime: {
+        //         bedtime: timeAsDate,
+        //     },
+        //     nightMood: {
+        //         nightMood: values.mood,
+        //     },
+        //     nightTired: {
+        //         nightTired: values.tiredness,
+        //     },
+        // };
+
         props.postBedtimeInputs(postRequestObj);
     };
 
     const handleWakeUpSubmit = values => {
+        console.log("in wakeUp submit form");
         let timeAsDate = new Date(values.time); // convert `time` to Date object for POST request
         timeAsDate = timeAsDate.toISOString();
 
@@ -164,11 +199,11 @@ const LandingPage = props => {
             time: timeAsDate,
         };
 
-        props.putWakeUpInputs(postRequestObj);
+        props.postWakeUpInputs(postRequestObj);
     };
 
     const handleMiddaySubmit = values => {
-        props.putMiddayInputs(values);
+        props.postMiddayInputs(values);
     };
 
     const toggleIsFormSubmitted = timeOfDay => {
@@ -257,6 +292,7 @@ const LandingPage = props => {
 
             <ButtonsContainer>
                 <InputFormButton
+                    ref={wakeUpButtonRef}
                     disabled={formsSubmitted.wakeUp} // don't want to allow more inputs/submissions after first submission
                     onTap={() => wakeUpTap()}
                     isWakeUp={true} // used for styled components for conditional styles
@@ -265,6 +301,7 @@ const LandingPage = props => {
                 </InputFormButton>
 
                 <InputFormButton
+                    ref={middayButtonRef}
                     disabled={formsSubmitted.midday} // don't want to allow more inputs/submissions after first submission
                     onTap={() => middayTap()}
                     isMidday={true} // used for styled components for conditional styles
@@ -273,6 +310,7 @@ const LandingPage = props => {
                 </InputFormButton>
 
                 <InputFormButton
+                    ref={bedtimeButtonRef}
                     disabled={formsSubmitted.bedtime} // don't want to allow more inputs/submissions after first submission
                     onTap={() => bedtimeTap()}
                     isBedtime={true} // used for styled components for conditional styles
@@ -292,6 +330,7 @@ const LandingPage = props => {
                 handleSubmit={handleWakeUpSubmit}
                 animateY={wakeUpSlide}
                 closeForm={wakeUpTap}
+                formRef={wakeUpFormRef}
                 isDisabled={formsSubmitted.wakeUp}
             />
             <UserInputForm
@@ -303,6 +342,7 @@ const LandingPage = props => {
                 isMidday={true} // for styling
                 animateY={middaySlide}
                 closeForm={middayTap}
+                formRef={middayFormRef}
                 isDisabled={formsSubmitted.midday}
             />
             <UserInputForm
@@ -316,6 +356,7 @@ const LandingPage = props => {
                 handleSubmit={handleBedtimeSubmit}
                 animateY={bedtimeSlide}
                 closeForm={bedtimeTap}
+                formRef={bedtimeFormRef}
                 isDisabled={formsSubmitted.bedtime}
             />
         </LandingPageContainer>
@@ -334,6 +375,6 @@ export default connect(mapStateToProps, {
     getUserData,
     getMainData,
     postBedtimeInputs,
-    putWakeUpInputs,
-    putMiddayInputs,
+    postWakeUpInputs,
+    postMiddayInputs,
 })(LandingPage);

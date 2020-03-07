@@ -1,19 +1,48 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
+import { connect } from "react-redux";
+import { formatDate } from "../utils/formatDate";
+import useOnClickOutside from "../hooks/useOnClickOutside";
 
-import { Sunrise } from "./UserLandingPage/LandingPage";
-import { FiSun, FiMoon } from "react-icons/fi";
+import {
+    getMainData,
+    editMood,
+    editTiredness,
+    editWakeAndBedTimes,
+    getDataFromOneDate,
+} from "../actions/bwActions";
 
-import IconTab from "./UserLandingPage/IconTab";
+import {
+    LandingPageContainer,
+    ProgressBarsContainer,
+    ProgressbarSleepAmount,
+    ButtonsContainer,
+    InputFormButton,
+    Emoji,
+} from "./UserLandingPage/LandingPage";
+import CircleProgressbar from "./UserLandingPage/CircleProgressbar";
+import UserInputForm from "./UserLandingPage/UserInputForm";
 
-const EditData = () => {
+const EditData = ({ dateToEdit, moodEmojis, tirednessEmojis, ...props }) => {
+    const [date, setDate] = useState(new Date());
+    const [averageMoodEmoji, setAverageMoodEmoji] = useState(0);
+    const [moodEmojiAriaLabel, setMoodEmojiAriaLabel] = useState("");
+    const [averageTirednessEmoji, setAverageTirednessEmoji] = useState(0);
+    const [tirednessEmojiAriaLabel, setTirednessEmojiAriaLabel] = useState("");
+
+    // for "closing" forms when clicking outside of them
+    const wakeUpFormRef = useRef(null);
+    const middayFormRef = useRef(null);
+    const bedtimeFormRef = useRef(null);
+
+    const wakeUpButtonRef = useRef(null);
+    const middayButtonRef = useRef(null);
+    const bedtimeButtonRef = useRef(null);
+
     // for the IconTab swiping animation
     const [wakeUpSlide, setWakeUpSlide] = useState(0);
     const [bedtimeSlide, setBedtimeSlide] = useState(0);
     const [middaySlide, setMiddaySlide] = useState(0);
-
-    // local state for the party that updates the date we want to do a GET request for
-    const [dateToQuery, setDateToQuery] = useState(Date.now());
 
     // initial values for the times, moods, and tiredness before doing a GET request
     const [initialValues, setInitialValues] = useState({
@@ -26,104 +55,293 @@ const EditData = () => {
     });
 
     // handleTap functions for the IconTab animations
-    const wakeUpTap = e => {
+    const wakeUpTap = () => {
         let slidePosition = wakeUpSlide;
 
         if (slidePosition === 0) {
-            slidePosition += 165;
+            slidePosition -= 400;
         } else {
-            slidePosition -= 165;
+            slidePosition += 400;
         }
 
         setWakeUpSlide(slidePosition);
     };
 
-    const bedtimeTap = e => {
+    const bedtimeTap = () => {
         let newPos = bedtimeSlide;
 
         if (newPos === 0) {
-            newPos -= 165;
+            newPos -= 400;
         } else {
-            newPos += 165;
+            newPos += 400;
         }
 
         setBedtimeSlide(newPos);
     };
 
-    const middayTap = e => {
+    const middayTap = () => {
         let newPosition = middaySlide;
 
         if (newPosition === 0) {
-            newPosition -= 135;
+            newPosition -= 393;
         } else {
-            newPosition += 135;
+            newPosition += 393;
         }
 
         setMiddaySlide(newPosition);
     };
 
+    useOnClickOutside(wakeUpFormRef, wakeUpButtonRef, () => {
+        setWakeUpSlide(0);
+    });
+
+    useOnClickOutside(middayFormRef, middayButtonRef, () => {
+        setMiddaySlide(0);
+    });
+
+    useOnClickOutside(bedtimeFormRef, bedtimeButtonRef, () => {
+        setBedtimeSlide(0);
+    });
+
+    const setProgressBarColor = percentage => {
+        if (percentage < 34) {
+            return "#F20000"; //red
+        } else if (percentage < 66 && percentage > 34) {
+            return "#EFD914"; // yellow
+        } else if (percentage > 66) {
+            return "#20C261"; // green
+        }
+
+        return "#20C261"; // green
+    };
+
+    const fetchUserData = () => {
+        props.getMainData();
+    };
+
+    const handleDateChange = e => {
+        setDate(e.target.value);
+    };
+
+    const getDateData = day => {
+        props.getDataFromOneDate(day);
+    };
+
     // handleSubmit for sending the PUT request to the server
-    const handleSubmit = e => {
-        e.preventDefault();
+    const handleMoodSubmit = (timeOfDay, dateId, updatedMood) => {
+        // e.preventDefault();
 
         // invoke action creator here that does the PUT request
         // action.payload = the date's updated redux state for the times, mood, and tiredness
+        props.editMood(timeOfDay, dateId, updatedMood);
+    };
+
+    const handleTirednessSubmit = (
+        initialVals,
+        timeOfDay,
+        dateId,
+        updatedTiredness
+    ) => {
+        // e.preventDefault();
+        console.log("initialValues in tiredness submit: ", initialVals);
+        props.editTiredness(timeOfDay, dateId, updatedTiredness);
+    };
+
+    const handleSleepTimesSubmit = (timeOfDay, dateId, updatedTime) => {
+        // e.preventDefault();
+
+        // updatedTime needs to be Date.toISOString()
+        props.editWakeAndBedTimes(timeOfDay, dateId, updatedTime);
     };
 
     useEffect(() => {
         // do GET request via action creator to update state in redux store
         // want to do a new GET request when the user selects a different date to edit
-    }, [dateToQuery]);
+        console.log("date: ", formatDate(date));
+
+        getDateData(formatDate(date));
+    }, [date]);
+
+    useEffect(() => {
+        let moodEmoji = "";
+        let moodAriaLabel = "";
+        let tirednessEmoji = "";
+        let tirednessAriaLabel = "";
+
+        if (dateToEdit.averageMood <= 1) {
+            moodEmoji = moodEmojis.bad.emoji;
+            moodAriaLabel = moodEmojis.bad.desc;
+        } else if (dateToEdit.averageMood > 1 && dateToEdit.averageMood <= 2) {
+            moodEmoji = moodEmojis.ok.emoji;
+            moodAriaLabel = moodEmojis.ok.desc;
+        } else if (dateToEdit.averageMood > 2) {
+            moodEmoji = moodEmojis.great.emoji;
+            moodAriaLabel = moodEmojis.great.desc;
+        }
+
+        if (dateToEdit.averageTiredness <= 1) {
+            tirednessEmoji = tirednessEmojis.great.emoji;
+            tirednessAriaLabel = tirednessEmojis.great.desc;
+        } else if (
+            dateToEdit.averageTiredness > 1 &&
+            dateToEdit.averageTiredness <= 2
+        ) {
+            tirednessEmoji = tirednessEmojis.ok.emoji;
+            tirednessAriaLabel = tirednessEmojis.ok.desc;
+        } else if (dateToEdit.averageTiredness > 2) {
+            tirednessEmoji = tirednessEmojis.bad.emoji;
+            tirednessAriaLabel = tirednessEmojis.bad.desc;
+        }
+
+        setAverageMoodEmoji(moodEmoji);
+        setMoodEmojiAriaLabel(moodAriaLabel);
+        setAverageTirednessEmoji(tirednessEmoji);
+        setTirednessEmojiAriaLabel(tirednessAriaLabel);
+    }, [dateToEdit]);
 
     useEffect(() => {
         // when the input values get updated in the redux store (pass into the dependency array for this useEffect), set the local state 'initialValues' and 'initialValuesPlusTime'
         // might have to convert wake and bed times from Date object to string first? something to check
+        fetchUserData();
     }, []);
 
     return (
         <div>
-            {/* Graph that only shows 1 day of data with some sort of data selection that will do a GET request for a different day */}
+            <div>
+                <label htmlFor="editDate">Date to edit:</label>
+                <input
+                    id="editDate"
+                    type="date"
+                    name="editDate"
+                    value={formatDate(date)}
+                    onChange={e => {
+                        console.log("e.target.value: ", e.target.value);
+                        handleDateChange(e);
+                    }}
+                />
+            </div>
 
             {/* Amount of sleep, mood, and tiredness levels compared to averages as circular progress "bars" */}
+            <ProgressBarsContainer>
+                {/* sleep ratio */}
+                <CircleProgressbar
+                    progressColor={setProgressBarColor(30)}
+                    value={dateToEdit.totalTimeInBed} // need to divide by overall average
+                >
+                    {/* placeholder value */}
+                    <ProgressbarSleepAmount>
+                        {dateToEdit.totalTimeInBed}hrs
+                    </ProgressbarSleepAmount>
+                </CircleProgressbar>
 
-            {/* IconTab components with values initialized with data pulled in from GET request */}
+                {/* mood ratio */}
+                <CircleProgressbar
+                    progressColor={setProgressBarColor(52)}
+                    value={dateToEdit.averageMood} // need to divide by overall average
+                >
+                    <Emoji
+                        emoji={averageMoodEmoji}
+                        ariaLabel={moodEmojiAriaLabel}
+                    />
+                </CircleProgressbar>
 
-            {/* Have each IconTab take an action creator that updates the redux store state on the client side, but don't send the PUT request to the server with those changes until they press the Submit button */}
-            <IconTab
+                {/* tiredness ratio */}
+                <CircleProgressbar
+                    progressColor={setProgressBarColor(80)}
+                    value={dateToEdit.averageTiredness} // need to divide by overall average
+                >
+                    <Emoji
+                        emoji={averageTirednessEmoji}
+                        ariaLabel={tirednessEmojiAriaLabel}
+                    />
+                </CircleProgressbar>
+            </ProgressBarsContainer>
+
+            <ButtonsContainer>
+                <InputFormButton
+                    ref={wakeUpButtonRef}
+                    onTap={() => wakeUpTap()}
+                    isWakeUp={true} // used for styled components for conditional styles
+                >
+                    Wake Up
+                </InputFormButton>
+
+                <InputFormButton
+                    ref={middayButtonRef}
+                    onTap={() => middayTap()}
+                    isMidday={true} // used for styled components for conditional styles
+                >
+                    Midday
+                </InputFormButton>
+
+                <InputFormButton
+                    ref={bedtimeButtonRef}
+                    onTap={() => bedtimeTap()}
+                    isBedtime={true} // used for styled components for conditional styles
+                >
+                    Bedtime
+                </InputFormButton>
+            </ButtonsContainer>
+
+            <UserInputForm
+                dateId={dateToEdit.dateId}
                 heading="Wake Up"
                 needsTimeInput={true}
                 timeLabel="Wake up time"
                 timeId="wakeUpTime"
-                initialValues={initialValuesPlusTime}
-                isWakeUp={true}
-                animateX={wakeUpSlide}
-                tapFunc={wakeUpTap}
-                icon={Sunrise}
+                timeOfDay="wakeUp"
+                initialValues={dateToEdit.wakeUp}
+                handleMoodSubmit={handleMoodSubmit}
+                handleTirednessSubmit={handleTirednessSubmit}
+                handleSleepTimesSubmit={handleSleepTimesSubmit}
+                animateY={wakeUpSlide}
+                closeForm={wakeUpTap}
+                formRef={wakeUpFormRef}
             />
-            <IconTab
+            <UserInputForm
+                dateId={dateToEdit.dateId}
                 heading="Midday"
-                initialValues={initialValues}
-                icon={FiSun}
-                isMidday={true}
+                timeOfDay="midday"
+                initialValues={dateToEdit.midday}
+                handleMoodSubmit={handleMoodSubmit}
+                handleTirednessSubmit={handleTirednessSubmit}
+                isMidday={true} // for styling
                 animateY={middaySlide}
-                tapFunc={middayTap}
+                closeForm={middayTap}
+                formRef={middayFormRef}
             />
-            <IconTab
+            <UserInputForm
+                dateId={dateToEdit.dateId}
                 heading="Bedtime"
                 needsTimeInput={true}
                 timeLabel="Bedtime"
                 timeId="bedtime"
-                initialValues={initialValuesPlusTime}
-                isBedtime={true}
-                icon={FiMoon}
-                animateX={bedtimeSlide}
-                tapFunc={bedtimeTap}
+                timeOfDay="bedtime"
+                initialValues={dateToEdit.bedtime}
+                handleMoodSubmit={handleMoodSubmit}
+                handleTirednessSubmit={handleTirednessSubmit}
+                handleSleepTimesSubmit={handleSleepTimesSubmit}
+                animateY={bedtimeSlide}
+                closeForm={bedtimeTap}
+                formRef={bedtimeFormRef}
             />
-
-            {/* button that invokes the action creator that does the PUT request */}
-            <button onClick={handleSubmit}>Save Changes</button>
         </div>
     );
 };
 
-export default EditData;
+const mapStateToProps = state => {
+    return {
+        user: state.user,
+        moodEmojis: state.moodEmojis,
+        tirednessEmojis: state.tirednessEmojis,
+        dateToEdit: state.dateToEdit,
+    };
+};
+
+export default connect(mapStateToProps, {
+    getMainData,
+    editMood,
+    editTiredness,
+    editWakeAndBedTimes,
+    getDataFromOneDate,
+})(EditData);

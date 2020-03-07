@@ -229,12 +229,11 @@ export default props => {
     const headerRef = useRef(null);
     const [menuIsOpen, toggleMenu] = useState(false);
 
-    useOnClickOutside(headerRef, () => toggleMenu(false));
+    useOnClickOutside(headerRef, null, () => toggleMenu(false));
 
     const handleLogoutClick = e => {
         localStorage.clear();
         // localStorage.removeItem("token");
-        
     };
 
     return (
@@ -262,8 +261,8 @@ export default props => {
                     <Span />
                 </Label>
                 <Nav>
-                    <ListLink to="/home" val="View History" />
-                    <ListLink to="/Account" val="Account" />
+                    <ListLink to="/edit" val="Edit Data" />
+                    <ListLink to="/account" val="Account" />
                     <ListLink
                         to="/"
                         val={<span onClick={handleLogoutClick}>Sign Out</span>}
