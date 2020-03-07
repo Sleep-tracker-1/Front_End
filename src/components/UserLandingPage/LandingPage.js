@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { connect } from "react-redux";
 import { motion } from "framer-motion";
 import useOnClickOutside from "../../hooks/useOnClickOutside";
-import { formatDate } from "../../utils/formatDate";
+import { formatDateForInput } from "../../utils/formatDateForInput";
 
 import {
     getUserData,
@@ -220,7 +220,20 @@ const LandingPage = ({ getMainData, getDataFromOneDate, ...props }) => {
     }, [getMainData]);
 
     useEffect(() => {
-        getDataFromOneDate(formatDate(today));
+        console.log("typeof `today` in LandingPage: ", typeof today);
+        console.log("`today` in LandingPage: ", today);
+
+        let stringDate = today.toLocaleDateString();
+
+        stringDate = stringDate.replace(/\//g, "-");
+        console.log("stringDate in LandingPage: ", stringDate);
+
+        console.log(
+            "formatDateForInput(today) in LandingPage: ",
+            formatDateForInput(today)
+        );
+
+        getDataFromOneDate(formatDateForInput(today)); //
     }, [getDataFromOneDate]);
 
     return (

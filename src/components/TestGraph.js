@@ -5,7 +5,7 @@ import styled from "styled-components";
 import { getAverages } from "../utils/getAverages";
 
 import { getDataFromDateRange } from "../actions/bwActions";
-import { formatDate } from "../utils/formatDate";
+import { formatDateForInput } from "../utils/formatDateForInput";
 
 import "./TestGraph.css";
 
@@ -67,11 +67,16 @@ const TestGraph = ({
             )}`;
         }
 
-        // convert to MM-DD-YYYY format
+        // if month is only a single digit, add a zero in front
+        if (sevenDaysAgo[1] === "-") {
+            sevenDaysAgo = `0${sevenDaysAgo}`;
+        }
+
+        // convert to YYYY-MM-DD format
         sevenDaysAgo = `${sevenDaysAgo.slice(
-            5,
+            6,
             sevenDaysAgo.length
-        )}-${sevenDaysAgo.slice(0, 4)}`;
+        )}-${sevenDaysAgo.slice(0, 5)}`;
 
         // want graph to start with data a week ago from today
         return sevenDaysAgo;
@@ -191,7 +196,13 @@ const TestGraph = ({
             getDataFromDateRange(startDate);
         };
 
-        getDates(startingDate);
+        console.log("startingDate in useEffect: ", startingDate);
+        console.log(
+            "formatDateForInput(startingDate) in Graph: ",
+            formatDateForInput(startingDate)
+        );
+
+        getDates(formatDateForInput(startingDate));
     }, [startingDate]);
 
     useEffect(() => {
@@ -241,7 +252,7 @@ const TestGraph = ({
                         id="graphDate"
                         type="date"
                         name="startingDate"
-                        value={formatDate(startingDate)}
+                        value={formatDateForInput(startingDate)}
                         onChange={e => handleDateChange(e)}
                     />
                 </DateInputContainer>

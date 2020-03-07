@@ -1,6 +1,6 @@
 import { axiosWithAuth } from "../utils/axiosWithAuth";
 import axios from "axios";
-import { formatDate } from "../utils/formatDate";
+import { formatDateForInput } from "../utils/formatDateForInput";
 
 export const FETCHING_USER = "FETCHING_USER";
 export const FETCH_USER_DATA = "FETCH_USER_DATA";
@@ -60,6 +60,7 @@ export const getUserData = () => dispatch => {
 
 export const getDataFromDateRange = date => dispatch => {
     dispatch({ type: FETCHING_DATE_RANGE_DATA });
+    console.log("initial date: ", date);
     // date comes in as YYYY-MM-DD
     // convert date to MM-DD-YYYY format
     let startDate = `${date.slice(5, date.length)}-${date.slice(0, 4)}`;
@@ -70,7 +71,11 @@ export const getDataFromDateRange = date => dispatch => {
         startDate = startDate.slice(1, startDate.length);
     }
 
+    console.log("rearranged date: ", startDate);
+
     const startDateObj = new Date(startDate);
+
+    console.log("startDateObj: ", startDateObj);
 
     // gets a Date object for 6 days from the startDate
     const endDateObj = new Date(
@@ -85,7 +90,7 @@ export const getDataFromDateRange = date => dispatch => {
         .get(`/data?start=${startDate}&end=${endDate}`)
         .then(res => {
             // console.log("getDataFromDateRange res: ", res);
-            console.log("here are the **** dates", res.data.dates);
+            console.log("dates from getDataFromDateRange res", res.data.dates);
 
             dispatch({
                 type: FETCHING_DATE_RANGE_DATA_SUCCESS,
@@ -215,7 +220,7 @@ export const getDataFromOneDate = date => dispatch => {
     const dateAsObject = new Date(date);
     let endDate = new Date(dateAsObject.setDate(dateAsObject.getDate() + 2));
 
-    endDate = formatDate(endDate);
+    endDate = formatDateForInput(endDate);
     endDate = `${endDate.slice(5, endDate.length)}-${endDate.slice(0, 4)}`;
 
     if (endDate[0] === 0 || endDate[0] === "0") {

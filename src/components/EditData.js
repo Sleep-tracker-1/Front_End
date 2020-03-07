@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import { connect } from "react-redux";
-import { formatDate } from "../utils/formatDate";
+import { formatDateForInput } from "../utils/formatDateForInput";
 import useOnClickOutside from "../hooks/useOnClickOutside";
 
 import {
@@ -141,9 +141,9 @@ const EditData = ({
             getDataFromOneDate(day);
         };
 
-        // console.log("date: ", formatDate(date));
+        console.log("date in EditData: ", date);
 
-        getDateData(formatDate(date));
+        getDateData(formatDateForInput(date));
     }, [date, getDataFromOneDate]);
 
     useEffect(() => {
@@ -164,7 +164,7 @@ const EditData = ({
                     id="editDate"
                     type="date"
                     name="editDate"
-                    value={formatDate(date)}
+                    value={formatDateForInput(date)}
                     onChange={e => {
                         handleDateChange(e);
                     }}
