@@ -23,7 +23,14 @@ import {
 import CircleProgressbar from "./UserLandingPage/CircleProgressbar";
 import UserInputForm from "./UserLandingPage/UserInputForm";
 
-const EditData = ({ dateToEdit, moodEmojis, tirednessEmojis, ...props }) => {
+const EditData = ({
+    dateToEdit,
+    getDataFromOneDate,
+    getMainData,
+    moodEmojis,
+    tirednessEmojis,
+    ...props
+}) => {
     const [date, setDate] = useState(new Date());
     const [averageMoodEmoji, setAverageMoodEmoji] = useState(0);
     const [moodEmojiAriaLabel, setMoodEmojiAriaLabel] = useState("");
@@ -115,16 +122,8 @@ const EditData = ({ dateToEdit, moodEmojis, tirednessEmojis, ...props }) => {
         return "#20C261"; // green
     };
 
-    const fetchUserData = () => {
-        props.getMainData();
-    };
-
     const handleDateChange = e => {
         setDate(e.target.value);
-    };
-
-    const getDateData = day => {
-        props.getDataFromOneDate(day);
     };
 
     // handleSubmit for sending the PUT request to the server
@@ -157,53 +156,67 @@ const EditData = ({ dateToEdit, moodEmojis, tirednessEmojis, ...props }) => {
     useEffect(() => {
         // do GET request via action creator to update state in redux store
         // want to do a new GET request when the user selects a different date to edit
+        const getDateData = day => {
+            getDataFromOneDate(day);
+        };
+
         console.log("date: ", formatDate(date));
 
         getDateData(formatDate(date));
-    }, [date]);
+    }, [date, getDataFromOneDate]);
 
     useEffect(() => {
         let moodEmoji = "";
         let moodAriaLabel = "";
         let tirednessEmoji = "";
         let tirednessAriaLabel = "";
+        const { bad: badMood, ok: okMood, great: greatMood } = moodEmojis;
+        const {
+            bad: badTiredness,
+            ok: okTiredness,
+            great: greatTiredness,
+        } = tirednessEmojis;
 
         if (dateToEdit.averageMood <= 1) {
-            moodEmoji = moodEmojis.bad.emoji;
-            moodAriaLabel = moodEmojis.bad.desc;
+            moodEmoji = badMood.emoji;
+            moodAriaLabel = badMood.desc;
         } else if (dateToEdit.averageMood > 1 && dateToEdit.averageMood <= 2) {
-            moodEmoji = moodEmojis.ok.emoji;
-            moodAriaLabel = moodEmojis.ok.desc;
+            moodEmoji = okMood.emoji;
+            moodAriaLabel = okMood.desc;
         } else if (dateToEdit.averageMood > 2) {
-            moodEmoji = moodEmojis.great.emoji;
-            moodAriaLabel = moodEmojis.great.desc;
+            moodEmoji = greatMood.emoji;
+            moodAriaLabel = greatMood.desc;
         }
 
         if (dateToEdit.averageTiredness <= 1) {
-            tirednessEmoji = tirednessEmojis.great.emoji;
-            tirednessAriaLabel = tirednessEmojis.great.desc;
+            tirednessEmoji = greatTiredness.emoji;
+            tirednessAriaLabel = greatTiredness.desc;
         } else if (
             dateToEdit.averageTiredness > 1 &&
             dateToEdit.averageTiredness <= 2
         ) {
-            tirednessEmoji = tirednessEmojis.ok.emoji;
-            tirednessAriaLabel = tirednessEmojis.ok.desc;
+            tirednessEmoji = okTiredness.emoji;
+            tirednessAriaLabel = okTiredness.desc;
         } else if (dateToEdit.averageTiredness > 2) {
-            tirednessEmoji = tirednessEmojis.bad.emoji;
-            tirednessAriaLabel = tirednessEmojis.bad.desc;
+            tirednessEmoji = badTiredness.emoji;
+            tirednessAriaLabel = badTiredness.desc;
         }
 
         setAverageMoodEmoji(moodEmoji);
         setMoodEmojiAriaLabel(moodAriaLabel);
         setAverageTirednessEmoji(tirednessEmoji);
         setTirednessEmojiAriaLabel(tirednessAriaLabel);
-    }, [dateToEdit]);
+    }, [dateToEdit, moodEmojis, tirednessEmojis]);
 
     useEffect(() => {
         // when the input values get updated in the redux store (pass into the dependency array for this useEffect), set the local state 'initialValues' and 'initialValuesPlusTime'
         // might have to convert wake and bed times from Date object to string first? something to check
+        const fetchUserData = () => {
+            getMainData();
+        };
+
         fetchUserData();
-    }, []);
+    }, [getMainData]);
 
     return (
         <div>
