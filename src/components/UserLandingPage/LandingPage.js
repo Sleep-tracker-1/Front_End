@@ -3,17 +3,19 @@ import styled from "styled-components";
 import { connect } from "react-redux";
 import { motion } from "framer-motion";
 import useOnClickOutside from "../../hooks/useOnClickOutside";
+import { formatDate } from "../../utils/formatDate";
 
 import {
     getUserData,
     getMainData,
+    getDataFromOneDate,
     postBedtimeInputs,
     postWakeUpInputs,
     postMiddayInputs,
 } from "../../actions/bwActions";
 
 import TestGraph from "../TestGraph";
-import CircleProgressbar from "./CircleProgressbar";
+import CircleProgressbars from "./CircleProgressbars";
 import UserInputForm from "./UserInputForm";
 
 // if you change the height of the header, the LandingPageContainer min and max height calcs need to be adjusted
@@ -96,7 +98,8 @@ export const Emoji = ({ emoji, ariaLabel }) => (
     </span>
 );
 
-const LandingPage = ({ getMainData, ...props }) => {
+const LandingPage = ({ getMainData, getDataFromOneDate, ...props }) => {
+    const [today, setToday] = useState(new Date());
     const [formsSubmitted, setFormsSubmitted] = useState({
         wakeUp: false,
         midday: false,
@@ -174,23 +177,10 @@ const LandingPage = ({ getMainData, ...props }) => {
             time: timeAsDate,
         };
 
-        // const postRequestObj = {
-        //     nightTime: {
-        //         bedtime: timeAsDate,
-        //     },
-        //     nightMood: {
-        //         nightMood: values.mood,
-        //     },
-        //     nightTired: {
-        //         nightTired: values.tiredness,
-        //     },
-        // };
-
         props.postBedtimeInputs(postRequestObj);
     };
 
     const handleWakeUpSubmit = values => {
-        console.log("in wakeUp submit form");
         let timeAsDate = new Date(values.time); // convert `time` to Date object for POST request
         timeAsDate = timeAsDate.toISOString();
 
@@ -220,26 +210,7 @@ const LandingPage = ({ getMainData, ...props }) => {
         setFormsSubmitted(submittedForm);
     };
 
-    // // fetch user data from API via action creator
-    // const fetchUserData = () => {
-    //     getMainData();
-    // };
-
-    const setProgressBarColor = percentage => {
-        if (percentage < 34) {
-            return "#F20000"; //red
-        } else if (percentage < 66 && percentage > 34) {
-            return "#EFD914"; // yellow
-        } else if (percentage > 66) {
-            return "#20C261"; // green
-        }
-
-        return "#20C261"; // green
-    };
-
     useEffect(() => {
-        // fetchUserData();
-
         // fetch user data from API via action creator
         const fetchUserData = () => {
             getMainData();
@@ -248,44 +219,15 @@ const LandingPage = ({ getMainData, ...props }) => {
         fetchUserData();
     }, [getMainData]);
 
+    useEffect(() => {
+        getDataFromOneDate(formatDate(today));
+    }, [getDataFromOneDate]);
+
     return (
         <LandingPageContainer>
             <TestGraph />
-            <ProgressBarsContainer>
-                {/* progressColor and emoji for each will need to be dynamic to change depending on the ratio */}
-
-                {/* sleep ratio */}
-                <CircleProgressbar
-                    progressColor={setProgressBarColor(30)}
-                    value={30}
-                >
-                    {/* placeholder value */}
-                    <ProgressbarSleepAmount>7hr 12min</ProgressbarSleepAmount>
-                </CircleProgressbar>
-
-                {/* mood ratio */}
-                <CircleProgressbar
-                    progressColor={setProgressBarColor(52)}
-                    value={52}
-                >
-                    <Emoji
-                        emoji={props.moodEmojis.great.emoji}
-                        ariaLabel={props.moodEmojis.great.desc}
-                    />
-                </CircleProgressbar>
-
-                {/* tiredness ratio */}
-                <CircleProgressbar
-                    progressColor={setProgressBarColor(80)}
-                    value={80}
-                >
-                    <Emoji
-                        emoji={props.tirednessEmojis.great.emoji}
-                        ariaLabel={props.tirednessEmojis.great.desc}
-                    />
-                </CircleProgressbar>
-            </ProgressBarsContainer>
-
+            <h2 style={{ fontSize: "1.25rem" }}>Today's Averages</h2>
+            <CircleProgressbars />
             <RecommendedSleepContainer>
                 <RecommendedSleep>
                     Sleep recommendation:{" "}
@@ -373,6 +315,7 @@ const LandingPage = ({ getMainData, ...props }) => {
 const mapStateToProps = state => {
     return {
         user: state.user,
+        dateToEdit: state.dateToEdit, // not editing here, but still need access to its data
         moodEmojis: state.moodEmojis,
         tirednessEmojis: state.tirednessEmojis,
     };
@@ -381,6 +324,7 @@ const mapStateToProps = state => {
 export default connect(mapStateToProps, {
     getUserData,
     getMainData,
+    getDataFromOneDate,
     postBedtimeInputs,
     postWakeUpInputs,
     postMiddayInputs,
