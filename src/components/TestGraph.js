@@ -42,11 +42,11 @@ const TestGraph = ({
         restfulness: [],
     });
 
-    // const [today, setToday] = useState(new Date());
     const [startingDate, setStartingDate] = useState(() => {
         const today = new Date();
         let sevenDaysAgo = new Date(today.setDate(today.getDate() - 6));
-        return formatDateForInput(sevenDaysAgo);
+        // return formatDateForInput(sevenDaysAgo);
+        return sevenDaysAgo;
 
         // convert to YYYY-MM-DD string
         // sevenDaysAgo = sevenDaysAgo.toLocaleDateString().replace(/\//g, "-");
@@ -82,6 +82,9 @@ const TestGraph = ({
         // // want graph to start with data a week ago from today
         // return sevenDaysAgo;
     });
+    const [stringStartingDate, setStringStartingDate] = useState(
+        formatDateForInput(startingDate)
+    );
 
     const chartProps = {
         data: {
@@ -189,7 +192,11 @@ const TestGraph = ({
     const chartReference = React.createRef();
 
     const handleDateChange = e => {
-        setStartingDate(e.target.value);
+        const newTime = e.target.value;
+        const timeZoneAdjusted = `${newTime}T00:00-0800`;
+
+        setStartingDate(new Date(timeZoneAdjusted));
+        setStringStartingDate(e.target.value);
     };
 
     useEffect(() => {
@@ -253,7 +260,7 @@ const TestGraph = ({
                         id="graphDate"
                         type="date"
                         name="startingDate"
-                        value={formatDateForInput(startingDate)}
+                        value={stringStartingDate}
                         onChange={e => handleDateChange(e)}
                     />
                 </DateInputContainer>

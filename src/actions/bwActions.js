@@ -81,9 +81,17 @@ export const getDataFromDateRange = date => dispatch => {
     const endDateObj = new Date(
         startDateObj.setDate(startDateObj.getDate() + 7)
     );
+    console.log("endDateObj: ", endDateObj);
     // convert to date string in MM-DD-YYYY format and replace / with -
     // let endDate = endDateObj.toLocaleDateString().replace(/\//g, "-");
-    const endDate = formatDateForInput(endDateObj);
+    let endDate = formatDateForInput(endDateObj);
+
+    endDate = `${endDate.slice(5, endDate.length)}-${endDate.slice(0, 4)}`;
+
+    if (endDate[0] === 0 || endDate[0] === "0") {
+        endDate = endDate.slice(1, endDate.length);
+    }
+
     console.log(`start date is ${startDate}, end date is ${endDate}`);
     console.log("endpoint: ", `/data?start=${startDate}&end=${endDate}`);
 
