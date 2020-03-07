@@ -3,6 +3,7 @@ import { Line } from "react-chartjs-2";
 import { connect } from "react-redux";
 // import ChartDataLabels from "chartjs-plugin-datalabels";
 import styled from "styled-components";
+import { getAverages } from "../utils/getAverages";
 
 import { getDataFromDateRange } from "../actions/bwActions";
 import { formatDate } from "../utils/formatDate";
@@ -37,12 +38,19 @@ const DateInput = styled.input`
 
 const TestGraph = ({ user, graphDatesArray, ...props }) => {
     // const apiResponseArray = [6, 5, 9, 12, 8, 5, 10];
+    const [dateLabels, setDateLabels] = useState([]);
     const [amountOfSleepArray, setAmountOfSleepArray] = useState([]);
-    const moodAndRestObj = {
+    const [moodAndRestObj, setMoodAndRestObj] = useState({
         sleepHours: amountOfSleepArray,
-        mood: 8,
-        restfulness: 10,
-    }; //We should probably use state here as well
+        mood: [],
+        restfulness: [],
+    });
+
+    // const moodAndRestObj = {
+    //     sleepHours: amountOfSleepArray,
+    //     mood: 8,
+    //     restfulness: 10,
+    // }; //We should probably use state here as well
     //We need to get our data from the server, but these are our stand-in values
     // const [currentWeek, setCurrentWeek] = useState(amountOfSleepArray);
 
@@ -66,15 +74,7 @@ const TestGraph = ({ user, graphDatesArray, ...props }) => {
 
     const chartProps = {
         data: {
-            labels: [
-                "Monday",
-                "Tuesday",
-                "Wednesday",
-                "Thursday",
-                "Friday",
-                "Saturday",
-                "Sunday",
-            ],
+            labels: [...dateLabels],
             datasets: [
                 {
                     data: amountOfSleepArray,
@@ -83,15 +83,15 @@ const TestGraph = ({ user, graphDatesArray, ...props }) => {
                     borderColor: "#3e95cd",
                     fill: false,
                     lineTension: 0,
-                    radius: 15,
-                    hoverRadius: 30,
+                    radius: 10,
+                    hoverRadius: 15,
                     pointHoverBackgroundColor: "yellow",
                     datalabels: {
                         textStrokeColor: "black",
                         textStrokeWidth: 1,
                         color: "black",
                         font: {
-                            size: 20,
+                            size: 16,
                         },
                     },
                 },
@@ -141,26 +141,32 @@ const TestGraph = ({ user, graphDatesArray, ...props }) => {
                 callbacks: {
                     // Use the footer callback to display the sum of the items showing in the tooltip
                     formatter: function(value) {
-                        return "line1\nline2\n" + value;
+                        return `line1\nline2\n${value}`;
                         // eq. return ['line1', 'line2', value]
                     },
                     label: function(tooltipItem, data) {
                         const thisDataset =
                             data.datasets[Number(tooltipItem.datasetIndex)];
 
-                        const WeekLabel =
-                            "Hours slept: " +
-                            thisDataset.data[Number(tooltipItem.index)];
+                        const WeekLabel = `Hours slept: ${
+                            thisDataset.data[Number(tooltipItem.index)]
+                        }`;
 
                         return WeekLabel;
                     },
                     afterLabel: function(tooltipItem, data) {
                         const thisDataset =
                             data.datasets[Number(tooltipItem.datasetIndex)];
-                        const rest = thisDataset.moodAndRest.restfulness;
-                        const mood = thisDataset.moodAndRest.restfulness;
+                        const rest =
+                            thisDataset.moodAndRest.restfulness[
+                                Number(tooltipItem.index)
+                            ];
+                        const mood =
+                            thisDataset.moodAndRest.mood[
+                                Number(tooltipItem.index)
+                            ];
 
-                        const stringo = `Rest: ${rest} - Mood: ${mood}`;
+                        const stringo = `Rest: ${rest} | Mood: ${mood}`;
 
                         return stringo;
                     },
@@ -202,7 +208,30 @@ const TestGraph = ({ user, graphDatesArray, ...props }) => {
         const sleepArray = graphDatesArray.map(day => day.totalTimeInBed);
 
         setAmountOfSleepArray(sleepArray);
+
+        const graphDateLabels = graphDatesArray.map(day => day.date);
+
+        setDateLabels(graphDateLabels);
+
+        // moodAndRestObj.mood = getAverages(graphDatesArray).averageMood;
+        // moodAndRestObj.restfulness = getAverages(
+        //     graphDatesArray
+        // ).averageTiredness;
     }, [graphDatesArray]);
+
+    useEffect(() => {
+        const moodAndRest = {
+            sleepHours: amountOfSleepArray,
+            mood: [],
+            restfulness: [],
+        };
+
+        moodAndRest.mood = getAverages(graphDatesArray).averageMood;
+
+        moodAndRest.restfulness = getAverages(graphDatesArray).averageTiredness;
+
+        setMoodAndRestObj(moodAndRest);
+    }, [graphDatesArray, amountOfSleepArray]);
 
     return (
         <>

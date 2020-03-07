@@ -105,7 +105,7 @@ const CircleProgressbars = ({
             tirednessAriaLabel = badTiredness.desc;
         }
 
-        console.log("averageTiredness: ", dateToEdit.averageTiredness);
+        // console.log("averageTiredness: ", dateToEdit.averageTiredness);
         setAverageMoodEmoji(moodEmoji);
         setMoodEmojiAriaLabel(moodAriaLabel);
         setAverageTirednessEmoji(tirednessEmoji);
@@ -116,9 +116,9 @@ const CircleProgressbars = ({
         let progressValue = dateToEdit.totalTimeInBed * 100;
         progressValue = progressValue / totalAvgSleep;
 
-        console.log("totalAvgSleep: ", totalAvgSleep);
-        console.log("dateToEdit.totalTimeInBed: ", dateToEdit.totalTimeInBed);
-        console.log("sleep progressValue: ", progressValue);
+        // console.log("totalAvgSleep: ", totalAvgSleep);
+        // console.log("dateToEdit.totalTimeInBed: ", dateToEdit.totalTimeInBed);
+        // console.log("sleep progressValue: ", progressValue);
         setSleepBarValue(progressValue);
     }, [dateToEdit.totalTimeInBed, totalAvgSleep]);
 
@@ -126,9 +126,9 @@ const CircleProgressbars = ({
         let progressValue = dateToEdit.averageMood * 100;
         progressValue = progressValue / totalAvgMood;
 
-        console.log("totalAvgMood: ", totalAvgMood);
-        console.log("dateToEdit.averageMood: ", dateToEdit.averageMood);
-        console.log("mood progressValue: ", progressValue);
+        // console.log("totalAvgMood: ", totalAvgMood);
+        // console.log("dateToEdit.averageMood: ", dateToEdit.averageMood);
+        // console.log("mood progressValue: ", progressValue);
         setMoodBarValue(progressValue);
     }, [dateToEdit.averageMood, totalAvgMood]);
 
@@ -136,12 +136,12 @@ const CircleProgressbars = ({
         let progressValue = dateToEdit.averageTiredness * 100;
         progressValue = progressValue / totalAvgTiredness;
 
-        console.log("totalAvgTiredness: ", totalAvgTiredness);
-        console.log(
-            "dateToEdit.averageTiredness: ",
-            dateToEdit.averageTiredness
-        );
-        console.log("tiredness progressValue: ", progressValue);
+        // console.log("totalAvgTiredness: ", totalAvgTiredness);
+        // console.log(
+        //     "dateToEdit.averageTiredness: ",
+        //     dateToEdit.averageTiredness
+        // );
+        // console.log("tiredness progressValue: ", progressValue);
         setTirednessBarValue(progressValue);
     }, [dateToEdit.averageTiredness, totalAvgTiredness]);
 

@@ -285,6 +285,7 @@ export const bwReducer = (state = initialState, action) => {
                 error: "",
             };
         case FETCHING_DATE_RANGE_DATA_SUCCESS:
+            console.log("graphDatesArray: ", action.payload);
             return {
                 ...state,
                 graphDatesArray: action.payload,
