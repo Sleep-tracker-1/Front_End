@@ -96,7 +96,7 @@ export const Emoji = ({ emoji, ariaLabel }) => (
     </span>
 );
 
-const LandingPage = props => {
+const LandingPage = ({ getMainData, ...props }) => {
     const [formsSubmitted, setFormsSubmitted] = useState({
         wakeUp: false,
         midday: false,
@@ -220,10 +220,10 @@ const LandingPage = props => {
         setFormsSubmitted(submittedForm);
     };
 
-    // fetch user data from API via action creator
-    const fetchUserData = () => {
-        props.getMainData();
-    };
+    // // fetch user data from API via action creator
+    // const fetchUserData = () => {
+    //     getMainData();
+    // };
 
     const setProgressBarColor = percentage => {
         if (percentage < 34) {
@@ -238,8 +238,15 @@ const LandingPage = props => {
     };
 
     useEffect(() => {
+        // fetchUserData();
+
+        // fetch user data from API via action creator
+        const fetchUserData = () => {
+            getMainData();
+        };
+
         fetchUserData();
-    }, []);
+    }, [getMainData]);
 
     return (
         <LandingPageContainer>

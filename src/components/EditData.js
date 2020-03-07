@@ -23,10 +23,30 @@ import {
 import CircleProgressbar from "./UserLandingPage/CircleProgressbar";
 import UserInputForm from "./UserLandingPage/UserInputForm";
 
+const DateInputContainer = styled.div`
+    width: 80%;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    margin-top: 10px;
+
+    & label {
+        margin-bottom: 0;
+    }
+
+    & input {
+        max-width: 150px;
+    }
+`;
+
+const ProgressCirclesContainer = styled(ProgressBarsContainer)`
+    margin: 10px 0;
+`;
+
 const EditData = ({
     dateToEdit,
-    getDataFromOneDate,
-    getMainData,
+    getDataFromOneDate, // need to destructure b/c of useEffect dependency array warning error
+    getMainData, // need to destructure b/c of useEffect dependency array warning error
     moodEmojis,
     tirednessEmojis,
     ...props
@@ -52,14 +72,14 @@ const EditData = ({
     const [middaySlide, setMiddaySlide] = useState(0);
 
     // initial values for the times, moods, and tiredness before doing a GET request
-    const [initialValues, setInitialValues] = useState({
-        mood: 0,
-        tiredness: 0,
-    });
-    const [initialValuesPlusTime, setInitialValuesPlusTime] = useState({
-        ...initialValues,
-        time: "",
-    });
+    // const [initialValues, setInitialValues] = useState({
+    //     mood: 0,
+    //     tiredness: 0,
+    // });
+    // const [initialValuesPlusTime, setInitialValuesPlusTime] = useState({
+    //     ...initialValues,
+    //     time: "",
+    // });
 
     // handleTap functions for the IconTab animations
     const wakeUpTap = () => {
@@ -219,8 +239,8 @@ const EditData = ({
     }, [getMainData]);
 
     return (
-        <div>
-            <div>
+        <LandingPageContainer>
+            <DateInputContainer>
                 <label htmlFor="editDate">Date to edit:</label>
                 <input
                     id="editDate"
@@ -228,14 +248,13 @@ const EditData = ({
                     name="editDate"
                     value={formatDate(date)}
                     onChange={e => {
-                        console.log("e.target.value: ", e.target.value);
                         handleDateChange(e);
                     }}
                 />
-            </div>
+            </DateInputContainer>
 
             {/* Amount of sleep, mood, and tiredness levels compared to averages as circular progress "bars" */}
-            <ProgressBarsContainer>
+            <ProgressCirclesContainer>
                 {/* sleep ratio */}
                 <CircleProgressbar
                     progressColor={setProgressBarColor(30)}
@@ -268,7 +287,7 @@ const EditData = ({
                         ariaLabel={tirednessEmojiAriaLabel}
                     />
                 </CircleProgressbar>
-            </ProgressBarsContainer>
+            </ProgressCirclesContainer>
 
             <ButtonsContainer>
                 <InputFormButton
@@ -338,7 +357,7 @@ const EditData = ({
                 closeForm={bedtimeTap}
                 formRef={bedtimeFormRef}
             />
-        </div>
+        </LandingPageContainer>
     );
 };
 
