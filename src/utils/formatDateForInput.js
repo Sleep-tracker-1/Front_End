@@ -1,14 +1,8 @@
 export const formatDateForInput = date => {
-    console.log("date in formatDate: ", date);
-
-    // TestGraph date for time input comes in as 2020-3-01
-    // needs to come back as 2020-03-01 (YYYY-MM-DD)
-
     // take in Date object
+    // return 2020-03-01 format (YYYY-MM-DD)
 
     let stringDate = date.toLocaleDateString().replace(/\//g, "-"); // 3-7-2020 format
-
-    console.log("stringDate in format: ", stringDate);
 
     // to handle different options for single digit months and days
     if (stringDate[1] === "-" && stringDate[3] === "-") {
@@ -32,30 +26,10 @@ export const formatDateForInput = date => {
         stringDate = `0${stringDate}`;
     }
 
-    console.log("stringDat: ", stringDate);
-
     // convert to YYYY-MM-DD format
     stringDate = `${stringDate.slice(6, stringDate.length)}-${stringDate.slice(
         0,
         5
     )}`;
-
-    console.log("stringDate reformatted: ", stringDate);
-
-    // const timeZoneAdjusted = `${date}T00:00-0800`;
-    // console.log("timeZoneAdjusted: ", timeZoneAdjusted);
-
-    // const d = new Date(timeZoneAdjusted);
-    // console.log("d: ", d);
-    // let month = `${d.getMonth() + 1}`;
-    // let day = `${d.getDate()}`;
-    // const year = d.getFullYear();
-
-    // if (month.length < 2) month = `0${month}`;
-    // if (day.length < 2) day = `0${day}`;
-
-    // console.log("formatDateForInput return: ", [year, month, day].join("-"));
-
-    // return [year, month, day].join("-");
     return stringDate;
 };

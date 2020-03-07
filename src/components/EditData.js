@@ -111,11 +111,9 @@ const EditData = ({
     });
 
     const handleDateChange = e => {
-        console.log("date before changing: ", date);
         const newTime = e.target.value;
         const timeZoneAdjusted = `${newTime}T00:00-0800`;
 
-        console.log("date after changing: ", new Date(timeZoneAdjusted));
         setDate(new Date(timeZoneAdjusted));
         setStringDate(e.target.value);
     };
@@ -141,70 +139,16 @@ const EditData = ({
         props.editWakeAndBedTimes(timeOfDay, dateId, updatedTime);
     };
 
-    // useEffect(() => {
-    //     // date starts as a Date object
-    //     // need to convert to
-    //     // const stringDate = date.toLocaleDateString().replace(/\//g, "-"); // 3-7-2020 format
-
-    //     // convert to YYYY-M-DD
-
-    //     // console.log("stringDate in EditData: ", stringDate);
-    //     console.log("date in EditData: ", date);
-    //     setStringDate(formatDateForInput(date));
-    // }, [date]);
-
     useEffect(() => {
-        // do GET request via action creator to update state in redux store
-        // want to do a new GET request when the user selects a different date to edit
         const getDateData = day => {
             getDataFromOneDate(day);
         };
-
-        console.log("date in EditData: ", date); // Date object
-
-        // let dateString = date.toLocaleDateString().replace(/\//g, "-");
-
-        // console.log("dateString in EditData: ", dateString);
-
-        // if (dateString[1] === "-" && dateString[3] === "-") {
-        //     // if day is formatted like 3-1-2020 (M-D-YYYY)
-        //     // want to add a 0 before the day num @ dateString[2] and shift everything from index 2 over 1
-        //     dateString = `${dateString.slice(0, 2)}0${dateString.slice(
-        //         2,
-        //         dateString.length
-        //     )}`;
-        // } else if (dateString[2] === "-" && dateString[4] === "-") {
-        //     // if 7 days from current day is formatted like 12-1-2020 (MM-D-YYYY)
-        //     // want to add a 0 before the day num @ dateString[3] and shift everything from index 3 over 1
-        //     dateString = `${dateString.slice(0, 3)}0${dateString.slice(
-        //         3,
-        //         dateString.length
-        //     )}`;
-        // }
-
-        // // if month is only a single digit, add a zero in front
-        // if (dateString[1] === "-") {
-        //     dateString = `0${dateString}`;
-        // }
-
-        // // convert to YYYY-MM-DD format
-        // dateString = `${dateString.slice(
-        //     6,
-        //     dateString.length
-        // )}-${dateString.slice(0, 5)}`;
-
-        // console.log(
-        //     "dateString before passing to formatDateForInput: ",
-        //     dateString
-        // );
 
         // value give to getDateData needs to be YYYY-MM-DD
         getDateData(formatDateForInput(date));
     }, [date, getDataFromOneDate]);
 
     useEffect(() => {
-        // when the input values get updated in the redux store (pass into the dependency array for this useEffect), set the local state 'initialValues' and 'initialValuesPlusTime'
-        // might have to convert wake and bed times from Date object to string first? something to check
         const fetchUserData = () => {
             getMainData();
         };

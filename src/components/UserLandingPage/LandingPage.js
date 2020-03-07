@@ -81,7 +81,6 @@ export const InputFormButton = styled(motion.button)`
     cursor: pointer;
 `;
 
-// can get rid of these and import initial values from redux store
 const initialValues = {
     mood: 0,
     tiredness: 0,
@@ -220,21 +219,8 @@ const LandingPage = ({ getMainData, getDataFromOneDate, ...props }) => {
     }, [getMainData]);
 
     useEffect(() => {
-        console.log("typeof `today` in LandingPage: ", typeof today);
-        console.log("`today` in LandingPage: ", today);
-
-        let stringDate = today.toLocaleDateString();
-
-        stringDate = stringDate.replace(/\//g, "-");
-        console.log("stringDate in LandingPage: ", stringDate);
-
-        console.log(
-            "formatDateForInput(today) in LandingPage: ",
-            formatDateForInput(today)
-        );
-
-        getDataFromOneDate(formatDateForInput(today)); //
-    }, [getDataFromOneDate]);
+        getDataFromOneDate(formatDateForInput(today));
+    }, [getDataFromOneDate, today]);
 
     return (
         <LandingPageContainer>

@@ -30,7 +30,6 @@ const DateInput = styled.input`
 `;
 
 const TestGraph = ({
-    // user,
     graphDatesArray,
     getDataFromDateRange, // need to destructure for useEffect dependency array
 }) => {
@@ -44,43 +43,8 @@ const TestGraph = ({
 
     const [startingDate, setStartingDate] = useState(() => {
         const today = new Date();
-        let sevenDaysAgo = new Date(today.setDate(today.getDate() - 6));
-        // return formatDateForInput(sevenDaysAgo);
+        const sevenDaysAgo = new Date(today.setDate(today.getDate() - 6));
         return sevenDaysAgo;
-
-        // convert to YYYY-MM-DD string
-        // sevenDaysAgo = sevenDaysAgo.toLocaleDateString().replace(/\//g, "-");
-
-        // // to handle different options for single digit months and days
-        // if (sevenDaysAgo[1] === "-" && sevenDaysAgo[3] === "-") {
-        //     // if 7 days from current day is formatted like 3-1-2020 (M-D-YYYY)
-        //     // want to add a 0 before the day num @ sevenDaysAgo[2] and shift everything from index 2 over 1
-        //     sevenDaysAgo = `${sevenDaysAgo.slice(0, 2)}0${sevenDaysAgo.slice(
-        //         2,
-        //         sevenDaysAgo.length
-        //     )}`;
-        // } else if (sevenDaysAgo[2] === "-" && sevenDaysAgo[4] === "-") {
-        //     // if 7 days from current day is formatted like 12-1-2020 (MM-D-YYYY)
-        //     // want to add a 0 before the day num @ sevenDaysAgo[3] and shift everything from index 3 over 1
-        //     sevenDaysAgo = `${sevenDaysAgo.slice(0, 3)}0${sevenDaysAgo.slice(
-        //         3,
-        //         sevenDaysAgo.length
-        //     )}`;
-        // }
-
-        // // if month is only a single digit, add a zero in front
-        // if (sevenDaysAgo[1] === "-") {
-        //     sevenDaysAgo = `0${sevenDaysAgo}`;
-        // }
-
-        // // convert to YYYY-MM-DD format
-        // sevenDaysAgo = `${sevenDaysAgo.slice(
-        //     6,
-        //     sevenDaysAgo.length
-        // )}-${sevenDaysAgo.slice(0, 5)}`;
-
-        // // want graph to start with data a week ago from today
-        // return sevenDaysAgo;
     });
     const [stringStartingDate, setStringStartingDate] = useState(
         formatDateForInput(startingDate)
@@ -204,31 +168,11 @@ const TestGraph = ({
             getDataFromDateRange(startDate);
         };
 
-        console.log("startingDate in useEffect: ", startingDate);
-        console.log(
-            "formatDateForInput(startingDate) in Graph: ",
-            formatDateForInput(startingDate)
-        );
-
         getDates(formatDateForInput(startingDate));
-    }, [startingDate]);
+    }, [startingDate, getDataFromDateRange]);
 
     useEffect(() => {
         const sleepArray = graphDatesArray.map(day => day.totalTimeInBed);
-        // const avgRestArray = graphDatesArray.map(day => {
-        //     let morning = day.wakeUp.tiredness;
-        //     let midday = day.wakeUp.tiredness;
-        //     let bedtime = day.wakeUp.tiredness;
-
-        //     return (morning + midday + bedtime) / 3;
-        // });
-        // const avgMoodArray = graphDatesArray.map(day => {
-        //     let morning = day.wakeUp.mood;
-        //     let midday = day.wakeUp.mood;
-        //     let bedtime = day.wakeUp.mood;
-
-        //     return (morning + midday + bedtime) / 3;
-        // });
 
         setAmountOfSleepArray(sleepArray);
 

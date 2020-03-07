@@ -30,7 +30,7 @@ const EmojiContainer = styled.div`
 const StyledEmoji = styled.span`
     font-size: ${props => (props.isSelected ? "1.5rem" : "initial")};
     text-shadow: ${props =>
-        props.isSelected ? "0px 0px 6px darkgray" : "none"};
+        props.isSelected ? "0px 0px 16px #ffffff;" : "none"};
 `;
 
 const Emoji = ({ ariaLabel, emoji, handleClick, isSelected }) => (
