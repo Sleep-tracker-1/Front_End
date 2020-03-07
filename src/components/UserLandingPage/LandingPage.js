@@ -81,7 +81,7 @@ export const InputFormButton = styled(motion.button)`
     cursor: pointer;
 `;
 
-const FormsContainer = styled.div`
+export const FormsContainer = styled.div`
     position: relative;
 `;
 
@@ -237,7 +237,8 @@ const LandingPage = ({ getMainData, getDataFromOneDate, ...props }) => {
                         Sleep recommendation:{" "}
                         {props.user.sleepRecommendation ? (
                             <strong>
-                                {props.user.sleepRecommendation}hours
+                                {props.user.sleepRecommendation.toFixed(1)}{" "}
+                                hours
                             </strong>
                         ) : (
                             <strong>Not available</strong>

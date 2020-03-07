@@ -16,6 +16,7 @@ import {
     LandingPageContainer,
     ButtonsContainer,
     InputFormButton,
+    FormsContainer,
 } from "./UserLandingPage/LandingPage";
 import CircleProgressbars from "./UserLandingPage/CircleProgressbars";
 import UserInputForm from "./UserLandingPage/UserInputForm";
@@ -157,92 +158,95 @@ const EditData = ({
     }, [getMainData]);
 
     return (
-        <LandingPageContainer>
-            <DateInputContainer>
-                <label htmlFor="editDate">Date to edit:</label>
-                <input
-                    id="editDate"
-                    type="date"
-                    name="editDate"
-                    value={stringDate}
-                    onChange={e => {
-                        handleDateChange(e);
-                    }}
+        <>
+            <LandingPageContainer>
+                <DateInputContainer>
+                    <label htmlFor="editDate">Date to edit:</label>
+                    <input
+                        id="editDate"
+                        type="date"
+                        name="editDate"
+                        value={stringDate}
+                        onChange={e => {
+                            handleDateChange(e);
+                        }}
+                    />
+                </DateInputContainer>
+
+                {/* Amount of sleep, mood, and tiredness levels compared to averages as circular progress "bars" */}
+                <CircleProgressbars />
+
+                <ButtonsContainer>
+                    <InputFormButton
+                        ref={wakeUpButtonRef}
+                        onTap={() => wakeUpTap()}
+                        isWakeUp={true} // used for styled components for conditional styles
+                    >
+                        Wake Up
+                    </InputFormButton>
+
+                    <InputFormButton
+                        ref={middayButtonRef}
+                        onTap={() => middayTap()}
+                        isMidday={true} // used for styled components for conditional styles
+                    >
+                        Midday
+                    </InputFormButton>
+
+                    <InputFormButton
+                        ref={bedtimeButtonRef}
+                        onTap={() => bedtimeTap()}
+                        isBedtime={true} // used for styled components for conditional styles
+                    >
+                        Bedtime
+                    </InputFormButton>
+                </ButtonsContainer>
+            </LandingPageContainer>
+            <FormsContainer>
+                <UserInputForm
+                    dateId={dateToEdit.dateId}
+                    heading="Wake Up"
+                    needsTimeInput={true}
+                    timeLabel="Wake up time"
+                    timeId="wakeUpTime"
+                    timeOfDay="wakeUp"
+                    initialValues={dateToEdit.wakeUp}
+                    handleMoodSubmit={handleMoodSubmit}
+                    handleTirednessSubmit={handleTirednessSubmit}
+                    handleSleepTimesSubmit={handleSleepTimesSubmit}
+                    animateY={wakeUpSlide}
+                    closeForm={wakeUpTap}
+                    formRef={wakeUpFormRef}
                 />
-            </DateInputContainer>
-
-            {/* Amount of sleep, mood, and tiredness levels compared to averages as circular progress "bars" */}
-            <CircleProgressbars />
-
-            <ButtonsContainer>
-                <InputFormButton
-                    ref={wakeUpButtonRef}
-                    onTap={() => wakeUpTap()}
-                    isWakeUp={true} // used for styled components for conditional styles
-                >
-                    Wake Up
-                </InputFormButton>
-
-                <InputFormButton
-                    ref={middayButtonRef}
-                    onTap={() => middayTap()}
-                    isMidday={true} // used for styled components for conditional styles
-                >
-                    Midday
-                </InputFormButton>
-
-                <InputFormButton
-                    ref={bedtimeButtonRef}
-                    onTap={() => bedtimeTap()}
-                    isBedtime={true} // used for styled components for conditional styles
-                >
-                    Bedtime
-                </InputFormButton>
-            </ButtonsContainer>
-
-            <UserInputForm
-                dateId={dateToEdit.dateId}
-                heading="Wake Up"
-                needsTimeInput={true}
-                timeLabel="Wake up time"
-                timeId="wakeUpTime"
-                timeOfDay="wakeUp"
-                initialValues={dateToEdit.wakeUp}
-                handleMoodSubmit={handleMoodSubmit}
-                handleTirednessSubmit={handleTirednessSubmit}
-                handleSleepTimesSubmit={handleSleepTimesSubmit}
-                animateY={wakeUpSlide}
-                closeForm={wakeUpTap}
-                formRef={wakeUpFormRef}
-            />
-            <UserInputForm
-                dateId={dateToEdit.dateId}
-                heading="Midday"
-                timeOfDay="midday"
-                initialValues={dateToEdit.midday}
-                handleMoodSubmit={handleMoodSubmit}
-                handleTirednessSubmit={handleTirednessSubmit}
-                isMidday={true} // for styling
-                animateY={middaySlide}
-                closeForm={middayTap}
-                formRef={middayFormRef}
-            />
-            <UserInputForm
-                dateId={dateToEdit.dateId}
-                heading="Bedtime"
-                needsTimeInput={true}
-                timeLabel="Bedtime"
-                timeId="bedtime"
-                timeOfDay="bedtime"
-                initialValues={dateToEdit.bedtime}
-                handleMoodSubmit={handleMoodSubmit}
-                handleTirednessSubmit={handleTirednessSubmit}
-                handleSleepTimesSubmit={handleSleepTimesSubmit}
-                animateY={bedtimeSlide}
-                closeForm={bedtimeTap}
-                formRef={bedtimeFormRef}
-            />
-        </LandingPageContainer>
+                <UserInputForm
+                    dateId={dateToEdit.dateId}
+                    heading="Midday"
+                    timeOfDay="midday"
+                    initialValues={dateToEdit.midday}
+                    handleMoodSubmit={handleMoodSubmit}
+                    handleTirednessSubmit={handleTirednessSubmit}
+                    isMidday={true} // for styling
+                    animateY={middaySlide}
+                    closeForm={middayTap}
+                    formRef={middayFormRef}
+                />
+                <UserInputForm
+                    dateId={dateToEdit.dateId}
+                    heading="Bedtime"
+                    needsTimeInput={true}
+                    timeLabel="Bedtime"
+                    timeId="bedtime"
+                    timeOfDay="bedtime"
+                    initialValues={dateToEdit.bedtime}
+                    handleMoodSubmit={handleMoodSubmit}
+                    handleTirednessSubmit={handleTirednessSubmit}
+                    handleSleepTimesSubmit={handleSleepTimesSubmit}
+                    animateY={bedtimeSlide}
+                    closeForm={bedtimeTap}
+                    formRef={bedtimeFormRef}
+                />
+            </FormsContainer>
+        </>
     );
 };
 
