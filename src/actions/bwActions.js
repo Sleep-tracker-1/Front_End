@@ -61,7 +61,7 @@ export const getUserData = () => dispatch => {
 export const getDataFromDateRange = date => dispatch => {
     dispatch({ type: FETCHING_DATE_RANGE_DATA });
     console.log("initial date: ", date);
-    // date comes in as YYYY-MM-DD
+    // date needs to come in as YYYY-MM-DD
     // convert date to MM-DD-YYYY format
     let startDate = `${date.slice(5, date.length)}-${date.slice(0, 4)}`;
 
@@ -82,8 +82,10 @@ export const getDataFromDateRange = date => dispatch => {
         startDateObj.setDate(startDateObj.getDate() + 7)
     );
     // convert to date string in MM-DD-YYYY format and replace / with -
-    let endDate = endDateObj.toLocaleDateString().replace(/\//g, "-");
+    // let endDate = endDateObj.toLocaleDateString().replace(/\//g, "-");
+    const endDate = formatDateForInput(endDateObj);
     console.log(`start date is ${startDate}, end date is ${endDate}`);
+    console.log("endpoint: ", `/data?start=${startDate}&end=${endDate}`);
 
     // https://sleep-tracker-server.herokuapp.com/api/data?start=12-29-2019&end=2-26-2020 would return all data from 12/29/2019 - 2/26/2020.
     axiosWithAuth()
@@ -209,7 +211,8 @@ export const addUser = () => dispatch => {
 
 export const getDataFromOneDate = date => dispatch => {
     dispatch({ type: FETCHING_DATA_FOR_ONE_DATE });
-
+    console.log("date in action: ", date);
+    // const startDate = formatDateForInput(date);
     // console.log("date in action creator: ", date); // 2020-03-02
     let formattedDate = `${date.slice(5, date.length)}-${date.slice(0, 4)}`;
 
@@ -220,7 +223,32 @@ export const getDataFromOneDate = date => dispatch => {
     const dateAsObject = new Date(date);
     let endDate = new Date(dateAsObject.setDate(dateAsObject.getDate() + 2));
 
+    // endDate = endDate.toLocaleDateString().replace(/\//g, "-");
+
+    // console.log("endDate: ", endDate);
+
+    // if (endDate[1] === "-" && endDate[3] === "-") {
+    //     // if day is formatted like 3-1-2020 (M-D-YYYY)
+    //     // want to add a 0 before the day num @ dateString[2] and shift everything from index 2 over 1
+    //     endDate = `${endDate.slice(0, 2)}0${endDate.slice(2, endDate.length)}`;
+    // } else if (endDate[2] === "-" && endDate[4] === "-") {
+    //     // if 7 days from current day is formatted like 12-1-2020 (MM-D-YYYY)
+    //     // want to add a 0 before the day num @ endDate[3] and shift everything from index 3 over 1
+    //     endDate = `${endDate.slice(0, 3)}0${endDate.slice(3, endDate.length)}`;
+    // }
+
+    // // if month is only a single digit, add a zero in front
+    // if (endDate[1] === "-") {
+    //     endDate = `0${endDate}`;
+    // }
+
+    // convert to YYYY-MM-DD format
+    // endDate = `${endDate.slice(6, endDate.length)}-${endDate.slice(0, 5)}`;
+
     endDate = formatDateForInput(endDate);
+
+    console.log("endDate after formatting: ", endDate);
+
     endDate = `${endDate.slice(5, endDate.length)}-${endDate.slice(0, 4)}`;
 
     if (endDate[0] === 0 || endDate[0] === "0") {
@@ -229,12 +257,15 @@ export const getDataFromOneDate = date => dispatch => {
 
     // console.log("startDate: ", formattedDate); // 3-02-2020
     // console.log("endDate: ", endDate);
+    console.log(
+        `getDataFromOneDate -- startDate ${formattedDate} && endDate ${endDate}`
+    );
 
     axiosWithAuth()
         // getting single date GET request only works if the end date is the next day
         .get(`/data?start=${formattedDate}&end=${endDate}`)
         .then(res => {
-            // console.log("getDataFromOneDate res: ", res);
+            console.log("getDataFromOneDate res: ", res);
             dispatch({
                 type: FETCHING_DATA_FOR_ONE_DATE_SUCCESS,
                 payload: res.data.dates[0],
