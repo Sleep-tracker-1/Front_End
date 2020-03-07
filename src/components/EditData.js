@@ -21,6 +21,13 @@ import {
 import CircleProgressbars from "./UserLandingPage/CircleProgressbars";
 import UserInputForm from "./UserLandingPage/UserInputForm";
 
+const EditDataContainer = styled(LandingPageContainer)`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+`;
+
 const DateInputContainer = styled.div`
     width: 80%;
     display: flex;
@@ -159,7 +166,7 @@ const EditData = ({
 
     return (
         <>
-            <LandingPageContainer>
+            <EditDataContainer>
                 <DateInputContainer>
                     <label htmlFor="editDate">Date to edit:</label>
                     <input
@@ -201,7 +208,7 @@ const EditData = ({
                         Bedtime
                     </InputFormButton>
                 </ButtonsContainer>
-            </LandingPageContainer>
+            </EditDataContainer>
             <FormsContainer>
                 <UserInputForm
                     dateId={dateToEdit.dateId}
