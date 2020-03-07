@@ -36,7 +36,12 @@ const DateInput = styled.input`
 // `;
 // const suggestedSleepHours = "9";
 
-const TestGraph = ({ user, graphDatesArray, ...props }) => {
+const TestGraph = ({
+    user,
+    graphDatesArray,
+    getDataFromDateRange, // need to destructure for useEffect dependency array
+    ...props
+}) => {
     // const apiResponseArray = [6, 5, 9, 12, 8, 5, 10];
     const [dateLabels, setDateLabels] = useState([]);
     const [amountOfSleepArray, setAmountOfSleepArray] = useState([]);
@@ -58,9 +63,30 @@ const TestGraph = ({ user, graphDatesArray, ...props }) => {
     const [startingDate, setStartingDate] = useState(() => {
         const today = new Date();
         let sevenDaysAgo = new Date(today.setDate(today.getDate() - 6));
+        console.log("sevenDaysAgo: ", sevenDaysAgo);
 
         // convert to YYYY-MM-DD string
         sevenDaysAgo = sevenDaysAgo.toLocaleDateString().replace(/\//g, "-");
+
+        console.log("sevenDaysAgo toLocaleDateString: ", sevenDaysAgo);
+
+        // to handle different options for single digit months and days
+        if (sevenDaysAgo[1] === "-" && sevenDaysAgo[3] === "-") {
+            // if 7 days from current day is formatted like 3-1-2020 (M-D-YYYY)
+            // want to add a 0 before the day num @ sevenDaysAgo[2] and shift everything from index 2 over 1
+            sevenDaysAgo = `${sevenDaysAgo.slice(0, 2)}0${sevenDaysAgo.slice(
+                2,
+                sevenDaysAgo.length
+            )}`;
+            console.log("sevenDaysAgo after slice: ", sevenDaysAgo);
+        } else if (sevenDaysAgo[2] === "-" && sevenDaysAgo[4] === "-") {
+            // if 7 days from current day is formatted like 12-1-2020 (MM-D-YYYY)
+            // want to add a 0 before the day num @ sevenDaysAgo[3] and shift everything from index 3 over 1
+            sevenDaysAgo = `${sevenDaysAgo.slice(0, 3)}0${sevenDaysAgo.slice(
+                3,
+                sevenDaysAgo.length
+            )}`;
+        }
 
         // convert to MM-DD-YYYY format
         sevenDaysAgo = `${sevenDaysAgo.slice(
@@ -69,6 +95,7 @@ const TestGraph = ({ user, graphDatesArray, ...props }) => {
         )}-${sevenDaysAgo.slice(0, 4)}`;
 
         // want graph to start with data a week ago from today
+        console.log("sevenDaysAgo at end: ", sevenDaysAgo);
         return sevenDaysAgo;
     });
 
@@ -111,7 +138,7 @@ const TestGraph = ({ user, graphDatesArray, ...props }) => {
                 yAxes: [
                     {
                         ticks: {
-                            suggestedMax: 18,
+                            suggestedMax: 12,
                             beginAtZero: true,
                         },
                     },
@@ -166,7 +193,7 @@ const TestGraph = ({ user, graphDatesArray, ...props }) => {
                                 Number(tooltipItem.index)
                             ];
 
-                        const stringo = `Rest: ${rest} | Mood: ${mood}`;
+                        const stringo = `Tiredness: ${rest} | Mood: ${mood}`;
 
                         return stringo;
                     },
@@ -178,11 +205,8 @@ const TestGraph = ({ user, graphDatesArray, ...props }) => {
     const chartReference = React.createRef();
 
     const handleDateChange = e => {
+        alert("In handleDateChange!");
         setStartingDate(e.target.value);
-    };
-
-    const getDates = startDate => {
-        props.getDataFromDateRange(startDate);
     };
 
     // useEffect(() => {
@@ -197,6 +221,11 @@ const TestGraph = ({ user, graphDatesArray, ...props }) => {
     // }, [today]);
 
     useEffect(() => {
+        const getDates = startDate => {
+            alert("about to invoke action creator");
+            getDataFromDateRange(startDate);
+        };
+
         getDates(startingDate);
     }, [startingDate]);
 
