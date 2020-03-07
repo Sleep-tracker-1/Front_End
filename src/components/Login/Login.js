@@ -69,7 +69,7 @@ function Login(props) {
                 </label>
 
                 <button onSubmit={e => {}}>Login</button>
-                <h6 onClick={() => props.history.push("/signup")}>signup/register</h6>
+                <loginStyles.H6Link onClick={() => props.history.push("/signup")}>signup/register</loginStyles.H6Link>
             </form>
         </loginStyles.LoginCard>
     );

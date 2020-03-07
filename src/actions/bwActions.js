@@ -76,15 +76,17 @@ export const getDataFromDateRange = date => dispatch => {
     const endDateObj = new Date(
         startDateObj.setDate(startDateObj.getDate() + 7)
     );
-
     // convert to date string in MM-DD-YYYY format and replace / with -
     let endDate = endDateObj.toLocaleDateString().replace(/\//g, "-");
+    console.log(`start date is ${startDate}, end date is ${endDate}`);
 
     // https://sleep-tracker-server.herokuapp.com/api/data?start=12-29-2019&end=2-26-2020 would return all data from 12/29/2019 - 2/26/2020.
     axiosWithAuth()
         .get(`/data?start=${startDate}&end=${endDate}`)
         .then(res => {
             // console.log("getDataFromDateRange res: ", res);
+            console.log("here are the **** dates", res.data.dates);
+
             dispatch({
                 type: FETCHING_DATE_RANGE_DATA_SUCCESS,
                 payload: res.data.dates,
