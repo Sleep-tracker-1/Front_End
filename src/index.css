@@ -16,3 +16,7 @@ input {
     border: solid 1px lightgray;
     border-radius: 8px;
 }
+
+.App {
+    overflow: hidden;
+}
