@@ -21,7 +21,6 @@ function App() {
     return (
         <Provider store={store}>
             {/* All of your jsx and components will be inside of Provider */}
-            
                 <Header headerText="Sleep Tracker" />
                 <div className="App">
                     <Route exact path="/" component={Login} />
@@ -30,7 +29,6 @@ function App() {
                     <PrivateRoute exact path="/home" component={LandingPage} />
                     <PrivateRoute exact path="/account" component={AccountPage} />
                 </div>
-            
         </Provider>
     );
 }
