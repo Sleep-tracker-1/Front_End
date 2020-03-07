@@ -30,7 +30,7 @@ const DateInput = styled.input`
 `;
 
 const TestGraph = ({
-    user,
+    // user,
     graphDatesArray,
     getDataFromDateRange, // need to destructure for useEffect dependency array
 }) => {
@@ -196,20 +196,20 @@ const TestGraph = ({
 
     useEffect(() => {
         const sleepArray = graphDatesArray.map(day => day.totalTimeInBed);
-        const avgRestArray = graphDatesArray.map(day => {
-            let morning = day.wakeUp.tiredness;
-            let midday = day.wakeUp.tiredness;
-            let bedtime = day.wakeUp.tiredness;
+        // const avgRestArray = graphDatesArray.map(day => {
+        //     let morning = day.wakeUp.tiredness;
+        //     let midday = day.wakeUp.tiredness;
+        //     let bedtime = day.wakeUp.tiredness;
 
-            return (morning + midday + bedtime) / 3;
-        });
-        const avgMoodArray = graphDatesArray.map(day => {
-            let morning = day.wakeUp.mood;
-            let midday = day.wakeUp.mood;
-            let bedtime = day.wakeUp.mood;
+        //     return (morning + midday + bedtime) / 3;
+        // });
+        // const avgMoodArray = graphDatesArray.map(day => {
+        //     let morning = day.wakeUp.mood;
+        //     let midday = day.wakeUp.mood;
+        //     let bedtime = day.wakeUp.mood;
 
-            return (morning + midday + bedtime) / 3;
-        });
+        //     return (morning + midday + bedtime) / 3;
+        // });
 
         setAmountOfSleepArray(sleepArray);
 
