@@ -378,10 +378,41 @@ export const bwReducer = (state = initialState, action) => {
                 error: "",
             };
         case EDITING_MOOD_SUCCESS:
-            // backend throws 500 error
-            // expected to be given the whole day object from the database so that we could update our redux state, but we're given back very useless information...so we can't update our state
+            const moodAvg =
+                (action.payload.data[0].wakeMood +
+                    action.payload.data[0].middayMood +
+                    action.payload.data[0].nightMood) /
+                3;
+
+            let moodTime = "";
+
+            if (action.payload.timeOfDay === "wakeMood") {
+                moodTime = "wakeUp";
+            } else if (action.payload.timeOfDay === "middayMood") {
+                moodTime = "midday";
+            } else if (action.payload.timeOfDay === "nightMood") {
+                moodTime = "bedtime";
+            }
+
+            console.log("action.payload[moodTime]: ", action.payload[moodTime]);
+
+            console.log("action.payload.timeOfDay: ", action.payload.timeOfDay);
+
+            console.log(
+                "action.payload.data[0].timeOfDay: ",
+                action.payload.data[0][action.payload.timeOfDay]
+            );
+
             return {
                 ...state,
+                dateToEdit: {
+                    ...state.dateToEdit,
+                    [moodTime]: {
+                        ...state.dateToEdit[moodTime],
+                        mood: action.payload.data[0][action.payload.timeOfDay],
+                    },
+                    averageMood: moodAvg,
+                },
                 isLoading: false,
                 error: "",
             };
@@ -398,10 +429,32 @@ export const bwReducer = (state = initialState, action) => {
                 error: "",
             };
         case EDITING_TIREDNESS_SUCCESS:
-            // backend throws 404 error
-            // expected to be given the whole day object from the database so that we could update our redux state, but we're given back very useless information...so we can't update our state
+            const tiredAvg =
+                (action.payload.data[0].wakeUpTiredness +
+                    action.payload.data[0].middayTiredness +
+                    action.payload.data[0].bedtimeTiredness) /
+                3;
+
+            let tiredTime = "";
+
+            if (action.payload.timeOfDay === "wakeTired") {
+                tiredTime = "wakeUp";
+            } else if (action.payload.timeOfDay === "middayTired") {
+                tiredTime = "midday";
+            } else if (action.payload.timeOfDay === "nightTired") {
+                tiredTime = "bedtime";
+            }
+
             return {
                 ...state,
+                dateToEdit: {
+                    ...state.dateToEdit,
+                    [action.payload[tiredTime]]: {
+                        ...state[action.payload[tiredTime]],
+                        tiredness: action.payload.timeOfDay,
+                    },
+                    averageTiredness: tiredAvg,
+                },
                 isLoading: false,
                 error: "",
             };

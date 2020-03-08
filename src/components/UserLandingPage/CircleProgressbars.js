@@ -41,7 +41,12 @@ const Emoji = ({ emoji, ariaLabel }) => (
     </span>
 );
 
-const CircleProgressbars = ({ dateToEdit, moodEmojis, tirednessEmojis }) => {
+const CircleProgressbars = ({
+    overallAvgSleep,
+    dateToEdit,
+    moodEmojis,
+    tirednessEmojis,
+}) => {
     const [averageMoodEmoji, setAverageMoodEmoji] = useState(0);
     const [moodEmojiAriaLabel, setMoodEmojiAriaLabel] = useState("");
     const [averageTirednessEmoji, setAverageTirednessEmoji] = useState(0);
@@ -49,9 +54,9 @@ const CircleProgressbars = ({ dateToEdit, moodEmojis, tirednessEmojis }) => {
     const [sleepBarValue, setSleepBarValue] = useState(0);
     const [moodBarValue, setMoodBarValue] = useState(0);
     const [tirednessBarValue, setTirednessBarValue] = useState(0);
-    const totalAvgSleep = 9.8; // dummy number -- should get from backend, but they didn't actually give it to us
-    const totalAvgMood = 3; // highest possible mood -- should get from backend, but they didn't actually give it to us
-    const totalAvgTiredness = 1; // best possible tiredness -- should get from backend, but they didn't actually give it to us
+    const totalAvgSleep = overallAvgSleep;
+    const totalAvgMood = 3; // highest possible mood -- thought it makes more sense for this visual to show their daily average mood vs what the highest possible mood is
+    const totalAvgTiredness = 1; // best possible tiredness -- thought it makes more sense for this visual to show their daily average tiredness vs what the lowest possible tiredness is
 
     const setProgressBarColor = percentage => {
         if (percentage < 34) {
@@ -66,6 +71,7 @@ const CircleProgressbars = ({ dateToEdit, moodEmojis, tirednessEmojis }) => {
     };
 
     useEffect(() => {
+        console.log("dateToEdit in useEffect: ", dateToEdit);
         let moodEmoji = "";
         let moodAriaLabel = "";
         let tirednessEmoji = "";
@@ -182,6 +188,7 @@ const CircleProgressbars = ({ dateToEdit, moodEmojis, tirednessEmojis }) => {
 
 const mapStateToProps = state => {
     return {
+        overallAvgSleep: state.user.averageHoursOfSleep,
         dateToEdit: state.dateToEdit,
         moodEmojis: state.moodEmojis,
         tirednessEmojis: state.tirednessEmojis,
