@@ -394,15 +394,6 @@ export const bwReducer = (state = initialState, action) => {
                 moodTime = "bedtime";
             }
 
-            // console.log("action.payload[moodTime]: ", action.payload[moodTime]);
-
-            // console.log("action.payload.timeOfDay: ", action.payload.timeOfDay);
-
-            // console.log(
-            //     "action.payload.data[0].timeOfDay: ",
-            //     action.payload.data[0][action.payload.timeOfDay]
-            // );
-
             return {
                 ...state,
                 dateToEdit: {
@@ -445,16 +436,6 @@ export const bwReducer = (state = initialState, action) => {
                 tiredTime = "bedtime";
             }
 
-            console.log("[tiredTime]: ", [tiredTime]);
-            console.log("{...state.dateToEdit[tiredTime]}: ", {
-                ...state.dateToEdit[tiredTime],
-            });
-
-            console.log(
-                "action.payload.data[0][action.payload.timeOfDay]: ",
-                action.payload.data[0][action.payload.timeOfDay]
-            );
-
             return {
                 ...state,
                 dateToEdit: {
@@ -482,9 +463,30 @@ export const bwReducer = (state = initialState, action) => {
                 error: "",
             };
         case EDITING_SLEEP_TIMES_SUCCESS:
-            // expected to be given the whole day object from the database so that we could update our redux state, but we're given back very useless information...so we can't update our state
+            let sleepTime = "";
+
+            if (action.payload.timeOfDay === "waketime") {
+                sleepTime = "wakeUp";
+            } else if (action.payload.timeOfDay === "bedtime") {
+                sleepTime = "bedtime";
+            }
+
+            // updated state totalTimeInBed without having to do another GET request
+            const wakeUpTime = new Date(action.payload.data[0].waketime);
+            const bed = new Date(action.payload.data[0].bedtime);
+
+            const updatedTotalSleep = Math.abs(bed - wakeUpTime) / 36e5; // calculates number of hours
+
             return {
                 ...state,
+                dateToEdit: {
+                    ...state.dateToEdit,
+                    totalTimeInBed: updatedTotalSleep.toFixed(1), // round to 1 decimal
+                    [sleepTime]: {
+                        ...state.dateToEdit[sleepTime],
+                        time: action.payload.data[0][action.payload.timeOfDay],
+                    },
+                },
                 isLoading: false,
                 error: "",
             };

@@ -258,7 +258,6 @@ export const editMood = (timeOfDay, dateId, updatedMood) => dispatch => {
     axiosWithAuth()
         .put(`/moods/${dateId}`, putRequestObj)
         .then(res => {
-            console.log("moods PUT res: ", res);
             dispatch({
                 type: EDITING_MOOD_SUCCESS,
                 payload: { data: res.data, timeOfDay: keyName },
@@ -294,7 +293,6 @@ export const editTiredness = (
     axiosWithAuth()
         .put(`/tiredness/${dateId}`, putRequestObj)
         .then(res => {
-            console.log("tiredness PUT res: ", res);
             dispatch({
                 type: EDITING_TIREDNESS_SUCCESS,
                 payload: { data: res.data, timeOfDay: keyName },
@@ -328,7 +326,11 @@ export const editWakeAndBedTimes = (
     axiosWithAuth()
         .put(`/bedhours/${dateId}`, putRequestObj)
         .then(res => {
-            dispatch({ type: EDITING_SLEEP_TIMES_SUCCESS, payload: res.data });
+            console.log("editTimes res: ", res.data);
+            dispatch({
+                type: EDITING_SLEEP_TIMES_SUCCESS,
+                payload: { data: res.data, timeOfDay: keyName },
+            });
         })
         .catch(err => {
             console.log("Error editing sleep times: ", err);
