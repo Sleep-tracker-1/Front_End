@@ -15,9 +15,10 @@ const ChartContainer = styled.div`
 
 const DateInputContainer = styled.div`
     display: flex;
-    justify-content: space-evenly;
+    justify-content: space-between;
     align-items: center;
-    margin-top: 10px;
+    margin: 1rem auto 0;
+    max-width: 325px;
 `;
 
 const DateLabel = styled.label`
@@ -27,6 +28,10 @@ const DateLabel = styled.label`
 const DateInput = styled.input`
     border: solid 1px lightgray;
     border-radius: 8px;
+
+    @media (max-width: 375px) {
+        width: ;
+    }
 `;
 
 const TestGraph = ({
@@ -199,7 +204,7 @@ const TestGraph = ({
         <>
             <ChartContainer className="chartCanvas">
                 <DateInputContainer>
-                    <DateLabel htmlFor="graphDate">Starting date:</DateLabel>
+                    <DateLabel htmlFor="graphDate">Graph start date:</DateLabel>
                     <DateInput
                         id="graphDate"
                         type="date"

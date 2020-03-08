@@ -5,15 +5,17 @@ import { connect } from "react-redux";
 import CircleProgressbar from "./CircleProgressbar";
 
 const ProgressBarsContainer = styled.section`
-    width: 100%;
+    width: 80%;
+    max-width: 700px;
+    margin: 0 auto;
     display: grid;
-    grid-template-columns: repeat(3, minmax(75px, 200px));
+    grid-template-columns: repeat(3, minmax(75px, 125px));
     grid-gap: 15px;
     box-sizing: border-box;
-    padding: 0 40px;
+    justify-content: space-evenly;
 
     @media (max-width: 400px) {
-        padding: 0 30px;
+        width: 90%;
     }
 `;
 

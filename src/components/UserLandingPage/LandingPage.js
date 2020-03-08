@@ -59,14 +59,24 @@ const RecommendedSleepContainer = styled.div`
 
 const RecommendedSleep = styled.h2`
     font-size: 1.25rem;
+    margin: 1rem 0;
 `;
 
 export const ButtonsContainer = styled.div`
-    width: 200px;
+    width: 80%;
     margin: 0 auto;
     display: grid;
-    grid-template-rows: repeat(3, 40px);
-    grid-gap: 10px;
+    grid-template-columns: repeat(3, minmax(150px, 200px));
+    grid-gap: 1rem;
+    justify-content: center;
+
+    @media (max-width: 500px) {
+        width: 200px;
+        grid-template-columns: none;
+        grid-template-rows: repeat(3, 40px);
+        grid-gap: 10px;
+        justify-content: unset;
+    }
 `;
 
 export const InputFormButton = styled(motion.button)`
@@ -74,11 +84,19 @@ export const InputFormButton = styled(motion.button)`
     height: 100%;
     box-sizing: border-box;
     font-size: 1rem;
-    padding: 10px;
-    border: 1px solid gray;
-    border-radius: 12px;
+    padding: 10px 20px;
+    background: #293845;
+    color: #dfe6ed;
+    border: 1px solid #293845;
+    border-radius: 5px;
     text-align: center;
     cursor: pointer;
+    transition: 300ms ease;
+
+    &:hover {
+        background: #dfe6ed;
+        color: #293845;
+    }
 `;
 
 export const FormsContainer = styled.div`
@@ -230,8 +248,7 @@ const LandingPage = ({ getMainData, getDataFromOneDate, ...props }) => {
         <>
             <LandingPageContainer>
                 <TestGraph />
-                <h2 style={{ fontSize: "1.25rem" }}>Today's Averages</h2>
-                <CircleProgressbars />
+
                 <RecommendedSleepContainer>
                     <RecommendedSleep>
                         Sleep recommendation:{" "}
@@ -245,6 +262,12 @@ const LandingPage = ({ getMainData, getDataFromOneDate, ...props }) => {
                         )}
                     </RecommendedSleep>
                 </RecommendedSleepContainer>
+
+                <CircleProgressbars />
+
+                <h2 style={{ fontSize: "1.25rem", margin: "0.5rem 0 1rem" }}>
+                    Today's Averages
+                </h2>
 
                 <ButtonsContainer>
                     <InputFormButton
