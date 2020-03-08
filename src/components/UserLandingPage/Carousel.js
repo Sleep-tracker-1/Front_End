@@ -4,7 +4,7 @@ import CarouselItem from "react-bootstrap/CarouselItem";
 import graphSnippet from "../../images/fin-graph.jpg";
 import tabSnippet from "../../images/fin-tabs.jpg";
 import { CarouselImg } from "../styles/NewUserStyles"
-export default function ControlledCarousel() {
+export default function ControlledCarousel(props) {
     const [index, setIndex] = useState(0);
     const [direction, setDirection] = useState(null);
   
@@ -28,6 +28,7 @@ export default function ControlledCarousel() {
                 src={tabSnippet}
                 alt="tabs"
             />
+            <button onClick={props.handleClick}>Start Sleeping</button>
         </CarouselItem>        
       </Carousel>
     );
