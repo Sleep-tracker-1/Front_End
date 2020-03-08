@@ -308,7 +308,6 @@ export const bwReducer = (state = initialState, action) => {
 
             return {
                 ...state,
-                // need to figure out what the res actually is
                 isLoading: false,
                 error: "",
             };
@@ -325,7 +324,6 @@ export const bwReducer = (state = initialState, action) => {
                 error: "",
             };
         case ADD_USER_SUCCESS:
-            // we should probably reset the user object to its initial state after the user has been deleted
             return {
                 ...state,
                 user: action.payload,
@@ -345,13 +343,13 @@ export const bwReducer = (state = initialState, action) => {
                 error: "",
             };
         case FETCHING_DATA_FOR_ONE_DATE_SUCCESS:
-            let wakeUpMood = action.payload.wakeUp.mood;
-            let middayMood = action.payload.midday.mood;
-            let bedtimeMood = action.payload.bedtime.mood;
+            const wakeUpMood = action.payload.wakeUp.mood;
+            const middayMood = action.payload.midday.mood;
+            const bedtimeMood = action.payload.bedtime.mood;
 
-            let wakeUpTiredness = action.payload.wakeUp.tiredness;
-            let middayTiredness = action.payload.midday.tiredness;
-            let bedtimeTiredness = action.payload.bedtime.tiredness;
+            const wakeUpTiredness = action.payload.wakeUp.tiredness;
+            const middayTiredness = action.payload.midday.tiredness;
+            const bedtimeTiredness = action.payload.bedtime.tiredness;
 
             const averageMood = (wakeUpMood + middayMood + bedtimeMood) / 3;
             const averageTiredness =
@@ -380,9 +378,10 @@ export const bwReducer = (state = initialState, action) => {
                 error: "",
             };
         case EDITING_MOOD_SUCCESS:
+            // backend throws 500 error
+            // expected to be given the whole day object from the database so that we could update our redux state, but we're given back very useless information...so we can't update our state
             return {
                 ...state,
-                // need to figure out what the res actually is
                 isLoading: false,
                 error: "",
             };
@@ -399,9 +398,10 @@ export const bwReducer = (state = initialState, action) => {
                 error: "",
             };
         case EDITING_TIREDNESS_SUCCESS:
+            // backend throws 404 error
+            // expected to be given the whole day object from the database so that we could update our redux state, but we're given back very useless information...so we can't update our state
             return {
                 ...state,
-                // need to figure out what the res actually is
                 isLoading: false,
                 error: "",
             };
@@ -418,9 +418,9 @@ export const bwReducer = (state = initialState, action) => {
                 error: "",
             };
         case EDITING_SLEEP_TIMES_SUCCESS:
+            // expected to be given the whole day object from the database so that we could update our redux state, but we're given back very useless information...so we can't update our state
             return {
                 ...state,
-                // need to figure out what the res actually is
                 isLoading: false,
                 error: "",
             };

@@ -22,7 +22,7 @@ import UserInputForm from "./UserInputForm";
 export const LandingPageContainer = styled.div`
     width: 100%;
     max-width: 100vw;
-    overflow: hidden;
+    overflow: scroll;
     height: 100%;
     min-height: calc(100vh - 75px);
     max-height: calc(100vh - 75px);
@@ -59,14 +59,24 @@ const RecommendedSleepContainer = styled.div`
 
 const RecommendedSleep = styled.h2`
     font-size: 1.25rem;
+    margin: 1rem 0;
 `;
 
 export const ButtonsContainer = styled.div`
-    width: 200px;
+    width: 80%;
     margin: 0 auto;
     display: grid;
-    grid-template-rows: repeat(3, 40px);
-    grid-gap: 10px;
+    grid-template-columns: repeat(3, minmax(150px, 200px));
+    grid-gap: 1rem;
+    justify-content: center;
+
+    @media (max-width: 500px) {
+        width: 200px;
+        grid-template-columns: none;
+        grid-template-rows: repeat(3, 40px);
+        grid-gap: 10px;
+        justify-content: unset;
+    }
 `;
 
 export const InputFormButton = styled(motion.button)`
@@ -74,14 +84,25 @@ export const InputFormButton = styled(motion.button)`
     height: 100%;
     box-sizing: border-box;
     font-size: 1rem;
-    padding: 10px;
-    border: 1px solid gray;
-    border-radius: 12px;
+    padding: 10px 20px;
+    background: #293845;
+    color: #dfe6ed;
+    border: 1px solid #293845;
+    border-radius: 5px;
     text-align: center;
     cursor: pointer;
+    transition: 300ms ease;
+
+    &:hover {
+        background: #dfe6ed;
+        color: #293845;
+    }
 `;
 
-// can get rid of these and import initial values from redux store
+export const FormsContainer = styled.div`
+    position: relative;
+`;
+
 const initialValues = {
     mood: 0,
     tiredness: 0,
@@ -220,108 +241,107 @@ const LandingPage = ({ getMainData, getDataFromOneDate, ...props }) => {
     }, [getMainData]);
 
     useEffect(() => {
-        console.log("typeof `today` in LandingPage: ", typeof today);
-        console.log("`today` in LandingPage: ", today);
-
-        let stringDate = today.toLocaleDateString();
-
-        stringDate = stringDate.replace(/\//g, "-");
-        console.log("stringDate in LandingPage: ", stringDate);
-
-        console.log(
-            "formatDateForInput(today) in LandingPage: ",
-            formatDateForInput(today)
-        );
-
-        getDataFromOneDate(formatDateForInput(today)); //
-    }, [getDataFromOneDate]);
+        getDataFromOneDate(formatDateForInput(today));
+    }, [getDataFromOneDate, today]);
 
     return (
-        <LandingPageContainer>
-            <TestGraph />
-            <h2 style={{ fontSize: "1.25rem" }}>Today's Averages</h2>
-            <CircleProgressbars />
-            <RecommendedSleepContainer>
-                <RecommendedSleep>
-                    Sleep recommendation:{" "}
-                    {props.user.sleepRecommendation ? (
-                        <strong>{props.user.sleepRecommendation}hours</strong>
-                    ) : (
-                        <strong>Not available</strong>
-                    )}
-                </RecommendedSleep>
-            </RecommendedSleepContainer>
+        <>
+            <LandingPageContainer>
+                <TestGraph />
 
-            <ButtonsContainer>
-                <InputFormButton
-                    ref={wakeUpButtonRef}
-                    disabled={formsSubmitted.wakeUp} // don't want to allow more inputs/submissions after first submission
-                    onTap={() => wakeUpTap()}
-                    isWakeUp={true} // used for styled components for conditional styles
-                >
-                    Wake Up
-                </InputFormButton>
+                <RecommendedSleepContainer>
+                    <RecommendedSleep>
+                        Sleep recommendation:{" "}
+                        {props.user.sleepRecommendation ? (
+                            <strong>
+                                {props.user.sleepRecommendation.toFixed(1)}{" "}
+                                hours
+                            </strong>
+                        ) : (
+                            <strong>Not available</strong>
+                        )}
+                    </RecommendedSleep>
+                </RecommendedSleepContainer>
 
-                <InputFormButton
-                    ref={middayButtonRef}
-                    disabled={formsSubmitted.midday} // don't want to allow more inputs/submissions after first submission
-                    onTap={() => middayTap()}
-                    isMidday={true} // used for styled components for conditional styles
-                >
-                    Midday
-                </InputFormButton>
+                <CircleProgressbars />
 
-                <InputFormButton
-                    ref={bedtimeButtonRef}
-                    disabled={formsSubmitted.bedtime} // don't want to allow more inputs/submissions after first submission
-                    onTap={() => bedtimeTap()}
-                    isBedtime={true} // used for styled components for conditional styles
-                >
-                    Bedtime
-                </InputFormButton>
-            </ButtonsContainer>
+                <h2 style={{ fontSize: "1.25rem", margin: "0.5rem 0 1rem" }}>
+                    Today's Averages
+                </h2>
 
-            <UserInputForm
-                heading="Wake Up"
-                needsTimeInput={true}
-                timeLabel="Wake up time"
-                timeId="wakeUpTime"
-                timeOfDay="wakeUp"
-                toggleIsFormSubmitted={toggleIsFormSubmitted}
-                initialValues={initialValuesPlusTime}
-                handleSubmit={handleWakeUpSubmit}
-                animateY={wakeUpSlide}
-                closeForm={wakeUpTap}
-                formRef={wakeUpFormRef}
-                isDisabled={formsSubmitted.wakeUp}
-            />
-            <UserInputForm
-                heading="Midday"
-                timeOfDay="midday"
-                toggleIsFormSubmitted={toggleIsFormSubmitted}
-                initialValues={initialValues}
-                handleSubmit={handleMiddaySubmit}
-                isMidday={true} // for styling
-                animateY={middaySlide}
-                closeForm={middayTap}
-                formRef={middayFormRef}
-                isDisabled={formsSubmitted.midday}
-            />
-            <UserInputForm
-                heading="Bedtime"
-                needsTimeInput={true}
-                timeLabel="Bedtime"
-                timeId="bedtime"
-                timeOfDay="bedtime"
-                toggleIsFormSubmitted={toggleIsFormSubmitted}
-                initialValues={initialValuesPlusTime}
-                handleSubmit={handleBedtimeSubmit}
-                animateY={bedtimeSlide}
-                closeForm={bedtimeTap}
-                formRef={bedtimeFormRef}
-                isDisabled={formsSubmitted.bedtime}
-            />
-        </LandingPageContainer>
+                <ButtonsContainer>
+                    <InputFormButton
+                        ref={wakeUpButtonRef}
+                        disabled={formsSubmitted.wakeUp} // don't want to allow more inputs/submissions after first submission
+                        onTap={() => wakeUpTap()}
+                        isWakeUp={true} // used for styled components for conditional styles
+                    >
+                        Wake Up
+                    </InputFormButton>
+
+                    <InputFormButton
+                        ref={middayButtonRef}
+                        disabled={formsSubmitted.midday} // don't want to allow more inputs/submissions after first submission
+                        onTap={() => middayTap()}
+                        isMidday={true} // used for styled components for conditional styles
+                    >
+                        Midday
+                    </InputFormButton>
+
+                    <InputFormButton
+                        ref={bedtimeButtonRef}
+                        disabled={formsSubmitted.bedtime} // don't want to allow more inputs/submissions after first submission
+                        onTap={() => bedtimeTap()}
+                        isBedtime={true} // used for styled components for conditional styles
+                    >
+                        Bedtime
+                    </InputFormButton>
+                </ButtonsContainer>
+            </LandingPageContainer>
+
+            <FormsContainer>
+                <UserInputForm
+                    heading="Wake Up"
+                    needsTimeInput={true}
+                    timeLabel="Wake up time"
+                    timeId="wakeUpTime"
+                    timeOfDay="wakeUp"
+                    toggleIsFormSubmitted={toggleIsFormSubmitted}
+                    initialValues={initialValuesPlusTime}
+                    handleSubmit={handleWakeUpSubmit}
+                    animateY={wakeUpSlide}
+                    closeForm={wakeUpTap}
+                    formRef={wakeUpFormRef}
+                    isDisabled={formsSubmitted.wakeUp}
+                />
+                <UserInputForm
+                    heading="Midday"
+                    timeOfDay="midday"
+                    toggleIsFormSubmitted={toggleIsFormSubmitted}
+                    initialValues={initialValues}
+                    handleSubmit={handleMiddaySubmit}
+                    isMidday={true} // for styling
+                    animateY={middaySlide}
+                    closeForm={middayTap}
+                    formRef={middayFormRef}
+                    isDisabled={formsSubmitted.midday}
+                />
+                <UserInputForm
+                    heading="Bedtime"
+                    needsTimeInput={true}
+                    timeLabel="Bedtime"
+                    timeId="bedtime"
+                    timeOfDay="bedtime"
+                    toggleIsFormSubmitted={toggleIsFormSubmitted}
+                    initialValues={initialValuesPlusTime}
+                    handleSubmit={handleBedtimeSubmit}
+                    animateY={bedtimeSlide}
+                    closeForm={bedtimeTap}
+                    formRef={bedtimeFormRef}
+                    isDisabled={formsSubmitted.bedtime}
+                />
+            </FormsContainer>
+        </>
     );
 };
 

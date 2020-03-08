@@ -5,15 +5,17 @@ import { connect } from "react-redux";
 import CircleProgressbar from "./CircleProgressbar";
 
 const ProgressBarsContainer = styled.section`
-    width: 100%;
+    width: 80%;
+    max-width: 700px;
+    margin: 0 auto;
     display: grid;
-    grid-template-columns: repeat(3, minmax(75px, 200px));
+    grid-template-columns: repeat(3, minmax(75px, 125px));
     grid-gap: 15px;
     box-sizing: border-box;
-    padding: 0 40px;
+    justify-content: space-evenly;
 
     @media (max-width: 400px) {
-        padding: 0 30px;
+        width: 90%;
     }
 `;
 
@@ -39,12 +41,7 @@ const Emoji = ({ emoji, ariaLabel }) => (
     </span>
 );
 
-const CircleProgressbars = ({
-    dateToEdit,
-    moodEmojis,
-    tirednessEmojis,
-    // totalAvgTiredness, // should get from backend, but they didn't actually give it to us
-}) => {
+const CircleProgressbars = ({ dateToEdit, moodEmojis, tirednessEmojis }) => {
     const [averageMoodEmoji, setAverageMoodEmoji] = useState(0);
     const [moodEmojiAriaLabel, setMoodEmojiAriaLabel] = useState("");
     const [averageTirednessEmoji, setAverageTirednessEmoji] = useState(0);
@@ -52,9 +49,9 @@ const CircleProgressbars = ({
     const [sleepBarValue, setSleepBarValue] = useState(0);
     const [moodBarValue, setMoodBarValue] = useState(0);
     const [tirednessBarValue, setTirednessBarValue] = useState(0);
-    const totalAvgSleep = 7.6;
-    const totalAvgMood = 2.3;
-    const totalAvgTiredness = 2.5;
+    const totalAvgSleep = 9.8; // dummy number -- should get from backend, but they didn't actually give it to us
+    const totalAvgMood = 3; // highest possible mood -- should get from backend, but they didn't actually give it to us
+    const totalAvgTiredness = 1; // best possible tiredness -- should get from backend, but they didn't actually give it to us
 
     const setProgressBarColor = percentage => {
         if (percentage < 34) {
@@ -105,7 +102,6 @@ const CircleProgressbars = ({
             tirednessAriaLabel = badTiredness.desc;
         }
 
-        // console.log("averageTiredness: ", dateToEdit.averageTiredness);
         setAverageMoodEmoji(moodEmoji);
         setMoodEmojiAriaLabel(moodAriaLabel);
         setAverageTirednessEmoji(tirednessEmoji);
@@ -116,9 +112,6 @@ const CircleProgressbars = ({
         let progressValue = dateToEdit.totalTimeInBed * 100;
         progressValue = progressValue / totalAvgSleep;
 
-        // console.log("totalAvgSleep: ", totalAvgSleep);
-        // console.log("dateToEdit.totalTimeInBed: ", dateToEdit.totalTimeInBed);
-        // console.log("sleep progressValue: ", progressValue);
         setSleepBarValue(progressValue);
     }, [dateToEdit.totalTimeInBed, totalAvgSleep]);
 
@@ -126,22 +119,18 @@ const CircleProgressbars = ({
         let progressValue = dateToEdit.averageMood * 100;
         progressValue = progressValue / totalAvgMood;
 
-        // console.log("totalAvgMood: ", totalAvgMood);
-        // console.log("dateToEdit.averageMood: ", dateToEdit.averageMood);
-        // console.log("mood progressValue: ", progressValue);
         setMoodBarValue(progressValue);
     }, [dateToEdit.averageMood, totalAvgMood]);
 
     useEffect(() => {
-        let progressValue = dateToEdit.averageTiredness * 100;
-        progressValue = progressValue / totalAvgTiredness;
+        // inverse ratio since 1 is the best and 3 is the worst
+        const worstPossibleValue = 3;
 
-        // console.log("totalAvgTiredness: ", totalAvgTiredness);
-        // console.log(
-        //     "dateToEdit.averageTiredness: ",
-        //     dateToEdit.averageTiredness
-        // );
-        // console.log("tiredness progressValue: ", progressValue);
+        const progressValue =
+            ((worstPossibleValue - dateToEdit.averageTiredness) /
+                worstPossibleValue) *
+            100;
+
         setTirednessBarValue(progressValue);
     }, [dateToEdit.averageTiredness, totalAvgTiredness]);
 
@@ -193,7 +182,6 @@ const CircleProgressbars = ({
 
 const mapStateToProps = state => {
     return {
-        // totalAvgTiredness: state.user.totalAvgTiredness,
         dateToEdit: state.dateToEdit,
         moodEmojis: state.moodEmojis,
         tirednessEmojis: state.tirednessEmojis,
