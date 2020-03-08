@@ -17,7 +17,7 @@ const Header = styled.header`
     left: 0;
     z-index: 2;
     background-color: #d2d1cf;
-    box-shadow: 2px 0px 9px 6px rgba(187, 187, 187, 0.6);
+    box-shadow: 2px 0px 8px 5px rgba(41, 56, 69, 0.1);
 `;
 
 const HeaderWrapper = styled.div`
@@ -123,7 +123,7 @@ const Nav = styled.nav`
         display: flex;
         flex-direction: column;
 
-        li:last-of-type {
+        div:last-of-type {
             border-bottom: none;
         }
     }
