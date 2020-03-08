@@ -17,6 +17,7 @@ const NewUser = (props) => {
             </Styles.NewUserContainer>
         </>
     )
+    
 }
 
 export default NewUser;

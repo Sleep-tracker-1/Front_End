@@ -27,10 +27,14 @@ const SignupForm = (props) => {
             .then(res => {
                 console.log(res)
                 localStorage.setItem("token", res.data.token);
-                props.history.push('/home')
+                props.history.push('/new')
             })
           .catch(err => console.log(err))
     };
+
+    if (localStorage.getItem("token")) {
+        props.history.push("/home");
+    }
 
     return (
         <>
