@@ -8,10 +8,10 @@ const PrivateRoute = ({ component: Component, ...rest }) => (
             if (localStorage.getItem("token")) {
                 return <Component {...props} />;
             } else {
-                return <Redirect to="YOUR REDIRECT PATH HERE" />;
+                return <Redirect to="/" />;
             }
         }}
     />
 );
-
+//I should be removed
 export default PrivateRoute;
