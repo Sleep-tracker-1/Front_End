@@ -394,14 +394,14 @@ export const bwReducer = (state = initialState, action) => {
                 moodTime = "bedtime";
             }
 
-            console.log("action.payload[moodTime]: ", action.payload[moodTime]);
+            // console.log("action.payload[moodTime]: ", action.payload[moodTime]);
 
-            console.log("action.payload.timeOfDay: ", action.payload.timeOfDay);
+            // console.log("action.payload.timeOfDay: ", action.payload.timeOfDay);
 
-            console.log(
-                "action.payload.data[0].timeOfDay: ",
-                action.payload.data[0][action.payload.timeOfDay]
-            );
+            // console.log(
+            //     "action.payload.data[0].timeOfDay: ",
+            //     action.payload.data[0][action.payload.timeOfDay]
+            // );
 
             return {
                 ...state,
@@ -430,9 +430,9 @@ export const bwReducer = (state = initialState, action) => {
             };
         case EDITING_TIREDNESS_SUCCESS:
             const tiredAvg =
-                (action.payload.data[0].wakeUpTiredness +
-                    action.payload.data[0].middayTiredness +
-                    action.payload.data[0].bedtimeTiredness) /
+                (action.payload.data[0].wakeTired +
+                    action.payload.data[0].middayTired +
+                    action.payload.data[0].nightTired) /
                 3;
 
             let tiredTime = "";
@@ -445,13 +445,24 @@ export const bwReducer = (state = initialState, action) => {
                 tiredTime = "bedtime";
             }
 
+            console.log("[tiredTime]: ", [tiredTime]);
+            console.log("{...state.dateToEdit[tiredTime]}: ", {
+                ...state.dateToEdit[tiredTime],
+            });
+
+            console.log(
+                "action.payload.data[0][action.payload.timeOfDay]: ",
+                action.payload.data[0][action.payload.timeOfDay]
+            );
+
             return {
                 ...state,
                 dateToEdit: {
                     ...state.dateToEdit,
-                    [action.payload[tiredTime]]: {
-                        ...state[action.payload[tiredTime]],
-                        tiredness: action.payload.timeOfDay,
+                    [tiredTime]: {
+                        ...state.dateToEdit[tiredTime],
+                        tiredness:
+                            action.payload.data[0][action.payload.timeOfDay],
                     },
                     averageTiredness: tiredAvg,
                 },
