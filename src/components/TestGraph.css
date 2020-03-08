@@ -11,4 +11,11 @@
 }
 
 .actualChart {
+    width: 90%;
+    max-width: 550px;
+    margin: 0 auto;
+}
+
+.actualChart canvas {
+    width: 100%;
 }
