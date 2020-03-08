@@ -378,10 +378,32 @@ export const bwReducer = (state = initialState, action) => {
                 error: "",
             };
         case EDITING_MOOD_SUCCESS:
-            // backend throws 500 error
-            // expected to be given the whole day object from the database so that we could update our redux state, but we're given back very useless information...so we can't update our state
+            const moodAvg =
+                (action.payload.data[0].wakeMood +
+                    action.payload.data[0].middayMood +
+                    action.payload.data[0].nightMood) /
+                3;
+
+            let moodTime = "";
+
+            if (action.payload.timeOfDay === "wakeMood") {
+                moodTime = "wakeUp";
+            } else if (action.payload.timeOfDay === "middayMood") {
+                moodTime = "midday";
+            } else if (action.payload.timeOfDay === "nightMood") {
+                moodTime = "bedtime";
+            }
+
             return {
                 ...state,
+                dateToEdit: {
+                    ...state.dateToEdit,
+                    [moodTime]: {
+                        ...state.dateToEdit[moodTime],
+                        mood: action.payload.data[0][action.payload.timeOfDay],
+                    },
+                    averageMood: moodAvg,
+                },
                 isLoading: false,
                 error: "",
             };
@@ -398,10 +420,33 @@ export const bwReducer = (state = initialState, action) => {
                 error: "",
             };
         case EDITING_TIREDNESS_SUCCESS:
-            // backend throws 404 error
-            // expected to be given the whole day object from the database so that we could update our redux state, but we're given back very useless information...so we can't update our state
+            const tiredAvg =
+                (action.payload.data[0].wakeTired +
+                    action.payload.data[0].middayTired +
+                    action.payload.data[0].nightTired) /
+                3;
+
+            let tiredTime = "";
+
+            if (action.payload.timeOfDay === "wakeTired") {
+                tiredTime = "wakeUp";
+            } else if (action.payload.timeOfDay === "middayTired") {
+                tiredTime = "midday";
+            } else if (action.payload.timeOfDay === "nightTired") {
+                tiredTime = "bedtime";
+            }
+
             return {
                 ...state,
+                dateToEdit: {
+                    ...state.dateToEdit,
+                    [tiredTime]: {
+                        ...state.dateToEdit[tiredTime],
+                        tiredness:
+                            action.payload.data[0][action.payload.timeOfDay],
+                    },
+                    averageTiredness: tiredAvg,
+                },
                 isLoading: false,
                 error: "",
             };
@@ -418,9 +463,30 @@ export const bwReducer = (state = initialState, action) => {
                 error: "",
             };
         case EDITING_SLEEP_TIMES_SUCCESS:
-            // expected to be given the whole day object from the database so that we could update our redux state, but we're given back very useless information...so we can't update our state
+            let sleepTime = "";
+
+            if (action.payload.timeOfDay === "waketime") {
+                sleepTime = "wakeUp";
+            } else if (action.payload.timeOfDay === "bedtime") {
+                sleepTime = "bedtime";
+            }
+
+            // updated state totalTimeInBed without having to do another GET request
+            const wakeUpTime = new Date(action.payload.data[0].waketime);
+            const bed = new Date(action.payload.data[0].bedtime);
+
+            const updatedTotalSleep = Math.abs(bed - wakeUpTime) / 36e5; // calculates number of hours
+
             return {
                 ...state,
+                dateToEdit: {
+                    ...state.dateToEdit,
+                    totalTimeInBed: updatedTotalSleep.toFixed(1), // round to 1 decimal
+                    [sleepTime]: {
+                        ...state.dateToEdit[sleepTime],
+                        time: action.payload.data[0][action.payload.timeOfDay],
+                    },
+                },
                 isLoading: false,
                 error: "",
             };

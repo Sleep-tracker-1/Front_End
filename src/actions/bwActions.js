@@ -110,6 +110,7 @@ export const getMainData = () => dispatch => {
     axiosWithAuth()
         .get("/data")
         .then(res => {
+            console.log("user data res: ", res.data);
             dispatch({ type: FETCH_MAIN_DATA, payload: res.data });
         })
         .catch(err => {
@@ -223,6 +224,7 @@ export const getDataFromOneDate = date => dispatch => {
         // getting single date GET request only works if the end date is the next day
         .get(`/data?start=${formattedDate}&end=${endDate}`)
         .then(res => {
+            console.log("getDataFromOneDate res: ", res.data);
             dispatch({
                 type: FETCHING_DATA_FOR_ONE_DATE_SUCCESS,
                 payload: res.data.dates[0],
@@ -256,7 +258,10 @@ export const editMood = (timeOfDay, dateId, updatedMood) => dispatch => {
     axiosWithAuth()
         .put(`/moods/${dateId}`, putRequestObj)
         .then(res => {
-            dispatch({ type: EDITING_MOOD_SUCCESS, payload: res.data });
+            dispatch({
+                type: EDITING_MOOD_SUCCESS,
+                payload: { data: res.data, timeOfDay: keyName },
+            });
         })
         .catch(err => {
             console.log("Error editing mood: ", err);
@@ -288,7 +293,10 @@ export const editTiredness = (
     axiosWithAuth()
         .put(`/tiredness/${dateId}`, putRequestObj)
         .then(res => {
-            dispatch({ type: EDITING_TIREDNESS_SUCCESS, payload: res.data });
+            dispatch({
+                type: EDITING_TIREDNESS_SUCCESS,
+                payload: { data: res.data, timeOfDay: keyName },
+            });
         })
         .catch(err => {
             console.log("Error editing tiredness: ", err);
@@ -318,7 +326,11 @@ export const editWakeAndBedTimes = (
     axiosWithAuth()
         .put(`/bedhours/${dateId}`, putRequestObj)
         .then(res => {
-            dispatch({ type: EDITING_SLEEP_TIMES_SUCCESS, payload: res.data });
+            console.log("editTimes res: ", res.data);
+            dispatch({
+                type: EDITING_SLEEP_TIMES_SUCCESS,
+                payload: { data: res.data, timeOfDay: keyName },
+            });
         })
         .catch(err => {
             console.log("Error editing sleep times: ", err);

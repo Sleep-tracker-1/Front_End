@@ -19,8 +19,6 @@ import "./App.css";
 
 const store = createStore(reducer, applyMiddleware(thunk));
 
-// TODO: create list compojnent that lets you view previous date ranges and have them display on the graph
-
 function App() {
     return (
         <Provider store={store}>
