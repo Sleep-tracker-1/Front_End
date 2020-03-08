@@ -33,7 +33,7 @@ const SignupForm = (props) => {
     };
 
     if (localStorage.getItem("token")) {
-        props.history.push("/home");
+        props.history.push("/new");
     }
 
     return (
