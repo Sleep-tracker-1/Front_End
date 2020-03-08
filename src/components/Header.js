@@ -17,7 +17,7 @@ const Header = styled.header`
     left: 0;
     z-index: 2;
     background-color: #d2d1cf;
-    box-shadow: 2px 0px 9px 6px rgba(187, 187, 187, 0.6);
+    box-shadow: 2px 0px 8px 5px rgba(41, 56, 69, 0.1);
 `;
 
 const HeaderWrapper = styled.div`
@@ -31,7 +31,7 @@ const HeaderWrapper = styled.div`
     @media (max-width: 950px) {
         width: 90%;
     }
-    @media (max-width: 830px) {
+    @media (max-width: 700px) {
         width: 100%;
         height: 100%;
         margin: 0;
@@ -46,36 +46,30 @@ const HeaderWrapper = styled.div`
 `;
 
 const LinkWrapper = styled.div`
+    min-width: 200px;
     max-width: 270px;
     margin-left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 
-    @media (max-width: 830px) {
+    @media (max-width: 700px) {
         margin-left: 1.5rem;
         grid-area: title;
         width: 115px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
     }
 `;
 
 const Heading = styled.h3`
-    font-size: 1.5rem;
+    font-size: 1.63rem;
+    margin-bottom: 0;
 `;
 
 const ImageLink = styled(NavLink)`
-    display: none;
-    width: 0;
-    font-color: black;
-    color: black;
     font-size: 2rem;
+    color: #293845;
 
-    &:visited {
-        font-color: black;
-        color: black;
-    }
-
-    @media (max-width: 830px) {
+    @media (max-width: 700px) {
         display: flex;
         align-items: center;
         justify-content: center;
@@ -91,27 +85,33 @@ const NameLink = styled(NavLink)`
     text-decoration: none;
     height: 75px;
     display: flex;
-    font-color: black;
+    align-items: center;
+    color: #293845;
     cursor: pointer;
 
     &:visited {
-        font-color: black;
+        font-color: #293845;
+        text-decoration: none;
     }
 
-    @media (max-width: 830px) {
+    &:hover {
+        text-decoration: none;
+    }
+
+    @media (max-width: 700px) {
         display: none;
     }
 `;
 
 const Nav = styled.nav`
-    width: 350px;
+    width: 300px;
     list-style: none;
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding-left: 0;
 
-    @media (max-width: 830px) {
+    @media (max-width: 700px) {
         grid-area: nav;
         max-height: 0;
         max-width: unset;
@@ -123,7 +123,7 @@ const Nav = styled.nav`
         display: flex;
         flex-direction: column;
 
-        li:last-of-type {
+        div:last-of-type {
             border-bottom: none;
         }
     }
@@ -134,12 +134,12 @@ const Input = styled.input`
     top: -100%;
     left: -100%;
 
-    @media (max-width: 830px) {
+    @media (max-width: 700px) {
         display: none;
 
         &:checked ~ nav {
             max-height: 240px;
-            background-color: #d2d1cf;
+            background-color: #293845;
         }
 
         &:checked ~ label span {
@@ -164,7 +164,7 @@ const Input = styled.input`
 const Label = styled.label`
     visibility: hidden;
 
-    @media (max-width: 830px) {
+    @media (max-width: 700px) {
         grid-area: hamburger;
         cursor: pointer;
         display: flex;
@@ -179,7 +179,7 @@ const Label = styled.label`
 `;
 
 const Span = styled.span`
-    @media (max-width: 830px) {
+    @media (max-width: 700px) {
         background: #333;
         display: block;
         height: 3px;
@@ -212,15 +212,17 @@ const NavItem = styled.div`
     justify-content: center;
     margin-bottom: 0;
     cursor: pointer;
-    @media (max-width: 830px) {
+    
+    @media (max-width: 700px) {
         padding: 20px 20px;
         width: 100%;
         text-align: center;
-        border-bottom: solid 1px rgba(45,156,219, 0.4);
+        border-bottom: 1px solid rgba(41, 56, 69, 0.2);;
 `;
 
 const NavLinkContainer = styled(NavLink)`
-    font-size: 1.2rem;
+    font-size: 1rem;
+    color: #293845;
     display: flex;
     align-items: center;
     justify-content: center;
