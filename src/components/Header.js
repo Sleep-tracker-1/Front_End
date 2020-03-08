@@ -67,10 +67,12 @@ const ImageLink = styled(NavLink)`
     display: none;
     width: 0;
     font-color: black;
+    color: black;
     font-size: 2rem;
 
     &:visited {
         font-color: black;
+        color: black;
     }
 
     @media (max-width: 830px) {
